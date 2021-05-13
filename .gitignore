@@ -1,0 +1,10 @@
+CMakeFiles
+.vscode
+CMakeCache.txt
+build
+cmake_install.cmake
+html
+latex
+log/*.log
+a.out
+compile_commands.json
