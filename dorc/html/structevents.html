@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>chatroom: events结构体 参考</title>
+<link href="qmi.css" rel="stylesheet" type="text/css" />
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+</head>
+<body>
+<div id="top"><!-- do not remove this div! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <!--td style="padding-left: 0.5em;"-->
+  <td>
+   <div id="projectname">chatroom
+   </div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.svg"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- 制作者 Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索','.html');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('structevents.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-attribs">成员变量</a>  </div>
+  <div class="headertitle">
+<div class="title">events结构体 参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="cli_8h_source.html">cli.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+成员变量</h2></td></tr>
+<tr class="memitem:a6f8059414f0228f0256115e024eeed4b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevents.html#a6f8059414f0228f0256115e024eeed4b">fd</a></td></tr>
+<tr class="separator:a6f8059414f0228f0256115e024eeed4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81a8a3a775bf2b769ce2a0f687a44c9f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevents.html#a81a8a3a775bf2b769ce2a0f687a44c9f">events</a></td></tr>
+<tr class="separator:a81a8a3a775bf2b769ce2a0f687a44c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae036856e415526e58e249638733f6752"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevents.html#ae036856e415526e58e249638733f6752">arg</a></td></tr>
+<tr class="separator:ae036856e415526e58e249638733f6752"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a848fecda0276439a3992280d4f5cf25d"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevents.html#a848fecda0276439a3992280d4f5cf25d">call_back</a> )(int <a class="el" href="structevents.html#a6f8059414f0228f0256115e024eeed4b">fd</a>, int <a class="el" href="structevents.html">events</a>, void *<a class="el" href="structevents.html#ae036856e415526e58e249638733f6752">arg</a>)</td></tr>
+<tr class="separator:a848fecda0276439a3992280d4f5cf25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e27f49150e9a14580fb313cc2777e00"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevents.html#a6e27f49150e9a14580fb313cc2777e00">status</a></td></tr>
+<tr class="separator:a6e27f49150e9a14580fb313cc2777e00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f233626d4b3c787c12be650618367c"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevents.html#af8f233626d4b3c787c12be650618367c">buf</a> [<a class="el" href="ser_8h.html#ad974fe981249f5e84fbf1683b012c9f8">BUFLEN</a>]</td></tr>
+<tr class="separator:af8f233626d4b3c787c12be650618367c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afed088663f8704004425cdae2120b9b3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevents.html#afed088663f8704004425cdae2120b9b3">len</a></td></tr>
+<tr class="separator:afed088663f8704004425cdae2120b9b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3faf0307ad0d5152575d716553ac6ce"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structevents.html#af3faf0307ad0d5152575d716553ac6ce">last_active</a></td></tr>
+<tr class="separator:af3faf0307ad0d5152575d716553ac6ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">结构体成员变量说明</h2>
+<a id="ae036856e415526e58e249638733f6752"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae036856e415526e58e249638733f6752">&#9670;&nbsp;</a></span>arg</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void * arg</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">被这些函数引用 <a class="el" href="ser_8h.html#a7a1517c5ea7b5552f9195d1e5a0a0e3c">epoll_set()</a>.</p>
+
+</div>
+</div>
+<a id="af8f233626d4b3c787c12be650618367c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8f233626d4b3c787c12be650618367c">&#9670;&nbsp;</a></span>buf</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char buf</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">被这些函数引用 <a class="el" href="ser_8h.html#ae1793bcf1cc6bf7ae73005ed68e2c546">client_event()</a>, <a class="el" href="ser_8h.html#a7a1517c5ea7b5552f9195d1e5a0a0e3c">epoll_set()</a>, <a class="el" href="cli_8h.html#a35a1a50711b522be68a3945d8db38620">justwrite()</a> , 以及 <a class="el" href="cli_8h.html#afe8783461c8e26b0f1ffc643686359e1">showevents()</a>.</p>
+
+</div>
+</div>
+<a id="a848fecda0276439a3992280d4f5cf25d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a848fecda0276439a3992280d4f5cf25d">&#9670;&nbsp;</a></span>call_back</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void(* call_back)(int <a class="el" href="structevents.html#a6f8059414f0228f0256115e024eeed4b">fd</a>, int <a class="el" href="structevents.html">events</a>, void *<a class="el" href="structevents.html#ae036856e415526e58e249638733f6752">arg</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">被这些函数引用 <a class="el" href="ser_8h.html#ae1793bcf1cc6bf7ae73005ed68e2c546">client_event()</a>, <a class="el" href="ser_8h.html#a7a1517c5ea7b5552f9195d1e5a0a0e3c">epoll_set()</a>, <a class="el" href="cli_8h.html#a35a1a50711b522be68a3945d8db38620">justwrite()</a> , 以及 <a class="el" href="cli_8h.html#afe8783461c8e26b0f1ffc643686359e1">showevents()</a>.</p>
+
+</div>
+</div>
+<a id="a81a8a3a775bf2b769ce2a0f687a44c9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81a8a3a775bf2b769ce2a0f687a44c9f">&#9670;&nbsp;</a></span>events</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="structevents.html">events</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">被这些函数引用 <a class="el" href="ser_8h.html#ac2d1521bffc25a3cc53f89a8514e7719">epoll_add()</a>, <a class="el" href="ser_8h.html#a7a1517c5ea7b5552f9195d1e5a0a0e3c">epoll_set()</a> , 以及 <a class="el" href="cli_8h.html#afe8783461c8e26b0f1ffc643686359e1">showevents()</a>.</p>
+
+</div>
+</div>
+<a id="a6f8059414f0228f0256115e024eeed4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f8059414f0228f0256115e024eeed4b">&#9670;&nbsp;</a></span>fd</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fd</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">被这些函数引用 <a class="el" href="ser_8h.html#ac2d1521bffc25a3cc53f89a8514e7719">epoll_add()</a>, <a class="el" href="ser_8h.html#a7a1517c5ea7b5552f9195d1e5a0a0e3c">epoll_set()</a>, <a class="el" href="ser_8h.html#afa3c61dfea5bb73b56d44ca734a18207">event_del()</a>, <a class="el" href="ser_8h.html#a6e6a413dac3d907b71eac350d9071fdf">lfdaccept()</a> , 以及 <a class="el" href="cli_8h.html#afe8783461c8e26b0f1ffc643686359e1">showevents()</a>.</p>
+
+</div>
+</div>
+<a id="af3faf0307ad0d5152575d716553ac6ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3faf0307ad0d5152575d716553ac6ce">&#9670;&nbsp;</a></span>last_active</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long last_active</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">被这些函数引用 <a class="el" href="ser_8h.html#a7a1517c5ea7b5552f9195d1e5a0a0e3c">epoll_set()</a>.</p>
+
+</div>
+</div>
+<a id="afed088663f8704004425cdae2120b9b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afed088663f8704004425cdae2120b9b3">&#9670;&nbsp;</a></span>len</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int len</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">被这些函数引用 <a class="el" href="ser_8h.html#ae1793bcf1cc6bf7ae73005ed68e2c546">client_event()</a>, <a class="el" href="ser_8h.html#a7a1517c5ea7b5552f9195d1e5a0a0e3c">epoll_set()</a>, <a class="el" href="cli_8h.html#a35a1a50711b522be68a3945d8db38620">justwrite()</a> , 以及 <a class="el" href="cli_8h.html#afe8783461c8e26b0f1ffc643686359e1">showevents()</a>.</p>
+
+</div>
+</div>
+<a id="a6e27f49150e9a14580fb313cc2777e00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e27f49150e9a14580fb313cc2777e00">&#9670;&nbsp;</a></span>status</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int status</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="reference">被这些函数引用 <a class="el" href="ser_8h.html#ac2d1521bffc25a3cc53f89a8514e7719">epoll_add()</a>, <a class="el" href="ser_8h.html#a7a1517c5ea7b5552f9195d1e5a0a0e3c">epoll_set()</a>, <a class="el" href="ser_8h.html#afa3c61dfea5bb73b56d44ca734a18207">event_del()</a> , 以及 <a class="el" href="cli_8h.html#afe8783461c8e26b0f1ffc643686359e1">showevents()</a>.</p>
+
+</div>
+</div>
+<hr/>该结构体的文档由以下文件生成:<ul>
+<li>include/<a class="el" href="cli_8h_source.html">cli.h</a></li>
+<li>include/<a class="el" href="ser_8h_source.html">ser.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+
+    <li class="footer">制作者
+    <span class="qmi"><a href="http://github.com/skozlovf/doxygen-qmi-style">qmi style</a> |</span>
+    <a href="http://www.doxygen.org/index.html">doxygen</a> 1.9.1 </li>
+   </ul>
+ </div>
+</body>
+</html>

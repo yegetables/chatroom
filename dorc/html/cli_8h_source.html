@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>chatroom: include/cli.h 源文件</title>
+<link href="qmi.css" rel="stylesheet" type="text/css" />
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+</head>
+<body>
+<div id="top"><!-- do not remove this div! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <!--td style="padding-left: 0.5em;"-->
+  <td>
+   <div id="projectname">chatroom
+   </div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.svg"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- 制作者 Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索','.html');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('cli_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">cli.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="cli_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="sdebug_8info_8h.html">sdebug.info.h</a>&quot;</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="wrap_8h.html">wrap.h</a>&quot;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;zlog.h&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;mysql/mysql.h&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;cjson/cJSON.h&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="cli_8h.html#ad974fe981249f5e84fbf1683b012c9f8">    6</a></span>&#160;<span class="preprocessor">#define BUFLEN 4096</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="cli_8h.html#ace6c609072c3b2eaca1e74b065d61dc4">    7</a></span>&#160;<span class="preprocessor">#define MAXCLIENT 5000</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="cli_8h.html#af6a258d8f3ee5206d682d799316314b1">    8</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="cli_8h.html#af6a258d8f3ee5206d682d799316314b1a08f175a5505a10b9ed657defeb050e4b">   10</a></span>&#160;    <span class="keyword">true</span> = 1,</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keyword">false</span> = 0</div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="cli_8h.html#af6a258d8f3ee5206d682d799316314b1ae9de385ef6fe9bf3360d1038396b884c">   12</a></span>&#160;} <a class="code" href="cli_8h.html#af6a258d8f3ee5206d682d799316314b1">bool</a>;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="structevents.html">   14</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="structevents.html#a6f8059414f0228f0256115e024eeed4b">   16</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structevents.html#a6f8059414f0228f0256115e024eeed4b">fd</a>;                                           <span class="comment">//要监听的文件描述符</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="structevents.html#a81a8a3a775bf2b769ce2a0f687a44c9f">   17</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structevents.html#a81a8a3a775bf2b769ce2a0f687a44c9f">events</a>;                                       <span class="comment">//对应的监听事件</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="structevents.html#ae036856e415526e58e249638733f6752">   18</a></span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="structevents.html#ae036856e415526e58e249638733f6752">arg</a>;                                        <span class="comment">//泛型参数</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="structevents.html#a848fecda0276439a3992280d4f5cf25d">   19</a></span>&#160;    void (*call_back)(<span class="keywordtype">int</span> fd, <span class="keywordtype">int</span> <a class="code" href="structevents.html">events</a>, <span class="keywordtype">void</span> *arg); <span class="comment">//回调函数</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="structevents.html#a6e27f49150e9a14580fb313cc2777e00">   20</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structevents.html#a6e27f49150e9a14580fb313cc2777e00">status</a>;                                       <span class="comment">//是否在监听:1-&gt;在红黑树上(监听), 0-&gt;不在(不监听)</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="structevents.html#af8f233626d4b3c787c12be650618367c">   21</a></span>&#160;    <span class="keywordtype">char</span> buf[<a class="code" href="cli_8h.html#ad974fe981249f5e84fbf1683b012c9f8">BUFLEN</a>];</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="structevents.html#afed088663f8704004425cdae2120b9b3">   22</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="structevents.html#afed088663f8704004425cdae2120b9b3">len</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="structevents.html#af3faf0307ad0d5152575d716553ac6ce">   23</a></span>&#160;    <span class="keywordtype">long</span> <a class="code" href="structevents.html#af3faf0307ad0d5152575d716553ac6ce">last_active</a>; <span class="comment">//记录每次加入红黑树 g_efd 的时间值</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;} <a class="code" href="structevents.html">events</a>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cli_8h.html#ad0b5f627bbf384d6b82bba6cd00ee72e">serverhelp</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cli_8h.html#a35a1a50711b522be68a3945d8db38620">justwrite</a>(<span class="keywordtype">int</span>, <span class="keywordtype">int</span>, <span class="keywordtype">void</span> *args);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keywordtype">void</span> <a class="code" href="cli_8h.html#afe8783461c8e26b0f1ffc643686359e1">showevents</a>(<a class="code" href="structevents.html">events</a> *args, <span class="keywordtype">int</span> line, <span class="keywordtype">char</span> *fun);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;zlog_category_t *<a class="code" href="cli_8h.html#a776897c656fac80050aa352906ca0c4d">my_zlog_init</a>(<span class="keywordtype">char</span> *);</div>
+<div class="ttc" id="acli_8h_html_a35a1a50711b522be68a3945d8db38620"><div class="ttname"><a href="cli_8h.html#a35a1a50711b522be68a3945d8db38620">justwrite</a></div><div class="ttdeci">void justwrite(int, int, void *args)</div><div class="ttdef"><b>Definition:</b> justwrite.c:5</div></div>
+<div class="ttc" id="acli_8h_html_a776897c656fac80050aa352906ca0c4d"><div class="ttname"><a href="cli_8h.html#a776897c656fac80050aa352906ca0c4d">my_zlog_init</a></div><div class="ttdeci">zlog_category_t * my_zlog_init(char *)</div><div class="ttdef"><b>Definition:</b> my_zlog_init.c:5</div></div>
+<div class="ttc" id="acli_8h_html_ad0b5f627bbf384d6b82bba6cd00ee72e"><div class="ttname"><a href="cli_8h.html#ad0b5f627bbf384d6b82bba6cd00ee72e">serverhelp</a></div><div class="ttdeci">void serverhelp(void)</div><div class="ttdef"><b>Definition:</b> serverhelp.c:2</div></div>
+<div class="ttc" id="acli_8h_html_ad974fe981249f5e84fbf1683b012c9f8"><div class="ttname"><a href="cli_8h.html#ad974fe981249f5e84fbf1683b012c9f8">BUFLEN</a></div><div class="ttdeci">#define BUFLEN</div><div class="ttdef"><b>Definition:</b> cli.h:6</div></div>
+<div class="ttc" id="acli_8h_html_af6a258d8f3ee5206d682d799316314b1"><div class="ttname"><a href="cli_8h.html#af6a258d8f3ee5206d682d799316314b1">bool</a></div><div class="ttdeci">bool</div><div class="ttdef"><b>Definition:</b> cli.h:9</div></div>
+<div class="ttc" id="acli_8h_html_afe8783461c8e26b0f1ffc643686359e1"><div class="ttname"><a href="cli_8h.html#afe8783461c8e26b0f1ffc643686359e1">showevents</a></div><div class="ttdeci">void showevents(events *args, int line, char *fun)</div><div class="ttdef"><b>Definition:</b> showevents.c:5</div></div>
+<div class="ttc" id="asdebug_8info_8h_html"><div class="ttname"><a href="sdebug_8info_8h.html">sdebug.info.h</a></div></div>
+<div class="ttc" id="astructevents_html"><div class="ttname"><a href="structevents.html">events</a></div><div class="ttdef"><b>Definition:</b> cli.h:15</div></div>
+<div class="ttc" id="astructevents_html_a6e27f49150e9a14580fb313cc2777e00"><div class="ttname"><a href="structevents.html#a6e27f49150e9a14580fb313cc2777e00">events::status</a></div><div class="ttdeci">int status</div><div class="ttdef"><b>Definition:</b> cli.h:20</div></div>
+<div class="ttc" id="astructevents_html_a6f8059414f0228f0256115e024eeed4b"><div class="ttname"><a href="structevents.html#a6f8059414f0228f0256115e024eeed4b">events::fd</a></div><div class="ttdeci">int fd</div><div class="ttdef"><b>Definition:</b> cli.h:16</div></div>
+<div class="ttc" id="astructevents_html_a81a8a3a775bf2b769ce2a0f687a44c9f"><div class="ttname"><a href="structevents.html#a81a8a3a775bf2b769ce2a0f687a44c9f">events::events</a></div><div class="ttdeci">int events</div><div class="ttdef"><b>Definition:</b> cli.h:17</div></div>
+<div class="ttc" id="astructevents_html_ae036856e415526e58e249638733f6752"><div class="ttname"><a href="structevents.html#ae036856e415526e58e249638733f6752">events::arg</a></div><div class="ttdeci">void * arg</div><div class="ttdef"><b>Definition:</b> cli.h:18</div></div>
+<div class="ttc" id="astructevents_html_af3faf0307ad0d5152575d716553ac6ce"><div class="ttname"><a href="structevents.html#af3faf0307ad0d5152575d716553ac6ce">events::last_active</a></div><div class="ttdeci">long last_active</div><div class="ttdef"><b>Definition:</b> cli.h:23</div></div>
+<div class="ttc" id="astructevents_html_afed088663f8704004425cdae2120b9b3"><div class="ttname"><a href="structevents.html#afed088663f8704004425cdae2120b9b3">events::len</a></div><div class="ttdeci">int len</div><div class="ttdef"><b>Definition:</b> cli.h:22</div></div>
+<div class="ttc" id="awrap_8h_html"><div class="ttname"><a href="wrap_8h.html">wrap.h</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+
+    <li class="footer">制作者
+    <span class="qmi"><a href="http://github.com/skozlovf/doxygen-qmi-style">qmi style</a> |</span>
+    <a href="http://www.doxygen.org/index.html">doxygen</a> 1.9.1 </li>
+   </ul>
+ </div>
+</body>
+</html>

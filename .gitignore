@@ -1,10 +1,5 @@
-CMakeFiles
-.vscode
-CMakeCache.txt
-build
-cmake_install.cmake
-html
-latex
+build/*
 log/*.log
 a.out
-compile_commands.json
+Doxyfile.bak
+doxygen-qmi-style 

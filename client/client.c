@@ -20,7 +20,6 @@ int main(int argc, char **argv)
 
         if (accesspassword(password))
         {
-
             if (useronline(username))
             {
                 printf("您的账号已在别处下线\n");
@@ -33,7 +32,10 @@ int main(int argc, char **argv)
             errornumber++;
             if (errornumber == 3)
             {
-                printf("密码错误次数太多，暂时锁定帐号%s,一分钟以后重新登陆\n", username);
+                printf(
+                    "密码错误次数太多，暂时锁定帐号%s,"
+                    "一分钟以后重新登陆\n",
+                    username);
                 exit(0);
             }
             else
@@ -43,18 +45,16 @@ int main(int argc, char **argv)
             }
         }
     }
-    else //注册
+    else  //注册
     {
         printf("-----------------注册:\n用户名:%s\n密码:", username);
         scanf("%19s", password);
 
-
-        //mysql
-
-
+        // mysql
 
         printf("-----------------注册成功\n");
-        printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username, password);
+        printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username,
+               password);
     }
 
     showmainmenu();

@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<title>chatroom: month6</title>
+<link href="qmi.css" rel="stylesheet" type="text/css" />
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+</head>
+<body>
+<div id="top"><!-- do not remove this div! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <!--td style="padding-left: 0.5em;"-->
+  <td>
+   <div id="projectname">chatroom
+   </div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.svg"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="搜索" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- 制作者 Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索','.html');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('md_month6.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">month6 </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><ol type="1">
+<li>项目简述</li>
+</ol>
+<p>实现 Linux 环境下的简易聊天室，采用 C/S 模型，实现多客户端之间的稳定数据传输。可参考 QQ、微信功能。</p><ol type="1">
+<li>项目需求</li>
+</ol>
+<p>功能后的*与**代表选做，其中**代表难度比*大。 选做必须选几项</p>
+<ol type="1">
+<li><p class="startli">账号管理</p>
+<p class="startli">登录、注册 找回密码 * 数据加密 *</p>
+</li>
+<li><p class="startli">好友管理</p>
+<p class="startli">私聊（实时性） 好友的添加、删除、查询 查看好友列表 显示好友状态（在线与否） 查看聊天记录 屏蔽好友消息</p>
+</li>
+<li><p class="startli">群管理</p>
+<p class="startli">群聊（实时性） 群的创建、解散（群主才有的权限） 申请加群、退群 查看已加群、查看群成员 查看聊天记录 设置群管理员 踢人（群主或管理员才有的权限）</p>
+</li>
+<li><p class="startli">发送文件</p>
+<p class="startli">文件传输 断点续传 *</p>
+</li>
+<li><p class="startli">离线传输</p>
+<p class="startli">离线消息，上线及时发送 离线文件，上线及时提醒有文件传送 **</p>
+</li>
+<li><p class="startli">关于客户端与服务器要求</p>
+<p class="startli">稳定性 要能处理大量客户端的连接与信息处理、传输 服务器稳定，不会因客户端的意外情况退出 数据正常接受、处理、发送 有容错处理，避免因非法输入导致C/S崩溃 高效性 服务器日志，记录服务器的状态信息 聊天界面分屏，利用光标的移动对输入和屏幕聊天记录输出的分屏 **</p>
+</li>
+<li><p class="startli">相关技术要求</p>
+<p class="startli">I/O 多路复用（epoll） mysql 数据传输可使用cJSON （cjson相关资料文件在 /Depended目录下） 图形化 ** 相关文档</p>
+</li>
+</ol>
+<p>ps : 基本的功能大概就这些，大家写的时候可以尽可能往 QQ、微信功能上靠，上面没有列出的功能，还有觉得不错的，也可以去实现，功能越完善越好。 需要注意的是，功能在设计的时候要符合正常的逻辑要求。比如添加好友，需要对方的同意，发送文件需要对方的接受等等。 在写项目之前一定要把整体的框架和功能都该怎么写想清楚了再动手，把逻辑捋顺。 尽量不要出现写了一半发现自己设计的没办法写下去了，推倒重构的现象，很浪费时间（但也有可能是不可避免的）。 聊天室也算一个大型项目了，写的时候要注意模块的划分，程序的规范性。写完后要有易用性的介绍项目文档 README.md，能做到让别人能通过文档看懂你的项目。 </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+
+    <li class="footer">制作者
+    <span class="qmi"><a href="http://github.com/skozlovf/doxygen-qmi-style">qmi style</a> |</span>
+    <a href="http://www.doxygen.org/index.html">doxygen</a> 1.9.1 </li>
+   </ul>
+ </div>
+</body>
+</html>
