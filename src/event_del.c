@@ -1,7 +1,7 @@
 
-#include "../../include/chat.h"
+#include "../include/chat.h"
 
-extern int defaultport;
+extern int port;
 extern char serverip[30];
 extern int epfd;
 extern events g_events[MAXCLIENT + 1];

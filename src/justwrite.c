@@ -1,10 +1,7 @@
 
-#include "../../include/chat.h"
+#include "../include/chat.h"
 extern int epfd;
-extern bool PRINTEXIT;
-extern bool DEBUGPRINT;
-extern bool WRITE_LOG;
-extern char serverlogpath[30];
+extern zlog_category_t *ser;
 void justwrite(int cfd, int event, void *args)
 {
 
@@ -16,7 +13,7 @@ void justwrite(int cfd, int event, void *args)
     if ((len = write(cfd, ev->buf, strlen(ev->buf))) > 0)
     {
         event_del(ev);
-        showevents(ev,__LINE__,__FUNCTION__);
+        showevents(ev,__LINE__,__FILE__);
 
         ev->len = 0;
 
@@ -32,7 +29,7 @@ void justwrite(int cfd, int event, void *args)
     else
     {
         close(cfd);
-        LOG(serverlogpath, "close cfd:%d ", cfd);
+        zlog_error(ser, "close cfd:%d ", cfd);
     }
     return;
 }

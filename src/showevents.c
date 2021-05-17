@@ -1,14 +1,10 @@
 
 
-#include "../../include/chat.h"
-
-extern bool PRINTEXIT;
-extern bool DEBUGPRINT;
-extern bool WRITE_LOG;
-extern char serverlogpath[30];
-
+#include "../include/chat.h"
+extern zlog_category_t *ser;
 void showevents(void *args, int line, char *fun)
 {
+    
     events *ev = (events *)args;
     char logbuf[1024];
     memset(logbuf, 0, sizeof(logbuf));
@@ -35,6 +31,6 @@ void showevents(void *args, int line, char *fun)
     sprintf(&logbuf[strlen(logbuf)], "\n-----------------over---------\n");
 
     //printf("%s\n", logbuf);
-    LOG(serverlogpath, "%s", logbuf);
+    zlog_debug(ser,"%s", logbuf);
     return;
 }

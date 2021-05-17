@@ -1,4 +1,4 @@
-#include "../../include/chat.h"
+#include "../include/chat.h"
 void serverhelp(void)
 {
     printf("***********使用说明***********\n");

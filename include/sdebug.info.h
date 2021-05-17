@@ -30,8 +30,6 @@
 #include <syslog.h>
 
 #define DEBUGPRINT(FORMAT, ...)                     \
-                                                    \
-  if (DEBUGPRINT)                                   \
   {                                                 \
     char *t = strrchr(__FILE__, '/');               \
     printf("[%s]", t);                              \
@@ -40,7 +38,6 @@
   }
 
 #define PRINTEXIT(FORMAT, ...)                                       \
-  if (PRINTEXIT)                                                     \
   {                                                                  \
     char *t = strrchr(__FILE__, '/');                                \
     fprintf(stderr, "[%s]", t);                                      \
@@ -50,50 +47,3 @@
     exit(-1);                                                        \
   }
 
-#define WRITE_LOG(filename, FORMAT, ...)                                                        \
-  if (WRITE_LOG)                                                                                \
-  {                                                                                             \
-    char *t = strrchr(__FILE__, '/');                                                           \
-    FILE *fp = fopen(filename, "a+");                                                           \
-    struct tm *pt;                                                                              \
-    time_t timer;                                                                               \
-    time(&timer);                                                                               \
-    pt = localtime(&timer);                                                                     \
-    fprintf(fp, "[%04d-%02d-%02d][%02d:%02d:%02d][%s][%s][%2d]" YELLOW FORMAT NONECOLOR "\r\n", \
-            pt->tm_year + 1900,                                                                 \
-            pt->tm_mon + 1,                                                                     \
-            pt->tm_mday,                                                                        \
-            pt->tm_hour,                                                                        \
-            pt->tm_min,                                                                         \
-            pt->tm_sec,                                                                         \
-            t,                                                                                  \
-            __FUNCTION__,                                                                       \
-            __LINE__,                                                                           \
-            ##__VA_ARGS__);                                                                     \
-    fclose(fp);                                                                                 \
-  }
-
-#define LOG(filename, FORMAT, ...)                                               \
-  {                                                                              \
-    if (WRITE_LOG)                                                               \
-    {                                                                            \
-      char *t = strrchr(__FILE__, '/');                                          \
-      int fp = open(filename, O_WRONLY | O_APPEND | O_CREAT | O_NONBLOCK, 0644); \
-      struct tm *pt;                                                             \
-      time_t timer;                                                              \
-      time(&timer);                                                              \
-      pt = localtime(&timer);                                                    \
-      char logstring[1024];                                                      \
-      memset(logstring, 0, sizeof(logstring));                                   \
-      sprintf(logstring,                                                         \
-              "[%02d:%02d][%s][%3d]" FORMAT                                      \
-              "\r\n",                                                            \
-              pt->tm_min,                                                        \
-              pt->tm_sec,                                                        \
-              __FUNCTION__,                                                      \
-              __LINE__,                                                          \
-              ##__VA_ARGS__);                                                    \
-      write(fp, logstring, strlen(logstring));                                   \
-      close(fp);                                                                 \
-    }                                                                            \
-  }

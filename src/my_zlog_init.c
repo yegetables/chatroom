@@ -1,4 +1,4 @@
-#include "../../include/chat.h"
+#include "../include/chat.h"
 
 extern char logconf[30];
 

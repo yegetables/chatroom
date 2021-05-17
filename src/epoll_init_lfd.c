@@ -1,6 +1,6 @@
-#include "../../include/chat.h"
+#include "../include/chat.h"
 
-extern int defaultport;
+extern int port;
 extern char serverip[30];
 extern int epfd;
 extern events g_events[MAXCLIENT + 1];
@@ -16,7 +16,7 @@ int epoll_init_lfd(void)
     serveraddr.sin_family = AF_INET;
     serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
     //inet_pton(AF_INET, serverip, &serveraddr.sin_addr);
-    serveraddr.sin_port = htons(defaultport);
+    serveraddr.sin_port = htons(port);
 
     //端口复用
     int op = 1;

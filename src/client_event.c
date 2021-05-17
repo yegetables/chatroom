@@ -1,9 +1,6 @@
-#include "../../include/chat.h"
+#include "../include/chat.h"
+extern zlog_category_t *ser;
 extern int epfd;
-extern bool PRINTEXIT;
-extern bool DEBUGPRINT;
-extern bool WRITE_LOG;
-extern char serverlogpath[30];
 
 void client_event(int cfd, int event, void *args)
 {
@@ -18,7 +15,8 @@ void client_event(int cfd, int event, void *args)
         event_del(ev);
         ev->len--;
         ev->buf[ev->len] = 0;
-        showevents(ev, __LINE__, __FUNCTION__);
+        
+        showevents(ev, __LINE__ ,__FILE__ );
 
         // write(cfd, ev->buf, len);
         //epoll_set(ev, cfd, justwrite, ev);
@@ -28,7 +26,7 @@ void client_event(int cfd, int event, void *args)
     else
     {
         close(cfd);
-        LOG(serverlogpath, "close cfd:%d ", cfd);
+        zlog_debug(ser, "close cfd:%d ", cfd);
     }
 
     // epoll_set(ev, cfd, write1, ev);

@@ -1,11 +1,16 @@
 #include "../include/chat.h"
-extern int port;
+int port = 500;
 /* SELF */
 int epfd;
 events g_events[MAXCLIENT + 1];
-
+zlog_category_t *ser=NULL;
 int main(int argc, char **argv)
 {
+
+
+
+
+
     //解析命令行
     char *options = "h";
     int opt;
@@ -22,6 +27,10 @@ int main(int argc, char **argv)
         printf("******************************\n");
     }
 
+    
+    
+
+    
     //读配置
     setconfig();
     printf("pid:%d\nserver port:%d\n", getpid(), port);
@@ -29,10 +38,10 @@ int main(int argc, char **argv)
     //守护进程
     creat_daemon();
 
-    //开日志
+        //开日志
     //TODO:rm *.log
     system("rm ./log/*.log");
-    zlog_category_t *ser = my_zlog_init("server");
+    ser = my_zlog_init("server");
     zlog_info(ser, "--------start--------");
     zlog_info(ser, " pid[%d]   port[%d]", getpid(), port);
     zlog_debug(ser, " epfd[%d]", epfd);

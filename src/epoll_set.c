@@ -1,4 +1,4 @@
-#include "../../include/chat.h"
+#include "../include/chat.h"
 
 void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *), void *arg)
 {

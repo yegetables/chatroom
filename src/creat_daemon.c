@@ -1,4 +1,4 @@
-#include "../../include/chat.h"
+#include "../include/chat.h"
 int creat_daemon(void)
 {
     //1.创建子进程，父进程退出

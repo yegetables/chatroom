@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ajian/work/cpptest/items/big_items/linuxc/chatroom
+CMAKE_SOURCE_DIR = /home/ajian/work/chatroom
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ajian/work/cpptest/items/big_items/linuxc/chatroom
+CMAKE_BINARY_DIR = /home/ajian/work/chatroom
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ajian/work/cpptest/items/big_items/linuxc/chatroom/CMakeFiles /home/ajian/work/cpptest/items/big_items/linuxc/chatroom//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ajian/work/chatroom/CMakeFiles /home/ajian/work/chatroom//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ajian/work/cpptest/items/big_items/linuxc/chatroom/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ajian/work/chatroom/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -117,6 +117,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named client.out
+
+# Build rule for target.
+client.out: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client.out
+.PHONY : client.out
+
+# fast build rule for target.
+client.out/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/build
+.PHONY : client.out/fast
+
+#=============================================================================
 # Target rules for targets named server.out
 
 # Build rule for target.
@@ -129,365 +142,356 @@ server.out/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/build
 .PHONY : server.out/fast
 
-rely/func/client_event.o: rely/func/client_event.c.o
-.PHONY : rely/func/client_event.o
+src/client_event.o: src/client_event.c.o
+.PHONY : src/client_event.o
 
 # target to build an object file
-rely/func/client_event.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/client_event.c.o
-.PHONY : rely/func/client_event.c.o
+src/client_event.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/client_event.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/client_event.c.o
+.PHONY : src/client_event.c.o
 
-rely/func/client_event.i: rely/func/client_event.c.i
-.PHONY : rely/func/client_event.i
+src/client_event.i: src/client_event.c.i
+.PHONY : src/client_event.i
 
 # target to preprocess a source file
-rely/func/client_event.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/client_event.c.i
-.PHONY : rely/func/client_event.c.i
+src/client_event.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/client_event.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/client_event.c.i
+.PHONY : src/client_event.c.i
 
-rely/func/client_event.s: rely/func/client_event.c.s
-.PHONY : rely/func/client_event.s
+src/client_event.s: src/client_event.c.s
+.PHONY : src/client_event.s
 
 # target to generate assembly for a file
-rely/func/client_event.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/client_event.c.s
-.PHONY : rely/func/client_event.c.s
+src/client_event.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/client_event.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/client_event.c.s
+.PHONY : src/client_event.c.s
 
-rely/func/creat_daemon.o: rely/func/creat_daemon.c.o
-.PHONY : rely/func/creat_daemon.o
+src/creat_daemon.o: src/creat_daemon.c.o
+.PHONY : src/creat_daemon.o
 
 # target to build an object file
-rely/func/creat_daemon.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/creat_daemon.c.o
-.PHONY : rely/func/creat_daemon.c.o
+src/creat_daemon.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/creat_daemon.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/creat_daemon.c.o
+.PHONY : src/creat_daemon.c.o
 
-rely/func/creat_daemon.i: rely/func/creat_daemon.c.i
-.PHONY : rely/func/creat_daemon.i
+src/creat_daemon.i: src/creat_daemon.c.i
+.PHONY : src/creat_daemon.i
 
 # target to preprocess a source file
-rely/func/creat_daemon.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/creat_daemon.c.i
-.PHONY : rely/func/creat_daemon.c.i
+src/creat_daemon.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/creat_daemon.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/creat_daemon.c.i
+.PHONY : src/creat_daemon.c.i
 
-rely/func/creat_daemon.s: rely/func/creat_daemon.c.s
-.PHONY : rely/func/creat_daemon.s
+src/creat_daemon.s: src/creat_daemon.c.s
+.PHONY : src/creat_daemon.s
 
 # target to generate assembly for a file
-rely/func/creat_daemon.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/creat_daemon.c.s
-.PHONY : rely/func/creat_daemon.c.s
+src/creat_daemon.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/creat_daemon.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/creat_daemon.c.s
+.PHONY : src/creat_daemon.c.s
 
-rely/func/epoll_add.o: rely/func/epoll_add.c.o
-.PHONY : rely/func/epoll_add.o
+src/epoll_add.o: src/epoll_add.c.o
+.PHONY : src/epoll_add.o
 
 # target to build an object file
-rely/func/epoll_add.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/epoll_add.c.o
-.PHONY : rely/func/epoll_add.c.o
+src/epoll_add.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_add.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_add.c.o
+.PHONY : src/epoll_add.c.o
 
-rely/func/epoll_add.i: rely/func/epoll_add.c.i
-.PHONY : rely/func/epoll_add.i
+src/epoll_add.i: src/epoll_add.c.i
+.PHONY : src/epoll_add.i
 
 # target to preprocess a source file
-rely/func/epoll_add.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/epoll_add.c.i
-.PHONY : rely/func/epoll_add.c.i
+src/epoll_add.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_add.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_add.c.i
+.PHONY : src/epoll_add.c.i
 
-rely/func/epoll_add.s: rely/func/epoll_add.c.s
-.PHONY : rely/func/epoll_add.s
+src/epoll_add.s: src/epoll_add.c.s
+.PHONY : src/epoll_add.s
 
 # target to generate assembly for a file
-rely/func/epoll_add.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/epoll_add.c.s
-.PHONY : rely/func/epoll_add.c.s
+src/epoll_add.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_add.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_add.c.s
+.PHONY : src/epoll_add.c.s
 
-rely/func/epoll_init_lfd.o: rely/func/epoll_init_lfd.c.o
-.PHONY : rely/func/epoll_init_lfd.o
+src/epoll_init_lfd.o: src/epoll_init_lfd.c.o
+.PHONY : src/epoll_init_lfd.o
 
 # target to build an object file
-rely/func/epoll_init_lfd.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/epoll_init_lfd.c.o
-.PHONY : rely/func/epoll_init_lfd.c.o
+src/epoll_init_lfd.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_init_lfd.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_init_lfd.c.o
+.PHONY : src/epoll_init_lfd.c.o
 
-rely/func/epoll_init_lfd.i: rely/func/epoll_init_lfd.c.i
-.PHONY : rely/func/epoll_init_lfd.i
+src/epoll_init_lfd.i: src/epoll_init_lfd.c.i
+.PHONY : src/epoll_init_lfd.i
 
 # target to preprocess a source file
-rely/func/epoll_init_lfd.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/epoll_init_lfd.c.i
-.PHONY : rely/func/epoll_init_lfd.c.i
+src/epoll_init_lfd.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_init_lfd.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_init_lfd.c.i
+.PHONY : src/epoll_init_lfd.c.i
 
-rely/func/epoll_init_lfd.s: rely/func/epoll_init_lfd.c.s
-.PHONY : rely/func/epoll_init_lfd.s
+src/epoll_init_lfd.s: src/epoll_init_lfd.c.s
+.PHONY : src/epoll_init_lfd.s
 
 # target to generate assembly for a file
-rely/func/epoll_init_lfd.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/epoll_init_lfd.c.s
-.PHONY : rely/func/epoll_init_lfd.c.s
+src/epoll_init_lfd.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_init_lfd.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_init_lfd.c.s
+.PHONY : src/epoll_init_lfd.c.s
 
-rely/func/epoll_set.o: rely/func/epoll_set.c.o
-.PHONY : rely/func/epoll_set.o
+src/epoll_set.o: src/epoll_set.c.o
+.PHONY : src/epoll_set.o
 
 # target to build an object file
-rely/func/epoll_set.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/epoll_set.c.o
-.PHONY : rely/func/epoll_set.c.o
+src/epoll_set.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_set.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_set.c.o
+.PHONY : src/epoll_set.c.o
 
-rely/func/epoll_set.i: rely/func/epoll_set.c.i
-.PHONY : rely/func/epoll_set.i
+src/epoll_set.i: src/epoll_set.c.i
+.PHONY : src/epoll_set.i
 
 # target to preprocess a source file
-rely/func/epoll_set.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/epoll_set.c.i
-.PHONY : rely/func/epoll_set.c.i
+src/epoll_set.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_set.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_set.c.i
+.PHONY : src/epoll_set.c.i
 
-rely/func/epoll_set.s: rely/func/epoll_set.c.s
-.PHONY : rely/func/epoll_set.s
+src/epoll_set.s: src/epoll_set.c.s
+.PHONY : src/epoll_set.s
 
 # target to generate assembly for a file
-rely/func/epoll_set.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/epoll_set.c.s
-.PHONY : rely/func/epoll_set.c.s
+src/epoll_set.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_set.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_set.c.s
+.PHONY : src/epoll_set.c.s
 
-rely/func/event_del.o: rely/func/event_del.c.o
-.PHONY : rely/func/event_del.o
+src/event_del.o: src/event_del.c.o
+.PHONY : src/event_del.o
 
 # target to build an object file
-rely/func/event_del.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/event_del.c.o
-.PHONY : rely/func/event_del.c.o
+src/event_del.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/event_del.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/event_del.c.o
+.PHONY : src/event_del.c.o
 
-rely/func/event_del.i: rely/func/event_del.c.i
-.PHONY : rely/func/event_del.i
+src/event_del.i: src/event_del.c.i
+.PHONY : src/event_del.i
 
 # target to preprocess a source file
-rely/func/event_del.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/event_del.c.i
-.PHONY : rely/func/event_del.c.i
+src/event_del.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/event_del.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/event_del.c.i
+.PHONY : src/event_del.c.i
 
-rely/func/event_del.s: rely/func/event_del.c.s
-.PHONY : rely/func/event_del.s
+src/event_del.s: src/event_del.c.s
+.PHONY : src/event_del.s
 
 # target to generate assembly for a file
-rely/func/event_del.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/event_del.c.s
-.PHONY : rely/func/event_del.c.s
+src/event_del.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/event_del.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/event_del.c.s
+.PHONY : src/event_del.c.s
 
-rely/func/justwrite.o: rely/func/justwrite.c.o
-.PHONY : rely/func/justwrite.o
+src/justwrite.o: src/justwrite.c.o
+.PHONY : src/justwrite.o
 
 # target to build an object file
-rely/func/justwrite.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/justwrite.c.o
-.PHONY : rely/func/justwrite.c.o
+src/justwrite.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/justwrite.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/justwrite.c.o
+.PHONY : src/justwrite.c.o
 
-rely/func/justwrite.i: rely/func/justwrite.c.i
-.PHONY : rely/func/justwrite.i
+src/justwrite.i: src/justwrite.c.i
+.PHONY : src/justwrite.i
 
 # target to preprocess a source file
-rely/func/justwrite.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/justwrite.c.i
-.PHONY : rely/func/justwrite.c.i
+src/justwrite.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/justwrite.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/justwrite.c.i
+.PHONY : src/justwrite.c.i
 
-rely/func/justwrite.s: rely/func/justwrite.c.s
-.PHONY : rely/func/justwrite.s
+src/justwrite.s: src/justwrite.c.s
+.PHONY : src/justwrite.s
 
 # target to generate assembly for a file
-rely/func/justwrite.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/justwrite.c.s
-.PHONY : rely/func/justwrite.c.s
+src/justwrite.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/justwrite.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/justwrite.c.s
+.PHONY : src/justwrite.c.s
 
-rely/func/lfdaccept.o: rely/func/lfdaccept.c.o
-.PHONY : rely/func/lfdaccept.o
+src/lfdaccept.o: src/lfdaccept.c.o
+.PHONY : src/lfdaccept.o
 
 # target to build an object file
-rely/func/lfdaccept.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/lfdaccept.c.o
-.PHONY : rely/func/lfdaccept.c.o
+src/lfdaccept.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/lfdaccept.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/lfdaccept.c.o
+.PHONY : src/lfdaccept.c.o
 
-rely/func/lfdaccept.i: rely/func/lfdaccept.c.i
-.PHONY : rely/func/lfdaccept.i
+src/lfdaccept.i: src/lfdaccept.c.i
+.PHONY : src/lfdaccept.i
 
 # target to preprocess a source file
-rely/func/lfdaccept.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/lfdaccept.c.i
-.PHONY : rely/func/lfdaccept.c.i
+src/lfdaccept.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/lfdaccept.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/lfdaccept.c.i
+.PHONY : src/lfdaccept.c.i
 
-rely/func/lfdaccept.s: rely/func/lfdaccept.c.s
-.PHONY : rely/func/lfdaccept.s
+src/lfdaccept.s: src/lfdaccept.c.s
+.PHONY : src/lfdaccept.s
 
 # target to generate assembly for a file
-rely/func/lfdaccept.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/lfdaccept.c.s
-.PHONY : rely/func/lfdaccept.c.s
+src/lfdaccept.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/lfdaccept.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/lfdaccept.c.s
+.PHONY : src/lfdaccept.c.s
 
-rely/func/log.o: rely/func/log.c.o
-.PHONY : rely/func/log.o
+src/my_zlog_init.o: src/my_zlog_init.c.o
+.PHONY : src/my_zlog_init.o
 
 # target to build an object file
-rely/func/log.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/log.c.o
-.PHONY : rely/func/log.c.o
+src/my_zlog_init.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/my_zlog_init.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/my_zlog_init.c.o
+.PHONY : src/my_zlog_init.c.o
 
-rely/func/log.i: rely/func/log.c.i
-.PHONY : rely/func/log.i
+src/my_zlog_init.i: src/my_zlog_init.c.i
+.PHONY : src/my_zlog_init.i
 
 # target to preprocess a source file
-rely/func/log.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/log.c.i
-.PHONY : rely/func/log.c.i
+src/my_zlog_init.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/my_zlog_init.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/my_zlog_init.c.i
+.PHONY : src/my_zlog_init.c.i
 
-rely/func/log.s: rely/func/log.c.s
-.PHONY : rely/func/log.s
+src/my_zlog_init.s: src/my_zlog_init.c.s
+.PHONY : src/my_zlog_init.s
 
 # target to generate assembly for a file
-rely/func/log.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/log.c.s
-.PHONY : rely/func/log.c.s
+src/my_zlog_init.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/my_zlog_init.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/my_zlog_init.c.s
+.PHONY : src/my_zlog_init.c.s
 
-rely/func/my_zlog_init.o: rely/func/my_zlog_init.c.o
-.PHONY : rely/func/my_zlog_init.o
+src/serverhelp.o: src/serverhelp.c.o
+.PHONY : src/serverhelp.o
 
 # target to build an object file
-rely/func/my_zlog_init.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/my_zlog_init.c.o
-.PHONY : rely/func/my_zlog_init.c.o
+src/serverhelp.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/serverhelp.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/serverhelp.c.o
+.PHONY : src/serverhelp.c.o
 
-rely/func/my_zlog_init.i: rely/func/my_zlog_init.c.i
-.PHONY : rely/func/my_zlog_init.i
+src/serverhelp.i: src/serverhelp.c.i
+.PHONY : src/serverhelp.i
 
 # target to preprocess a source file
-rely/func/my_zlog_init.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/my_zlog_init.c.i
-.PHONY : rely/func/my_zlog_init.c.i
+src/serverhelp.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/serverhelp.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/serverhelp.c.i
+.PHONY : src/serverhelp.c.i
 
-rely/func/my_zlog_init.s: rely/func/my_zlog_init.c.s
-.PHONY : rely/func/my_zlog_init.s
+src/serverhelp.s: src/serverhelp.c.s
+.PHONY : src/serverhelp.s
 
 # target to generate assembly for a file
-rely/func/my_zlog_init.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/my_zlog_init.c.s
-.PHONY : rely/func/my_zlog_init.c.s
+src/serverhelp.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/serverhelp.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/serverhelp.c.s
+.PHONY : src/serverhelp.c.s
 
-rely/func/serverhelp.o: rely/func/serverhelp.c.o
-.PHONY : rely/func/serverhelp.o
+src/setconfig.o: src/setconfig.c.o
+.PHONY : src/setconfig.o
 
 # target to build an object file
-rely/func/serverhelp.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/serverhelp.c.o
-.PHONY : rely/func/serverhelp.c.o
+src/setconfig.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/setconfig.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/setconfig.c.o
+.PHONY : src/setconfig.c.o
 
-rely/func/serverhelp.i: rely/func/serverhelp.c.i
-.PHONY : rely/func/serverhelp.i
+src/setconfig.i: src/setconfig.c.i
+.PHONY : src/setconfig.i
 
 # target to preprocess a source file
-rely/func/serverhelp.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/serverhelp.c.i
-.PHONY : rely/func/serverhelp.c.i
+src/setconfig.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/setconfig.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/setconfig.c.i
+.PHONY : src/setconfig.c.i
 
-rely/func/serverhelp.s: rely/func/serverhelp.c.s
-.PHONY : rely/func/serverhelp.s
+src/setconfig.s: src/setconfig.c.s
+.PHONY : src/setconfig.s
 
 # target to generate assembly for a file
-rely/func/serverhelp.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/serverhelp.c.s
-.PHONY : rely/func/serverhelp.c.s
+src/setconfig.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/setconfig.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/setconfig.c.s
+.PHONY : src/setconfig.c.s
 
-rely/func/setconfig.o: rely/func/setconfig.c.o
-.PHONY : rely/func/setconfig.o
+src/showevents.o: src/showevents.c.o
+.PHONY : src/showevents.o
 
 # target to build an object file
-rely/func/setconfig.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/setconfig.c.o
-.PHONY : rely/func/setconfig.c.o
+src/showevents.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/showevents.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/showevents.c.o
+.PHONY : src/showevents.c.o
 
-rely/func/setconfig.i: rely/func/setconfig.c.i
-.PHONY : rely/func/setconfig.i
+src/showevents.i: src/showevents.c.i
+.PHONY : src/showevents.i
 
 # target to preprocess a source file
-rely/func/setconfig.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/setconfig.c.i
-.PHONY : rely/func/setconfig.c.i
+src/showevents.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/showevents.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/showevents.c.i
+.PHONY : src/showevents.c.i
 
-rely/func/setconfig.s: rely/func/setconfig.c.s
-.PHONY : rely/func/setconfig.s
+src/showevents.s: src/showevents.c.s
+.PHONY : src/showevents.s
 
 # target to generate assembly for a file
-rely/func/setconfig.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/setconfig.c.s
-.PHONY : rely/func/setconfig.c.s
+src/showevents.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/showevents.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/showevents.c.s
+.PHONY : src/showevents.c.s
 
-rely/func/showevents.o: rely/func/showevents.c.o
-.PHONY : rely/func/showevents.o
+src/wrap.o: src/wrap.c.o
+.PHONY : src/wrap.o
 
 # target to build an object file
-rely/func/showevents.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/showevents.c.o
-.PHONY : rely/func/showevents.c.o
+src/wrap.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/wrap.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/wrap.c.o
+.PHONY : src/wrap.c.o
 
-rely/func/showevents.i: rely/func/showevents.c.i
-.PHONY : rely/func/showevents.i
-
-# target to preprocess a source file
-rely/func/showevents.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/showevents.c.i
-.PHONY : rely/func/showevents.c.i
-
-rely/func/showevents.s: rely/func/showevents.c.s
-.PHONY : rely/func/showevents.s
-
-# target to generate assembly for a file
-rely/func/showevents.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/func/showevents.c.s
-.PHONY : rely/func/showevents.c.s
-
-rely/includec/wrap.o: rely/includec/wrap.c.o
-.PHONY : rely/includec/wrap.o
-
-# target to build an object file
-rely/includec/wrap.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/includec/wrap.c.o
-.PHONY : rely/includec/wrap.c.o
-
-rely/includec/wrap.i: rely/includec/wrap.c.i
-.PHONY : rely/includec/wrap.i
+src/wrap.i: src/wrap.c.i
+.PHONY : src/wrap.i
 
 # target to preprocess a source file
-rely/includec/wrap.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/includec/wrap.c.i
-.PHONY : rely/includec/wrap.c.i
+src/wrap.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/wrap.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/wrap.c.i
+.PHONY : src/wrap.c.i
 
-rely/includec/wrap.s: rely/includec/wrap.c.s
-.PHONY : rely/includec/wrap.s
-
-# target to generate assembly for a file
-rely/includec/wrap.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/rely/includec/wrap.c.s
-.PHONY : rely/includec/wrap.c.s
-
-server/server.o: server/server.c.o
-.PHONY : server/server.o
-
-# target to build an object file
-server/server.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/server/server.c.o
-.PHONY : server/server.c.o
-
-server/server.i: server/server.c.i
-.PHONY : server/server.i
-
-# target to preprocess a source file
-server/server.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/server/server.c.i
-.PHONY : server/server.c.i
-
-server/server.s: server/server.c.s
-.PHONY : server/server.s
+src/wrap.s: src/wrap.c.s
+.PHONY : src/wrap.s
 
 # target to generate assembly for a file
-server/server.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/server/server.c.s
-.PHONY : server/server.c.s
+src/wrap.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/wrap.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/wrap.c.s
+.PHONY : src/wrap.c.s
 
 # Help Target
 help:
@@ -497,52 +501,47 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... client.out"
 	@echo "... server.out"
-	@echo "... rely/func/client_event.o"
-	@echo "... rely/func/client_event.i"
-	@echo "... rely/func/client_event.s"
-	@echo "... rely/func/creat_daemon.o"
-	@echo "... rely/func/creat_daemon.i"
-	@echo "... rely/func/creat_daemon.s"
-	@echo "... rely/func/epoll_add.o"
-	@echo "... rely/func/epoll_add.i"
-	@echo "... rely/func/epoll_add.s"
-	@echo "... rely/func/epoll_init_lfd.o"
-	@echo "... rely/func/epoll_init_lfd.i"
-	@echo "... rely/func/epoll_init_lfd.s"
-	@echo "... rely/func/epoll_set.o"
-	@echo "... rely/func/epoll_set.i"
-	@echo "... rely/func/epoll_set.s"
-	@echo "... rely/func/event_del.o"
-	@echo "... rely/func/event_del.i"
-	@echo "... rely/func/event_del.s"
-	@echo "... rely/func/justwrite.o"
-	@echo "... rely/func/justwrite.i"
-	@echo "... rely/func/justwrite.s"
-	@echo "... rely/func/lfdaccept.o"
-	@echo "... rely/func/lfdaccept.i"
-	@echo "... rely/func/lfdaccept.s"
-	@echo "... rely/func/log.o"
-	@echo "... rely/func/log.i"
-	@echo "... rely/func/log.s"
-	@echo "... rely/func/my_zlog_init.o"
-	@echo "... rely/func/my_zlog_init.i"
-	@echo "... rely/func/my_zlog_init.s"
-	@echo "... rely/func/serverhelp.o"
-	@echo "... rely/func/serverhelp.i"
-	@echo "... rely/func/serverhelp.s"
-	@echo "... rely/func/setconfig.o"
-	@echo "... rely/func/setconfig.i"
-	@echo "... rely/func/setconfig.s"
-	@echo "... rely/func/showevents.o"
-	@echo "... rely/func/showevents.i"
-	@echo "... rely/func/showevents.s"
-	@echo "... rely/includec/wrap.o"
-	@echo "... rely/includec/wrap.i"
-	@echo "... rely/includec/wrap.s"
-	@echo "... server/server.o"
-	@echo "... server/server.i"
-	@echo "... server/server.s"
+	@echo "... src/client_event.o"
+	@echo "... src/client_event.i"
+	@echo "... src/client_event.s"
+	@echo "... src/creat_daemon.o"
+	@echo "... src/creat_daemon.i"
+	@echo "... src/creat_daemon.s"
+	@echo "... src/epoll_add.o"
+	@echo "... src/epoll_add.i"
+	@echo "... src/epoll_add.s"
+	@echo "... src/epoll_init_lfd.o"
+	@echo "... src/epoll_init_lfd.i"
+	@echo "... src/epoll_init_lfd.s"
+	@echo "... src/epoll_set.o"
+	@echo "... src/epoll_set.i"
+	@echo "... src/epoll_set.s"
+	@echo "... src/event_del.o"
+	@echo "... src/event_del.i"
+	@echo "... src/event_del.s"
+	@echo "... src/justwrite.o"
+	@echo "... src/justwrite.i"
+	@echo "... src/justwrite.s"
+	@echo "... src/lfdaccept.o"
+	@echo "... src/lfdaccept.i"
+	@echo "... src/lfdaccept.s"
+	@echo "... src/my_zlog_init.o"
+	@echo "... src/my_zlog_init.i"
+	@echo "... src/my_zlog_init.s"
+	@echo "... src/serverhelp.o"
+	@echo "... src/serverhelp.i"
+	@echo "... src/serverhelp.s"
+	@echo "... src/setconfig.o"
+	@echo "... src/setconfig.i"
+	@echo "... src/setconfig.s"
+	@echo "... src/showevents.o"
+	@echo "... src/showevents.i"
+	@echo "... src/showevents.s"
+	@echo "... src/wrap.o"
+	@echo "... src/wrap.i"
+	@echo "... src/wrap.s"
 .PHONY : help
 
 
