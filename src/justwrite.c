@@ -6,7 +6,6 @@ void justwrite(int cfd, int event, void *args)
 {
 
     events *ev = (events *)args;
-
     strcat(ev->buf, "getted\n");
     int len = 0;
 

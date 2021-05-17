@@ -117,19 +117,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named client.out
-
-# Build rule for target.
-client.out: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client.out
-.PHONY : client.out
-
-# fast build rule for target.
-client.out/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/build
-.PHONY : client.out/fast
-
-#=============================================================================
 # Target rules for targets named server.out
 
 # Build rule for target.
@@ -142,12 +129,35 @@ server.out/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/build
 .PHONY : server.out/fast
 
+server/server.o: server/server.c.o
+.PHONY : server/server.o
+
+# target to build an object file
+server/server.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/server/server.c.o
+.PHONY : server/server.c.o
+
+server/server.i: server/server.c.i
+.PHONY : server/server.i
+
+# target to preprocess a source file
+server/server.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/server/server.c.i
+.PHONY : server/server.c.i
+
+server/server.s: server/server.c.s
+.PHONY : server/server.s
+
+# target to generate assembly for a file
+server/server.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/server/server.c.s
+.PHONY : server/server.c.s
+
 src/client_event.o: src/client_event.c.o
 .PHONY : src/client_event.o
 
 # target to build an object file
 src/client_event.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/client_event.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/client_event.c.o
 .PHONY : src/client_event.c.o
 
@@ -156,7 +166,6 @@ src/client_event.i: src/client_event.c.i
 
 # target to preprocess a source file
 src/client_event.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/client_event.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/client_event.c.i
 .PHONY : src/client_event.c.i
 
@@ -165,7 +174,6 @@ src/client_event.s: src/client_event.c.s
 
 # target to generate assembly for a file
 src/client_event.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/client_event.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/client_event.c.s
 .PHONY : src/client_event.c.s
 
@@ -174,7 +182,6 @@ src/creat_daemon.o: src/creat_daemon.c.o
 
 # target to build an object file
 src/creat_daemon.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/creat_daemon.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/creat_daemon.c.o
 .PHONY : src/creat_daemon.c.o
 
@@ -183,7 +190,6 @@ src/creat_daemon.i: src/creat_daemon.c.i
 
 # target to preprocess a source file
 src/creat_daemon.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/creat_daemon.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/creat_daemon.c.i
 .PHONY : src/creat_daemon.c.i
 
@@ -192,7 +198,6 @@ src/creat_daemon.s: src/creat_daemon.c.s
 
 # target to generate assembly for a file
 src/creat_daemon.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/creat_daemon.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/creat_daemon.c.s
 .PHONY : src/creat_daemon.c.s
 
@@ -201,7 +206,6 @@ src/epoll_add.o: src/epoll_add.c.o
 
 # target to build an object file
 src/epoll_add.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_add.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_add.c.o
 .PHONY : src/epoll_add.c.o
 
@@ -210,7 +214,6 @@ src/epoll_add.i: src/epoll_add.c.i
 
 # target to preprocess a source file
 src/epoll_add.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_add.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_add.c.i
 .PHONY : src/epoll_add.c.i
 
@@ -219,7 +222,6 @@ src/epoll_add.s: src/epoll_add.c.s
 
 # target to generate assembly for a file
 src/epoll_add.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_add.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_add.c.s
 .PHONY : src/epoll_add.c.s
 
@@ -228,7 +230,6 @@ src/epoll_init_lfd.o: src/epoll_init_lfd.c.o
 
 # target to build an object file
 src/epoll_init_lfd.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_init_lfd.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_init_lfd.c.o
 .PHONY : src/epoll_init_lfd.c.o
 
@@ -237,7 +238,6 @@ src/epoll_init_lfd.i: src/epoll_init_lfd.c.i
 
 # target to preprocess a source file
 src/epoll_init_lfd.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_init_lfd.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_init_lfd.c.i
 .PHONY : src/epoll_init_lfd.c.i
 
@@ -246,7 +246,6 @@ src/epoll_init_lfd.s: src/epoll_init_lfd.c.s
 
 # target to generate assembly for a file
 src/epoll_init_lfd.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_init_lfd.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_init_lfd.c.s
 .PHONY : src/epoll_init_lfd.c.s
 
@@ -255,7 +254,6 @@ src/epoll_set.o: src/epoll_set.c.o
 
 # target to build an object file
 src/epoll_set.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_set.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_set.c.o
 .PHONY : src/epoll_set.c.o
 
@@ -264,7 +262,6 @@ src/epoll_set.i: src/epoll_set.c.i
 
 # target to preprocess a source file
 src/epoll_set.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_set.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_set.c.i
 .PHONY : src/epoll_set.c.i
 
@@ -273,7 +270,6 @@ src/epoll_set.s: src/epoll_set.c.s
 
 # target to generate assembly for a file
 src/epoll_set.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/epoll_set.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/epoll_set.c.s
 .PHONY : src/epoll_set.c.s
 
@@ -282,7 +278,6 @@ src/event_del.o: src/event_del.c.o
 
 # target to build an object file
 src/event_del.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/event_del.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/event_del.c.o
 .PHONY : src/event_del.c.o
 
@@ -291,7 +286,6 @@ src/event_del.i: src/event_del.c.i
 
 # target to preprocess a source file
 src/event_del.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/event_del.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/event_del.c.i
 .PHONY : src/event_del.c.i
 
@@ -300,7 +294,6 @@ src/event_del.s: src/event_del.c.s
 
 # target to generate assembly for a file
 src/event_del.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/event_del.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/event_del.c.s
 .PHONY : src/event_del.c.s
 
@@ -309,7 +302,6 @@ src/justwrite.o: src/justwrite.c.o
 
 # target to build an object file
 src/justwrite.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/justwrite.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/justwrite.c.o
 .PHONY : src/justwrite.c.o
 
@@ -318,7 +310,6 @@ src/justwrite.i: src/justwrite.c.i
 
 # target to preprocess a source file
 src/justwrite.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/justwrite.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/justwrite.c.i
 .PHONY : src/justwrite.c.i
 
@@ -327,7 +318,6 @@ src/justwrite.s: src/justwrite.c.s
 
 # target to generate assembly for a file
 src/justwrite.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/justwrite.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/justwrite.c.s
 .PHONY : src/justwrite.c.s
 
@@ -336,7 +326,6 @@ src/lfdaccept.o: src/lfdaccept.c.o
 
 # target to build an object file
 src/lfdaccept.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/lfdaccept.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/lfdaccept.c.o
 .PHONY : src/lfdaccept.c.o
 
@@ -345,7 +334,6 @@ src/lfdaccept.i: src/lfdaccept.c.i
 
 # target to preprocess a source file
 src/lfdaccept.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/lfdaccept.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/lfdaccept.c.i
 .PHONY : src/lfdaccept.c.i
 
@@ -354,7 +342,6 @@ src/lfdaccept.s: src/lfdaccept.c.s
 
 # target to generate assembly for a file
 src/lfdaccept.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/lfdaccept.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/lfdaccept.c.s
 .PHONY : src/lfdaccept.c.s
 
@@ -363,7 +350,6 @@ src/my_zlog_init.o: src/my_zlog_init.c.o
 
 # target to build an object file
 src/my_zlog_init.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/my_zlog_init.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/my_zlog_init.c.o
 .PHONY : src/my_zlog_init.c.o
 
@@ -372,7 +358,6 @@ src/my_zlog_init.i: src/my_zlog_init.c.i
 
 # target to preprocess a source file
 src/my_zlog_init.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/my_zlog_init.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/my_zlog_init.c.i
 .PHONY : src/my_zlog_init.c.i
 
@@ -381,7 +366,6 @@ src/my_zlog_init.s: src/my_zlog_init.c.s
 
 # target to generate assembly for a file
 src/my_zlog_init.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/my_zlog_init.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/my_zlog_init.c.s
 .PHONY : src/my_zlog_init.c.s
 
@@ -390,7 +374,6 @@ src/serverhelp.o: src/serverhelp.c.o
 
 # target to build an object file
 src/serverhelp.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/serverhelp.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/serverhelp.c.o
 .PHONY : src/serverhelp.c.o
 
@@ -399,7 +382,6 @@ src/serverhelp.i: src/serverhelp.c.i
 
 # target to preprocess a source file
 src/serverhelp.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/serverhelp.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/serverhelp.c.i
 .PHONY : src/serverhelp.c.i
 
@@ -408,7 +390,6 @@ src/serverhelp.s: src/serverhelp.c.s
 
 # target to generate assembly for a file
 src/serverhelp.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/serverhelp.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/serverhelp.c.s
 .PHONY : src/serverhelp.c.s
 
@@ -417,7 +398,6 @@ src/setconfig.o: src/setconfig.c.o
 
 # target to build an object file
 src/setconfig.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/setconfig.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/setconfig.c.o
 .PHONY : src/setconfig.c.o
 
@@ -426,7 +406,6 @@ src/setconfig.i: src/setconfig.c.i
 
 # target to preprocess a source file
 src/setconfig.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/setconfig.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/setconfig.c.i
 .PHONY : src/setconfig.c.i
 
@@ -435,7 +414,6 @@ src/setconfig.s: src/setconfig.c.s
 
 # target to generate assembly for a file
 src/setconfig.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/setconfig.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/setconfig.c.s
 .PHONY : src/setconfig.c.s
 
@@ -444,7 +422,6 @@ src/showevents.o: src/showevents.c.o
 
 # target to build an object file
 src/showevents.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/showevents.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/showevents.c.o
 .PHONY : src/showevents.c.o
 
@@ -453,7 +430,6 @@ src/showevents.i: src/showevents.c.i
 
 # target to preprocess a source file
 src/showevents.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/showevents.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/showevents.c.i
 .PHONY : src/showevents.c.i
 
@@ -462,7 +438,6 @@ src/showevents.s: src/showevents.c.s
 
 # target to generate assembly for a file
 src/showevents.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/showevents.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/showevents.c.s
 .PHONY : src/showevents.c.s
 
@@ -471,7 +446,6 @@ src/wrap.o: src/wrap.c.o
 
 # target to build an object file
 src/wrap.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/wrap.c.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/wrap.c.o
 .PHONY : src/wrap.c.o
 
@@ -480,7 +454,6 @@ src/wrap.i: src/wrap.c.i
 
 # target to preprocess a source file
 src/wrap.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/wrap.c.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/wrap.c.i
 .PHONY : src/wrap.c.i
 
@@ -489,7 +462,6 @@ src/wrap.s: src/wrap.c.s
 
 # target to generate assembly for a file
 src/wrap.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.out.dir/build.make CMakeFiles/client.out.dir/src/wrap.c.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.out.dir/build.make CMakeFiles/server.out.dir/src/wrap.c.s
 .PHONY : src/wrap.c.s
 
@@ -501,8 +473,10 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... client.out"
 	@echo "... server.out"
+	@echo "... server/server.o"
+	@echo "... server/server.i"
+	@echo "... server/server.s"
 	@echo "... src/client_event.o"
 	@echo "... src/client_event.i"
 	@echo "... src/client_event.s"

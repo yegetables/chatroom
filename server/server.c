@@ -28,9 +28,6 @@ int main(int argc, char **argv)
     }
 
     
-    
-
-    
     //读配置
     setconfig();
     printf("pid:%d\nserver port:%d\n", getpid(), port);
@@ -46,7 +43,7 @@ int main(int argc, char **argv)
     zlog_info(ser, " pid[%d]   port[%d]", getpid(), port);
     zlog_debug(ser, " epfd[%d]", epfd);
 
-    exit(-1);
+    
     //3.epoll反应堆模型
     epfd = epoll_create(MAXCLIENT);
     //TODO:多线程

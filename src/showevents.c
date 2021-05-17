@@ -2,12 +2,13 @@
 
 #include "../include/chat.h"
 extern zlog_category_t *ser;
-void showevents(void *args, int line, char *fun)
+void showevents(events*ev, int line, char *fun)
 {
     
-    events *ev = (events *)args;
+//    events *ev = (events *)args;
     char logbuf[1024];
     memset(logbuf, 0, sizeof(logbuf));
+    fun=strrchr(fun,'/');
     sprintf(&logbuf[strlen(logbuf)], "\n-------events------\n[%s][%3d]", fun, line);
     sprintf(&logbuf[strlen(logbuf)], "fd:[%d]", ev->fd);
     if (ev->events & EPOLLIN)

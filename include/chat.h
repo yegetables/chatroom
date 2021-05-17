@@ -38,6 +38,6 @@ void justwrite(int, int, void *args);
 void lfdaccept(int, int, void *args);
 void event_del(events *ev);
 
-void showevents(void *args, int line, char *fun);
+void showevents(events*args, int line, char *fun);
 int creat_daemon(void);
 zlog_category_t *my_zlog_init(char *);

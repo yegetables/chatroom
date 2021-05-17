@@ -16,11 +16,14 @@ void client_event(int cfd, int event, void *args)
         ev->len--;
         ev->buf[ev->len] = 0;
         
-        showevents(ev, __LINE__ ,__FILE__ );
+        
 
         // write(cfd, ev->buf, len);
         //epoll_set(ev, cfd, justwrite, ev);
         ev->call_back = justwrite;
+        
+        
+        showevents(ev, __LINE__ , __FILE__ );
         epoll_add(EPOLLOUT, ev);
     }
     else
