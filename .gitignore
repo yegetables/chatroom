@@ -1,6 +1,6 @@
 CMakeFiles
 CMakeCache.txt
-build/
+build/*
 cmake_install.cmake
 html
 latex
