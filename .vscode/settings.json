@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "chat.h": "c"
+        "chat.h": "c",
+        "sdebug.info.h": "c"
     }
 }
