@@ -3,16 +3,15 @@ extern int port;
 char logconf[30] = "./log/s.log.conf";
 void setconfig(void)
 {
-
-    const char *configpath = "./config.json"; //写死配置路径
+    const char *configpath = "./config.json";  //写死配置路径
     int configfd;
     char bufjson[BUFLEN] = {0};
-    int i = 0;
+    int i                = 0;
     //读配置文件
     if (!access(configpath, F_OK) && !access(configpath, R_OK))
     {
         configfd = open(configpath, O_RDONLY);
-        int n = 1;
+        int n    = 1;
         while (n != 0)
         {
             n = read(configfd, bufjson, BUFLEN);
@@ -27,15 +26,17 @@ void setconfig(void)
             }
 
             cJSON *item = NULL;
-            char *name = NULL;
-            name = "port";
-            if (cJSON_HasObjectItem(configjson, name) && cJSON_IsNumber((item = cJSON_GetObjectItem(configjson, name))))
+            char *name  = NULL;
+            name        = "port";
+            if (cJSON_HasObjectItem(configjson, name) &&
+                cJSON_IsNumber((item = cJSON_GetObjectItem(configjson, name))))
             {
                 port = item->valueint;
             }
 
             name = "logconf";
-            if (cJSON_HasObjectItem(configjson, name) && cJSON_IsString((item = cJSON_GetObjectItem(configjson, name))))
+            if (cJSON_HasObjectItem(configjson, name) &&
+                cJSON_IsString((item = cJSON_GetObjectItem(configjson, name))))
             {
                 memset(logconf, 0, sizeof(logconf));
                 strcpy(logconf, item->valuestring);

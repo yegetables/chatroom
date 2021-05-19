@@ -6,7 +6,6 @@ events g_events[MAXCLIENT + 1];
 zlog_category_t *ser = NULL;
 int main(int argc, char **argv)
 {
-
     //解析命令行
     char *options = "h";
     int opt;
@@ -15,11 +14,11 @@ int main(int argc, char **argv)
         optarg —— 指向当前选项参数(如果有)的指针。
         optind —— 再次调用 getopt() 时的下一个 argv指针的索引。
         optopt —— 最后一个未知选项。
-        opterr ­—— 如果不希望getopt()打印出错信息，则只要将全域变量opterr设为0即可。
+        opterr ­——
+        如果不希望getopt()打印出错信息，则只要将全域变量opterr设为0即可。
         */
-        if (opt == 'h')
-            serverhelp();
-        //TODO:help手册
+        if (opt == 'h') serverhelp();
+        // TODO:help手册
         printf("******************************\n");
     }
 
@@ -31,16 +30,16 @@ int main(int argc, char **argv)
     creat_daemon();
 
     //开日志
-    //TODO:rm *.log
+    // TODO:rm *.log
     system("rm ./log/*.log");
     ser = my_zlog_init("server");
     zlog_info(ser, "--------start--------");
     zlog_info(ser, " pid[%d]   port[%d]", getpid(), port);
     zlog_debug(ser, " epfd[%d]", epfd);
 
-    //3.epoll反应堆模型
+    // 3.epoll反应堆模型
     epfd = epoll_create(MAXCLIENT);
-    //TODO:多线程
+    // TODO:多线程
     int lfd = epoll_init_lfd();
     zlog_debug(ser, "lfd:%d", lfd);
 
@@ -66,7 +65,7 @@ int main(int argc, char **argv)
         }
     }
 
-    //4.状态
+    // 4.状态
     /*
     while (1)
     {

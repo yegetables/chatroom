@@ -13,8 +13,8 @@ void event_del(events *ev)
     else
         ev->status = 0;
     struct epoll_event temp = {0, {0}};
-    temp.data.ptr = NULL;
-    //epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, NULL);
+    temp.data.ptr           = NULL;
+    // epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, NULL);
     epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, &temp);
 
     return;
