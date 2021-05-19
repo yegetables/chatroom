@@ -1,9 +1,9 @@
-#include "../include/chat.h"
-extern int port ;
+#include "../include/ser.h"
+extern int port;
 char logconf[30] = "./log/s.log.conf";
 void setconfig(void)
 {
-   
+
     const char *configpath = "./config.json"; //写死配置路径
     int configfd;
     char bufjson[BUFLEN] = {0};

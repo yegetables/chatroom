@@ -1,15 +1,11 @@
-#include "../include/chat.h"
+#include "../include/ser.h"
 int port = 500;
 /* SELF */
 int epfd;
 events g_events[MAXCLIENT + 1];
-zlog_category_t *ser=NULL;
+zlog_category_t *ser = NULL;
 int main(int argc, char **argv)
 {
-
-
-
-
 
     //解析命令行
     char *options = "h";
@@ -27,7 +23,6 @@ int main(int argc, char **argv)
         printf("******************************\n");
     }
 
-    
     //读配置
     setconfig();
     printf("pid:%d\nserver port:%d\n", getpid(), port);
@@ -35,7 +30,7 @@ int main(int argc, char **argv)
     //守护进程
     creat_daemon();
 
-        //开日志
+    //开日志
     //TODO:rm *.log
     system("rm ./log/*.log");
     ser = my_zlog_init("server");
@@ -43,7 +38,6 @@ int main(int argc, char **argv)
     zlog_info(ser, " pid[%d]   port[%d]", getpid(), port);
     zlog_debug(ser, " epfd[%d]", epfd);
 
-    
     //3.epoll反应堆模型
     epfd = epoll_create(MAXCLIENT);
     //TODO:多线程

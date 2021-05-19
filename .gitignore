@@ -1,9 +1,5 @@
-CMakeFiles
-CMakeCache.txt
 build/*
-cmake_install.cmake
-latex
 log/*.log
 a.out
-compile_commands.json
 Doxyfile.bak
+doxygen-qmi-style 

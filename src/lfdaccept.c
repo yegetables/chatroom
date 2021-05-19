@@ -1,4 +1,4 @@
-#include "../include/chat.h"
+#include "../include/ser.h"
 extern int epfd;
 extern zlog_category_t *ser;
 extern events g_events[MAXCLIENT + 1];
@@ -28,7 +28,7 @@ void lfdaccept(int a, int b, void *args)
     }
     if (i == MAXCLIENT)
     {
-        zlog_warn(ser,"ERROR[BUSY] no found free events");
+        zlog_warn(ser, "ERROR[BUSY] no found free events");
         return;
     }
 

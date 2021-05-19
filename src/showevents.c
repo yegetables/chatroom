@@ -1,14 +1,14 @@
 
 
-#include "../include/chat.h"
+#include "../include/ser.h"
 extern zlog_category_t *ser;
-void showevents(events*ev, int line, char *fun)
+void showevents(events *ev, int line, char *fun)
 {
-    
-//    events *ev = (events *)args;
+
+    //    events *ev = (events *)args;
     char logbuf[1024];
     memset(logbuf, 0, sizeof(logbuf));
-    fun=strrchr(fun,'/');
+    fun = strrchr(fun, '/');
     sprintf(&logbuf[strlen(logbuf)], "\n-------events------\n[%s][%3d]", fun, line);
     sprintf(&logbuf[strlen(logbuf)], "fd:[%d]", ev->fd);
     if (ev->events & EPOLLIN)
@@ -32,6 +32,6 @@ void showevents(events*ev, int line, char *fun)
     sprintf(&logbuf[strlen(logbuf)], "\n-----------------over---------\n");
 
     //printf("%s\n", logbuf);
-    zlog_debug(ser,"%s", logbuf);
+    zlog_debug(ser, "%s", logbuf);
     return;
 }

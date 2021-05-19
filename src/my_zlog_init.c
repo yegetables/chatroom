@@ -1,8 +1,8 @@
-#include "../include/chat.h"
+#include "../include/ser.h"
 
 extern char logconf[30];
 
-zlog_category_t *my_zlog_init(char*cate)
+zlog_category_t *my_zlog_init(char *cate)
 {
     if (zlog_init(logconf))
     {
