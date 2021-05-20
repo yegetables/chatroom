@@ -1,4 +1,6 @@
-#include "../include/ser.h"
+#include "config.h"
+#include PROJECT_SERVERHEAD
+
 int port = 500;
 /* SELF */
 int epfd;
@@ -24,14 +26,20 @@ int main(int argc, char **argv)
 
     //读配置
     setconfig();
-    printf("pid:%d\nserver port:%d\n", getpid(), port);
+    printf("server port:%d\n", port);
 
     //守护进程
     creat_daemon();
-
     //开日志
-    // TODO:rm *.log
-    system("rm ./log/*.log");
+
+    {
+        char cmd[100] = {0};
+        sprintf(cmd, "rm ");
+        strcat(cmd, PROJECT_LOGPATH);
+        strcat(cmd, "*.log");
+        system(cmd);
+    }
+
     ser = my_zlog_init("server");
     zlog_info(ser, "--------start--------");
     zlog_info(ser, " pid[%d]   port[%d]", getpid(), port);

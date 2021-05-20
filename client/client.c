@@ -1,8 +1,24 @@
-#include "../include/sdebug.info.h"
-#include "../include/wrap.h"
+#include "config.h"
+#include PROJECT_CLIENTHEAD
 
 int main(int argc, char **argv)
 {
+    //连接
+    int cfd = socket(AF_INET, SOCK_STREAM, 0);
+    struct sockaddr_in addr;
+    addr.sin_family      = AF_INET;
+    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    inet_aton(argv[1], &addr.sin_addr);
+    addr.sin_port     = htons(atoi(argv[2]));
+    socklen_t addrlen = sizeof(addr);   
+    if (0 != connect(cfd, (struct sockaddr *)&addr, addrlen))
+    {
+        perror("connect failed");
+        exit(-1);
+    }
+    perror("connect success");
+    exit(-1);
+
     printf("登录请输入你的用户名\n");
     printf("注册请输入你想要的用户名\n");
     printf("(不超过15个字符)\n");

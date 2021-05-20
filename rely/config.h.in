@@ -1,0 +1,10 @@
+#ifndef PROJECT_DEFINE
+#define PROJECT_DEFINE
+
+#define PROJECT_PATH "${CMAKE_SOURCE_DIR}/"
+#define PROJECT_LOGPATH  "${CMAKE_SOURCE_DIR}/log/"
+#define PROJECT_LOGCONFIG  "${CMAKE_SOURCE_DIR}/log/s.log.conf"
+#define PROJECT_SERVERHEAD "${CMAKE_SOURCE_DIR}/include/ser.h"
+#define PROJECT_CLIENTHEAD "${CMAKE_SOURCE_DIR}/include/cli.h"
+#define PROJECT_CONFIG "${CMAKE_SOURCE_DIR}/config.json"
+#endif 

@@ -1,14 +1,17 @@
 
-#include "../include/ser.h"
+#include "config.h"
+#include PROJECT_SERVERHEAD
+
 extern int epfd;
 extern zlog_category_t *ser;
 void justwrite(int cfd, int event, void *args)
 {
     events *ev = (events *)args;
     strcat(ev->buf, "getted\n");
+    ev->len = strlen(ev->buf);
     int len = 0;
 
-    if ((len = write(cfd, ev->buf, strlen(ev->buf))) > 0)
+    if ((len = write(cfd, ev->buf, ev->len)) > 0)
     {
         event_del(ev);
         showevents(ev, __LINE__, __FILE__);
@@ -24,7 +27,7 @@ void justwrite(int cfd, int event, void *args)
         // epoll_set(ev, cfd, client_event, ev);
         epoll_add(EPOLLIN, ev);
     }
-    else
+    else if (len < 0)
     {
         close(cfd);
         zlog_error(ser, "close cfd:%d ", cfd);

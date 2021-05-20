@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/socket.h>
-#include "../include/sdebug.info.h"
+// #include "../include/sdebug.info.h"
 
 void perr_exit(const char *s)
 {
