@@ -1,8 +1,8 @@
 
-#include "../include/ser.h"
+#include "config.h"
+#include PROJECT_SERVERHEAD
 
 extern int port;
-extern char serverip[30];
 extern int epfd;
 extern events g_events[MAXCLIENT + 1];
 

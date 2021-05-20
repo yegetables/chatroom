@@ -1,16 +1,16 @@
-#include "../include/ser.h"
+#include "config.h"
+#include PROJECT_SERVERHEAD
+
 extern int port;
-char logconf[30] = "./log/s.log.conf";
 void setconfig(void)
 {
-    const char *configpath = "./config.json";  //写死配置路径
     int configfd;
     char bufjson[BUFLEN] = {0};
-    int i                = 0;
+  
     //读配置文件
-    if (!access(configpath, F_OK) && !access(configpath, R_OK))
+    if (!access(PROJECT_CONFIG, F_OK) && !access(PROJECT_CONFIG, R_OK))
     {
-        configfd = open(configpath, O_RDONLY);
+        configfd = open(PROJECT_CONFIG, O_RDONLY);
         int n    = 1;
         while (n != 0)
         {
@@ -34,13 +34,13 @@ void setconfig(void)
                 port = item->valueint;
             }
 
-            name = "logconf";
-            if (cJSON_HasObjectItem(configjson, name) &&
-                cJSON_IsString((item = cJSON_GetObjectItem(configjson, name))))
-            {
-                memset(logconf, 0, sizeof(logconf));
-                strcpy(logconf, item->valuestring);
-            }
+            // name = PROJECT_LOGPROJECT_CONFIG;
+            // if (cJSON_HasObjectItem(configjson, PROJECT_LOGPROJECT_CONFIG) &&
+            //     cJSON_IsString((item = cJSON_GetObjectItem(configjson,
+            //     name))))
+            // {
+            //     strcpy(PROJECT_LOGPROJECT_CONFIG, item->valuestring);
+            // }
             cJSON_Delete(configjson);
         }
 

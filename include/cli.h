@@ -1,8 +1,8 @@
 #include "sdebug.info.h"
 #include "wrap.h"
-#include <zlog.h>
-#include <mysql/mysql.h>
-#include <cjson/cJSON.h>
+#include "zlog.h"
+#include "mysql/mysql.h"
+#include "cJSON.h"
 #define BUFLEN 4096
 #define MAXCLIENT 5000
 typedef enum

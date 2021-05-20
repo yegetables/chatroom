@@ -1,10 +1,9 @@
-#include "../include/ser.h"
-
-extern char logconf[30];
+#include "config.h"
+#include PROJECT_SERVERHEAD
 
 zlog_category_t *my_zlog_init(char *cate)
 {
-    if (zlog_init(logconf))
+    if (zlog_init(PROJECT_LOGCONFIG))
     {
         perror("zlog_init error");
         exit(-1);

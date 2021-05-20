@@ -1,4 +1,6 @@
-#include "../include/ser.h"
+#include "config.h"
+#include PROJECT_SERVERHEAD
+
 int creat_daemon(void)
 {
     // 1.创建子进程，父进程退出
@@ -6,7 +8,7 @@ int creat_daemon(void)
     if (pid == 0)
     {
         // 2.创建新会话,使子进程完全独立出来，脱离控制
-        pid = setsid();
+        setsid();
 
         //再次创建子进程(第二次保证进程不是进程组长)
         pid = fork();
@@ -33,6 +35,8 @@ int creat_daemon(void)
     {
         exit(0);
     }
+
+    printf("pid:%d\n", getpid());
 
     // 3.切换目录
     // chdir("/");

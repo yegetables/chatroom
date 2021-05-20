@@ -1,4 +1,5 @@
-#include "../include/ser.h"
+#include "config.h"
+#include PROJECT_SERVERHEAD
 extern int epfd;
 extern zlog_category_t *ser;
 void epoll_add(int event, events *ev)

@@ -1,4 +1,5 @@
-#include "../include/ser.h"
+#include "config.h"
+#include PROJECT_SERVERHEAD
 
 void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
                void *arg)
@@ -10,6 +11,6 @@ void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
     ev->status    = 0;
     memset(ev->buf, 0, sizeof(ev->buf));
     ev->len         = 0;
-    ev->last_active = time(NULL);
+    //ev->last_active = time(NULL);
     return;
 }
