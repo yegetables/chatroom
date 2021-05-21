@@ -31,7 +31,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 # 指定生成目标 
 add_executable(server.out ${SERVER_SRCS}  ${RELY_FUNC_SRCS} )
-#add_executable(client.out ${CLIENT_SRCS}  ${RELY_FUNC_SRCS} )
+add_executable(client.out ${CLIENT_SRCS}  ${RELY_FUNC_SRCS} )
 
 
 configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/server/config.h )
@@ -43,7 +43,8 @@ configure_file(${CMAKE_SOURCE_DIR}/rely/s.log.conf.in ${CMAKE_SOURCE_DIR}/log/s.
 
 # 添加链接库
 target_link_libraries(server.out cjson pthread zlog )
-#target_link_libraries(client.out -lcjson -lpthread -lzlog -lmysqlclient )
+target_link_libraries(client.out -lcjson -lpthread -lzlog  )
+#-lmysqlclient
 
 #SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -g -Wall -fsanitize=address -fno-omit-frame-pointer ")
 #SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -g -Wall -L${CMAKE_SOURCE_DIR}/lib -lmysqlclient -I${CMAKE_SOURCE_DIR}/include/mysql ")
