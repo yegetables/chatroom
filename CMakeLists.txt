@@ -4,8 +4,6 @@ cmake_minimum_required (VERSION  3.20.2 )
 # 项目信息
 project (chatroom)
 
-
-
 set( CMAKE_BUILD_TYPE Debug )
 #set( CMAKE_BUILD_TYPE Release )
 
@@ -42,8 +40,8 @@ configure_file(${CMAKE_SOURCE_DIR}/rely/s.log.conf.in ${CMAKE_SOURCE_DIR}/log/s.
 #add_definitions(  -g -Wall -fsanitize=address -fno-omit-frame-pointer )
 
 # 添加链接库
-target_link_libraries(server.out cjson pthread zlog )
-target_link_libraries(client.out -lcjson -lpthread -lzlog  )
+target_link_libraries(server.out cjson pthread zlog  mysqlclient)
+target_link_libraries(client.out cjson pthread zlog  mysqlclient)
 #-lmysqlclient
 
 #SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -g -Wall -fsanitize=address -fno-omit-frame-pointer ")
