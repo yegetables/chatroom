@@ -3,14 +3,14 @@
 
 int main(int argc, char **argv)
 {
-    //连接
+    ///  连接
     int cfd = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in addr;
     addr.sin_family      = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     inet_aton(argv[1], &addr.sin_addr);
     addr.sin_port     = htons(atoi(argv[2]));
-    socklen_t addrlen = sizeof(addr);   
+    socklen_t addrlen = sizeof(addr);
     if (0 != connect(cfd, (struct sockaddr *)&addr, addrlen))
     {
         perror("connect failed");
@@ -61,12 +61,12 @@ int main(int argc, char **argv)
             }
         }
     }
-    else  //注册
+    else  ///  注册
     {
         printf("-----------------注册:\n用户名:%s\n密码:", username);
         scanf("%19s", password);
 
-        // mysql
+        /// mysql
 
         printf("-----------------注册成功\n");
         printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username,

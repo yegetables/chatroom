@@ -45,8 +45,9 @@ int creat_daemon(void)
     // umask(0);
 
     // 5.关文件
-    for (int i = 0; i < NOFILE; close(i++))
+    for (int i = 0; i < NOFILE; close(i++)) {
         ;
+}
 
     // 6.信号处理
     //如果对于信号处理通过怕生成子进程执行,要设置信号忽略SIGCHLD信号,可以避免子进程成为僵尸
@@ -54,5 +55,6 @@ int creat_daemon(void)
 
     // 7.其他,可以处理别的
     //也可以返回主程序,执行任务,此时主程序成为守护进程
+    
     return 0;
 }

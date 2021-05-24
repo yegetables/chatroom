@@ -952,7 +952,11 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                =
+EXCLUDE                = ./include/mysql 
+EXCLUDE               += ./include/cJSON.h 
+EXCLUDE               += ./include/zlog.h
+EXCLUDE               += ./build
+
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -1210,8 +1214,7 @@ HTML_FILE_EXTENSION    = .html
 # of the possible markers and block names see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_HEADER            = ./doxygen-qmi-style/header.html
-
+HTML_HEADER            = 
 # The HTML_FOOTER tag can be used to specify a user-defined HTML footer for each
 # generated HTML page. If the tag is left blank doxygen will generate a standard
 # footer. See HTML_HEADER for more information on how to generate a default
@@ -1220,7 +1223,7 @@ HTML_HEADER            = ./doxygen-qmi-style/header.html
 # that doxygen normally uses.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_FOOTER            = ./doxygen-qmi-style/footer.html
+HTML_FOOTER            = 
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading style
 # sheet that is used by each HTML page. It can be used to fine-tune the look of
@@ -1232,7 +1235,7 @@ HTML_FOOTER            = ./doxygen-qmi-style/footer.html
 # obsolete.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_STYLESHEET        =  ./doxygen-qmi-style/qmi.css
+HTML_STYLESHEET        =  
 
 # The HTML_EXTRA_STYLESHEET tag can be used to specify additional user-defined
 # cascading style sheets that are included after the standard style sheets

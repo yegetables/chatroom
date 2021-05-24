@@ -3,4 +3,4 @@ log/*.log
 a.out
 Doxyfile.bak
 doxygen-qmi-style 
-droc/html/*
+**/html/**
