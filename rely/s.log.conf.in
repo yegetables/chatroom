@@ -1,8 +1,10 @@
 [formats]
 simple  = "[%f][%U:%L][%V]  %m%n"
+simple_simple ="[%U:%L][%V]  %m%n"
 
 [rules]
-server.DEBUG      "${CMAKE_SOURCE_DIR}/log/severDEBUG.log";simple
+server.DEBUG      "${CMAKE_SOURCE_DIR}/log/severDEBUG.log";simple_simple
 server.INFO       "${CMAKE_SOURCE_DIR}/log/severINFO.log";simple
-user_*.DEBUG      "${CMAKE_SOURCE_DIR}/log/userDEBUG.log";simple
-user_*.INFO       "${CMAKE_SOURCE_DIR}/log/userINFO.log";simple
+
+client.DEBUG      "${CMAKE_SOURCE_DIR}/log/clientDEBUG.log";simple
+client.INFO       "${CMAKE_SOURCE_DIR}/log/clientINFO.log";simple

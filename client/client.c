@@ -1,8 +1,20 @@
 #include "config.h"
 #include PROJECT_CLIENTHEAD
 
+zlog_category_t *cli = NULL;
 int main(int argc, char **argv)
 {
+    /// @brief 开日志
+    char cmd[100] = {0};
+#ifdef DEBUG
+    sprintf(cmd, "rm ");
+    strcat(cmd, PROJECT_LOGPATH);
+    strcat(cmd, "client*.log");
+    system(cmd);
+#endif
+    cli = my_zlog_init("client");
+    zlog_info(cli, "--------start--------");
+
     ///  连接
     int cfd = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in addr;
