@@ -3,21 +3,24 @@
 #include "sdebug.info.h"
 #include "wrap.h"
 #include "zlog.h"
+
 #define BUFLEN 4096
 #define MAXCLIENT 5000
+
+/// @enum bool枚举
 typedef enum
 {
-    true  = 1,
-    false = 0
+    true  = 1,  ///<  true=1
+    false = 0   ///<  fales=0
 } bool;
 
 typedef struct
 {
-    int fd;      //要监听的文件描述符
-    int events;  //对应的监听事件
-    void *arg;   //泛型参数
-    void (*call_back)(int fd, int events, void *arg);  //回调函数
-    int status;  //是否在监听:1->在红黑树上(监听), 0->不在(不监听)
+    int fd;      ///  要监听的文件描述符
+    int events;  ///  对应的监听事件
+    void *arg;   ///  泛型参数
+    void (*call_back)(int fd, int events, void *arg);  ///  回调函数
+    int status;  ///  是否在监听:1->在红黑树上(监听), 0->不在(不监听)
     char buf[BUFLEN];
     int len;
 
@@ -30,9 +33,9 @@ void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
 void epoll_add(int event, events *ev);
 int epoll_init_lfd(void);
 
-// cfd初始事件(lfd accept分派)read close
+///  cfd初始事件(lfd accept分派)read close
 void client_event(int, int, void *args);
-//
+
 void justwrite(int, int, void *args);
 
 void lfdaccept(int, int, void *args);
