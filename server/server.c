@@ -1,9 +1,9 @@
 #include "config.h"
 #include PROJECT_SERVERHEAD
 
-int port = 500; ///< var 服务器端口
-int epfd; ///< 全局epfd
-events g_events[MAXCLIENT + 1]; ///< 
+int port = 500;                  ///< var 服务器端口
+int epfd;                        ///< 全局epfd
+events g_events[MAXCLIENT + 1];  ///<
 zlog_category_t *ser = NULL;
 
 int main(int argc, char **argv)
