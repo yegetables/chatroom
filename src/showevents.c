@@ -9,7 +9,7 @@ void showevents(events *ev, int line, char *fun)
     //    events *ev = (events *)args;
     char logbuf[ev->len + 1 + BUFLEN];
     memset(logbuf, 0, sizeof(logbuf));
-    fun = strrchr(fun, '/');
+    fun = 1 + strrchr(fun, '/');
     sprintf(&logbuf[strlen(logbuf)], "\n-------events------\n[%s][%3d]", fun,
             line);
     sprintf(&logbuf[strlen(logbuf)], "fd:[%d]", ev->fd);

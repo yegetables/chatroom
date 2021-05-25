@@ -7,7 +7,6 @@
 #define BUFLEN 4096
 #define MAXCLIENT 5000
 
-/// @enum bool枚举
 typedef enum
 {
     true  = 1,  ///<  true=1
@@ -26,7 +25,7 @@ typedef struct
 
 } events;
 
-void setconfig(void);
+void setserconfig(char *filename);
 void serverhelp(void);
 void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
                void *arg);
@@ -44,3 +43,16 @@ void event_del(events *ev);
 void showevents(events *args, int line, char *fun);
 int creat_daemon(void);
 zlog_category_t *my_zlog_init(char *);
+
+MYSQL *sql_connect(void);
+
+/**
+ * @brief table init
+ *
+ * @param sql句柄
+ * @note  init user table
+ * @details init related tables
+ * @return true
+ * @return false
+ */
+bool sql_init_table(MYSQL *sql);

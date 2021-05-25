@@ -1,13 +1,17 @@
 #include "config.h"
 #include PROJECT_SERVERHEAD
 
-int port = 500;                  ///< var 服务器端口
-int epfd;                        ///< 全局epfd
-events g_events[MAXCLIENT + 1];  ///<
+int port = 500;  ///< var 服务器端口
+int epfd;        ///< 全局epfd
+events g_events[MAXCLIENT + 1];
 zlog_category_t *ser = NULL;
-
+extern char database_name[20];
+MYSQL *sql = NULL;
 int main(int argc, char **argv)
 {
+    char q[BUFLEN];  /// 数据库语句
+    memset(q, 0, sizeof(q));
+
     /// @brief 解析命令行
     char *options = "h";
     int opt;
@@ -29,7 +33,7 @@ int main(int argc, char **argv)
     }
 
     /// @brief 读配置
-    setconfig();
+    setserconfig(PROJECT_SERCONFIG);
     printf("server port:%d\n", port);
 
     /// @brief 守护进程
@@ -37,15 +41,28 @@ int main(int argc, char **argv)
 
     /// @brief 开日志
     char cmd[100] = {0};
+#ifdef DEBUG
     sprintf(cmd, "rm ");
     strcat(cmd, PROJECT_LOGPATH);
-    strcat(cmd, "*.log");
+    strcat(cmd, "sever*.log");
     system(cmd);
-
+#endif
     ser = my_zlog_init("server");
     zlog_info(ser, "--------start--------");
-    zlog_info(ser, " pid[%d]   port[%d]", getpid(), port);
-    zlog_debug(ser, " epfd[%d]", epfd);
+    zlog_info(ser, "pid[%d]   port[%d]", getpid(), port);
+    zlog_debug(ser, "epfd[%d]", epfd);
+
+    /// @brief sql 连接
+    sql = sql_connect();
+    if (sql == NULL)
+    {
+        zlog_error(ser, "sql_connect error");
+        exit(-1);
+    }
+    if (false == sql_init_table(sql))
+    {
+        exit(-1);
+    }
 
     /// @brief epoll反应堆模型
     epfd = epoll_create(MAXCLIENT);
@@ -74,5 +91,6 @@ int main(int argc, char **argv)
     }
 
     zlog_fini();
+    mysql_close(sql);
     return 0;
 }

@@ -1,0 +1,8 @@
+{
+    "server_port":5000,
+    "database_name":"test",
+    "database_user":"ajian",
+    "database_passwd":"123456",
+    "database_port":3306,
+    "database_ip":"127.0.0.1"
+}
