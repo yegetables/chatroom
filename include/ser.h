@@ -45,3 +45,5 @@ int creat_daemon(void);
 zlog_category_t *my_zlog_init(char *);
 
 MYSQL *sql_connect(void);
+
+bool sql_init_table(MYSQL *sql);

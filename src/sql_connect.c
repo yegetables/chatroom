@@ -23,8 +23,7 @@ MYSQL* sql_connect(void)
                    "Failed to init mysql "
                    "Error %u: %s",
                    mysql_errno(conn), mysql_error(conn));
-        conn = NULL;
-        return conn;
+        return NULL;
     }
 
     /// 连接数据库
@@ -35,8 +34,7 @@ MYSQL* sql_connect(void)
                    "Failed to connect "
                    "Error %u: %s",
                    mysql_errno(conn), mysql_error(conn));
-        conn = NULL;
-        return conn;
+        return NULL;
     }
 
     char q[BUFLEN];
@@ -51,8 +49,7 @@ MYSQL* sql_connect(void)
                   "failed to create "
                   "Error %u: %s",
                   mysql_errno(conn), mysql_error(conn));
-        conn = NULL;
-        return conn;
+        return NULL;
     }
 
     memset(q, 0, sizeof(q));
@@ -63,8 +60,8 @@ MYSQL* sql_connect(void)
                   "failed to create "
                   "Error %u: %s",
                   mysql_errno(conn), mysql_error(conn));
-        conn = NULL;
-        return conn;
+
+        return NULL;
     }
 
     return conn;

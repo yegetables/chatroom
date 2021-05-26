@@ -6,6 +6,7 @@ int epfd;        ///< 全局epfd
 events g_events[MAXCLIENT + 1];
 zlog_category_t *ser = NULL;
 extern char database_name[20];
+MYSQL *sql = NULL;
 int main(int argc, char **argv)
 {
     char q[BUFLEN];  /// 数据库语句
@@ -51,14 +52,17 @@ int main(int argc, char **argv)
     zlog_info(ser, "pid[%d]   port[%d]", getpid(), port);
     zlog_debug(ser, "epfd[%d]", epfd);
 
-    MYSQL *sql = NULL;
-    sql        = sql_connect();
+    /// @brief sql 连接
+    sql = sql_connect();
     if (sql == NULL)
     {
         zlog_error(ser, "sql_connect error");
         exit(-1);
     }
-
+    if (false == sql_init_table(sql))
+    {
+        exit(-1);
+    }
     /// @brief epoll反应堆模型
     epfd = epoll_create(MAXCLIENT);
 
