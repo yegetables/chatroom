@@ -2,6 +2,7 @@
 #include PROJECT_CLIENTHEAD
 
 zlog_category_t *cli = NULL;
+int cfd;
 int main(int argc, char **argv)
 {
     /// @brief 开日志
@@ -15,8 +16,28 @@ int main(int argc, char **argv)
     cli = my_zlog_init("client");
     zlog_info(cli, "--------start--------");
 
+    /// @brief 解析命令行
+    char *options = "h";
+    int opt;
+    while ((opt = getopt(argc, argv, options)) != -1)
+    {
+        /**
+         * @brief getopt
+         * @note optarg —— 指向当前选项参数(如果有) 的指针。
+         * @note optind —— 再次调用 getopt()时的下一个 argv指针的索引。
+         * @note optopt —— 最后一个未知选项。
+         * @note opterr ­——
+         * 如果不希望getopt()打印出错信息，则只要将全域变量opterr设为0即可。
+         */
+
+        if (opt == 'h') clienthelp();
+
+        ///  @todo help手册
+        printf("******************************\n");
+    }
+
     ///  连接
-    int cfd = socket(AF_INET, SOCK_STREAM, 0);
+    cfd = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in addr;
     addr.sin_family      = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -25,11 +46,13 @@ int main(int argc, char **argv)
     socklen_t addrlen = sizeof(addr);
     if (0 != connect(cfd, (struct sockaddr *)&addr, addrlen))
     {
-        perror("connect failed");
+        zlog_warn(cli, "connect error: %s", strerror(errno));
         exit(-1);
     }
-    perror("connect success");
-    exit(-1);
+    else
+    {
+        zlog_debug(cli, "connect success");
+    }
 
     printf("登录请输入你的用户名\n");
     printf("注册请输入你想要的用户名\n");
@@ -38,8 +61,9 @@ int main(int argc, char **argv)
     char password[20];
     memset(username, 0, sizeof(username));
     memset(password, 0, sizeof(password));
-    scanf("%19s", username);
-    if (accessusername(username))
+    scanf("%16s", username);
+    /// login
+    if (cli_accessusername(username))
     {
         int errornumber = 0;
     again:

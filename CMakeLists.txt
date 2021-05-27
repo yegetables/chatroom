@@ -9,7 +9,7 @@ project (chatroom)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
-#add_subdirectory(${CMAKE_SOURCE_DIR}/client)
+add_subdirectory(${CMAKE_SOURCE_DIR}/client)
 add_subdirectory(${CMAKE_SOURCE_DIR}/server)
 
 

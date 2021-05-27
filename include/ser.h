@@ -46,4 +46,13 @@ zlog_category_t *my_zlog_init(char *);
 
 MYSQL *sql_connect(void);
 
+/**
+ * @brief table init
+ *
+ * @param sql句柄
+ * @note  init user table
+ * @details init related tables
+ * @return true
+ * @return false
+ */
 bool sql_init_table(MYSQL *sql);

@@ -25,6 +25,10 @@ MYSQL* sql_connect(void)
                    mysql_errno(conn), mysql_error(conn));
         return NULL;
     }
+    else
+    {
+        zlog_debug(ser, "init mysql success");
+    }
 
     /// 连接数据库
     if (mysql_real_connect(conn, database_ip, database_user, database_passwd,
@@ -35,6 +39,10 @@ MYSQL* sql_connect(void)
                    "Error %u: %s",
                    mysql_errno(conn), mysql_error(conn));
         return NULL;
+    }
+    else
+    {
+        zlog_debug(ser, "connect datebase success");
     }
 
     char q[BUFLEN];
@@ -51,6 +59,10 @@ MYSQL* sql_connect(void)
                   mysql_errno(conn), mysql_error(conn));
         return NULL;
     }
+    else
+    {
+        zlog_debug(ser, "datebase creat success");
+    }
 
     memset(q, 0, sizeof(q));
     sprintf(q, "use %s", database_name);
@@ -62,6 +74,10 @@ MYSQL* sql_connect(void)
                   mysql_errno(conn), mysql_error(conn));
 
         return NULL;
+    }
+    else
+    {
+        zlog_debug(ser, "use datebase %s success", database_name);
     }
 
     return conn;
