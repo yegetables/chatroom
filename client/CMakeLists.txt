@@ -16,12 +16,12 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 
 add_executable(client.out ${CLIENT_SRCS}  ${RELY_FUNC_SRCS} )
-
+#add_executable(client.out ${CLIENT_SRCS}  ${RELY_FUNC_SRCS} )
 
 configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/client/config.h )
 
+add_definitions(  -g -Wall -DDEBUG  )
 
-#add_definitions(  -g -Wall -fsanitize=address -fno-omit-frame-pointer )
 
 
-target_link_libraries(client.out cjson pthread zlog  mysqlclient)
+target_link_libraries(client.out cjson pthread zlog  )

@@ -17,11 +17,10 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 add_executable(server.out ${SERVER_SRCS}  ${RELY_FUNC_SRCS} )
 
-
 configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/server/config.h )
 
 
-add_definitions(  -g -Wall -DDEBUG )
+add_definitions(  -g -Wall -DDEBUG  )
 # -fsanitize=address -fno-omit-frame-pointer
 
 

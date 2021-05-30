@@ -46,7 +46,20 @@
         "zlog.h": "c",
         "Doxyfile": "dockercompose",
         ".clang-format": "bat",
+        "*.md": "markdown",
+        "*.h": "c",
         "*.in": "bat",
-        "config.h": "c"
-    }
+        "config.h": "c",
+        "cassert": "c"
+    },
+    "cSpell.words": [
+        "lfdaccept",
+        "rerecv",
+        "rerecving",
+        "resending",
+        "resend",
+        "zlog"
+    ],
+    "todo-tree.tree.showBadges": true,
+    "todo-tree.tree.showCountsInTree": true
 }

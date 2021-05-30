@@ -1,7 +1,7 @@
 #include "config.h"
 #include PROJECT_SERVERHEAD
 
-zlog_category_t *my_zlog_init(char *cate)
+zlog_category_t *my_zlog_init(char *category)
 {
     if (zlog_init(PROJECT_LOGCONFIG))
     {
@@ -9,7 +9,7 @@ zlog_category_t *my_zlog_init(char *cate)
         exit(-1);
     }
 
-    zlog_category_t *ser = zlog_get_category(cate);
+    zlog_category_t *ser = zlog_get_category(category);
     if (!ser)
     {
         zlog_fini();

@@ -4,3 +4,4 @@ a.out
 Doxyfile.bak
 doxygen-qmi-style 
 **/html/**
+node_modules

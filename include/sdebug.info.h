@@ -3,6 +3,7 @@
 #endif
 
 #include <arpa/inet.h>
+#include <assert.h>
 #include <bits/sockaddr.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -11,6 +12,7 @@
 #include <netinet/in.h>
 #include <pthread.h>
 #include <signal.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
