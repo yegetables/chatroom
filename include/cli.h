@@ -14,7 +14,7 @@ typedef enum
 } bool;
 typedef enum
 {
-    message,
+    msg,
     file
 } value_type;
 
@@ -30,8 +30,11 @@ void clienthelp(void);
 
 void justwrite(int, int, void *args);
 
-void showevents(events *args, int line, char *fun);
+// void showevents(void *args, int line, char *fun);
 
 zlog_category_t *my_zlog_init(char *);
 
 bool cli_accessusername(char *name);
+bool cli_accesspassword(char *passwd);
+bool useronline(char *name);
+void showmainmenu(void);

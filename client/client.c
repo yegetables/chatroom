@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 {
     /// @brief 开日志
     char cmd[100] = {0};
-#ifdef DEBUG
+#ifndef DEBUG
     sprintf(cmd, "rm ");
     strcat(cmd, PROJECT_LOGPATH);
     strcat(cmd, "client*.log");
@@ -36,7 +36,12 @@ int main(int argc, char **argv)
         printf("******************************\n");
     }
 
-    ///  连接服务器 并 设置非阻塞套接字
+    if (argc < 2)
+    {
+        printf("usage ./client ipaddr port \n");
+        exit(1);
+    }
+    ///  连接服务器
     cfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     struct sockaddr_in addr;
     addr.sin_family      = AF_INET;
@@ -44,15 +49,20 @@ int main(int argc, char **argv)
     inet_aton(argv[1], &addr.sin_addr);
     addr.sin_port     = htons(atoi(argv[2]));
     socklen_t addrlen = sizeof(addr);
-    if (0 != connect(cfd, (struct sockaddr *)&addr, addrlen))
+reconnect:
+    if (-1 == connect(cfd, (struct sockaddr *)&addr, addrlen))
     {
-        zlog_warn(cli, "connect error: %s", strerror(errno));
-        exit(-1);
+        zlog_debug(cli, "connect failer %s", strerror(errno));
+        sleep(3);
+        if (connect(cfd, (struct sockaddr *)&addr, addrlen) && errno == EISCONN)
+            ;
+        else
+        {
+            zlog_debug(cli, "re connect");
+            goto reconnect;
+        }
     }
-    else
-    {
-        zlog_debug(cli, "connect success");
-    }
+    zlog_info(cli, "connect success");
 
     printf("登录请输入你的用户名\n");
     printf("注册请输入你想要的用户名\n");
@@ -61,20 +71,29 @@ int main(int argc, char **argv)
     char password[20];
     memset(username, 0, sizeof(username));
     memset(password, 0, sizeof(password));
+
     scanf("%16s", username);
     /// login
     if (cli_accessusername(username))
     {
+        zlog_info(cli, "login %s", username);
         int errornumber = 0;
     again:
         printf("请输入密码:\n");
         scanf("%19s", password);
 
-        if (accesspassword(password))
+        if (cli_accesspassword(password))
         {
+            zlog_info(cli, "login passwd right username:%s\npasswd:%s",
+                      username, password);
             if (useronline(username))
             {
+                zlog_debug(cli, "login success 挤掉");
                 printf("您的账号已在别处下线\n");
+            }
+            else
+            {
+                zlog_info(cli, "login success");
             }
 
             printf("登录成功\n");
@@ -88,10 +107,15 @@ int main(int argc, char **argv)
                     "密码错误次数太多，暂时锁定帐号%s,"
                     "一分钟以后重新登陆\n",
                     username);
+                zlog_info(cli, "login passwd error username:%s passwd error 3 ",
+                          username);
                 exit(0);
             }
             else
             {
+                zlog_debug(cli,
+                           "login passwd error username:%s passwd error %d ",
+                           username, errornumber);
                 printf("密码错误\n");
                 goto again;
             }
@@ -99,9 +123,10 @@ int main(int argc, char **argv)
     }
     else  ///  注册
     {
+        zlog_info(cli, "sign up %s", username);
         printf("-----------------注册:\n用户名:%s\n密码:", username);
         scanf("%19s", password);
-
+    
         /// mysql
 
         printf("-----------------注册成功\n");

@@ -9,12 +9,15 @@ bool cli_accessusername(char* name)
     memset(p, 0, sizeof(p));
     sprintf(p, "select * from user where username ='%s';", name);
     info ms;
-    ms.vaule = p;
-    ms.type  = msg;
-    ms.from  = -1;
-    ms.to    = 0;
+    strcpy(ms.vaule, p);
+    ms.type = msg;
+    ms.from = -1;
+    ms.to   = 0;
+
+    //非阻塞写
     if (sizeof(info) != Writen(cfd, &ms, sizeof(info)))
     {
         zlog_warn(cli, "write username failed");
     }
+    return true;
 }
