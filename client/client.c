@@ -36,8 +36,8 @@ int main(int argc, char **argv)
         printf("******************************\n");
     }
 
-    ///  连接
-    cfd = socket(AF_INET, SOCK_STREAM, 0);
+    ///  连接服务器 并 设置非阻塞套接字
+    cfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     struct sockaddr_in addr;
     addr.sin_family      = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);

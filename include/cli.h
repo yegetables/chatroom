@@ -16,15 +16,15 @@ typedef enum
 {
     message,
     file
-} vaule_type;
+} value_type;
 
 typedef struct
 {
     char vaule[BUFLEN];
-    vaule_type type;
+    value_type type;
     int from;
     int to;
-} message;
+} info;
 
 void clienthelp(void);
 
