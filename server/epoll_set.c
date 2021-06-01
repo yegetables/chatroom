@@ -9,8 +9,7 @@ void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
     ev->arg       = arg;
     ev->events    = 0;
     ev->status    = 0;
-    memset(ev->buf, 0, sizeof(ev->buf));
-    ev->len         = 0;
-    //ev->last_active = time(NULL);
+    memset(&(ev->js), 0, sizeof(info));
+    // ev->last_active = time(NULL);
     return;
 }

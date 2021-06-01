@@ -5,6 +5,7 @@ zlog_category_t *cli = NULL;
 int cfd;
 int main(int argc, char **argv)
 {
+    srand((unsigned)time(NULL));
     /// @brief 开日志
     char cmd[100] = {0};
 #ifndef DEBUG
@@ -52,8 +53,8 @@ int main(int argc, char **argv)
 reconnect:
     if (-1 == connect(cfd, (struct sockaddr *)&addr, addrlen))
     {
-        zlog_debug(cli, "connect failer %s", strerror(errno));
-        sleep(3);
+        zlog_debug(cli, "connect failer :%s", strerror(errno));
+        sleep(rand() % 3);
         if (connect(cfd, (struct sockaddr *)&addr, addrlen) && errno == EISCONN)
             ;
         else
@@ -76,19 +77,19 @@ reconnect:
     /// login
     if (cli_accessusername(username))
     {
-        zlog_info(cli, "login %s", username);
+        zlog_info(cli, "login %s access success ", username);
         int errornumber = 0;
     again:
         printf("请输入密码:\n");
         scanf("%19s", password);
 
-        if (cli_accesspassword(password))
+        if (cli_accesspassword(username, password))
         {
-            zlog_info(cli, "login passwd right username:%s\npasswd:%s",
-                      username, password);
+            zlog_info(cli, "login %s passwd right passwd:%s", username,
+                      password);
             if (useronline(username))
             {
-                zlog_debug(cli, "login success 挤掉");
+                zlog_debug(cli, "login %s success 挤掉", username);
                 printf("您的账号已在别处下线\n");
             }
             else
@@ -107,15 +108,14 @@ reconnect:
                     "密码错误次数太多，暂时锁定帐号%s,"
                     "一分钟以后重新登陆\n",
                     username);
-                zlog_info(cli, "login passwd error username:%s passwd error 3 ",
+                zlog_info(cli, "login %s passwd error passwd error 3 times ",
                           username);
                 exit(0);
             }
             else
             {
-                zlog_debug(cli,
-                           "login passwd error username:%s passwd error %d ",
-                           username, errornumber);
+                zlog_debug(cli, "login %s passwd error  %d times ", username,
+                           errornumber);
                 printf("密码错误\n");
                 goto again;
             }
@@ -123,15 +123,16 @@ reconnect:
     }
     else  ///  注册
     {
-        zlog_info(cli, "sign up %s", username);
+        zlog_info(cli, "sign user: %s", username);
         printf("-----------------注册:\n用户名:%s\n密码:", username);
         scanf("%19s", password);
-    
+
         /// mysql
 
         printf("-----------------注册成功\n");
         printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username,
                password);
+        zlog_info(cli, "注册成功:用户名:%s 密码:%s", username, password);
     }
 
     showmainmenu();

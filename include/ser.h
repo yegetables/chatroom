@@ -13,6 +13,21 @@ typedef enum
     false = 0   ///<  fales=0
 } bool;
 
+typedef enum
+{
+    msg,
+    file,
+    sql
+} value_type;
+
+typedef struct
+{
+    char vaule[BUFLEN];
+    value_type type;
+    int from;
+    int to;
+} info;
+
 typedef struct
 {
     int fd;      ///  要监听的文件描述符
@@ -20,9 +35,7 @@ typedef struct
     void *arg;   ///  泛型参数
     void (*call_back)(int fd, int events, void *arg);  ///  回调函数
     int status;  ///  是否在监听:1->在红黑树上(监听), 0->不在(不监听)
-    char buf[BUFLEN];
-    int len;
-
+    info js;
 } events;
 
 void setserconfig(char *filename);

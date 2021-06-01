@@ -35,7 +35,7 @@ void lfdaccept(int a, int b, void *args)
     }
 
     // cfd非阻塞
-    // fcntl(cfd, F_SETFL, fcntl(cfd, F_GETFL, 0) | O_NONBLOCK);
+    fcntl(cfd, F_SETFL, fcntl(cfd, F_GETFL, 0) | O_NONBLOCK);
     epoll_set(&g_events[i], cfd, client_event, &g_events[i]);
     epoll_add(EPOLLIN, &g_events[i]);
     zlog_debug(ser,

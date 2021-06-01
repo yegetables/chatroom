@@ -15,7 +15,8 @@ typedef enum
 typedef enum
 {
     msg,
-    file
+    file,
+    sql
 } value_type;
 
 typedef struct
@@ -35,6 +36,6 @@ void justwrite(int, int, void *args);
 zlog_category_t *my_zlog_init(char *);
 
 bool cli_accessusername(char *name);
-bool cli_accesspassword(char *passwd);
+bool cli_accesspassword(char *name, char *passwd);
 bool useronline(char *name);
 void showmainmenu(void);

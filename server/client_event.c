@@ -11,24 +11,25 @@ void client_event(int cfd, int event, void *args)
     //可能是非阻塞
 
     // while (1)
-    if ((ev->len = read(cfd, ev->buf, BUFLEN)) > 0)
-    {
-        event_del(ev);
-        // ev->len--;
-        // ev->buf[ev->len] = 0;
 
-        // write(cfd, ev->buf, len);
-        // epoll_set(ev, cfd, justwrite, ev);
-        ev->call_back = justwrite;
-
-        showevents(ev, __LINE__, __FILE__);
-        epoll_add(EPOLLOUT, ev);
-    }
-    else
+    if (sizeof(info) != recv(ev->fd, &(ev->js), sizeof(info), 0))
     {
+        zlog_warn(ser, "recv info failed");
+        memset(&(ev->js), 0, sizeof(info));
         close(cfd);
         zlog_debug(ser, "close cfd:%d ", cfd);
+        return;
+        //@todo: fix errno
     }
+
+    event_del(ev);
+    if (ev->js.to == 0)
+    {
+        if (ev->js.type == sql) }
+    ev->call_back = justwrite;
+
+    showevents(ev, __LINE__, __FILE__);
+    epoll_add(EPOLLOUT, ev);
 
     // epoll_set(ev, cfd, write1, ev);
 

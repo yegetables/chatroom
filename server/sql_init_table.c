@@ -13,6 +13,7 @@ bool sql_init_table(MYSQL* sql)
                 "CREATE TABLE IF NOT EXISTS `user` ( "
                 "`user_id` INT UNSIGNED  AUTO_INCREMENT PRIMARY KEY, "
                 "`user_name` VARCHAR(25) NOT NULL, "
+                "`user_passwd` VARCHAR(30) NOT NULL,"
                 "`user_last_login_time` DATE "
                 ")default charset utf8;");
         //    AUTO_INCREMENT定义列为自增的属性，一般用于主键，数值会自动加1。
