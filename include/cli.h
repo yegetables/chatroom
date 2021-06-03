@@ -21,7 +21,7 @@ typedef enum
 
 typedef struct
 {
-    char vaule[BUFLEN];
+    char value[BUFLEN];
     value_type type;
     int from;
     int to;
@@ -36,6 +36,6 @@ void justwrite(int, int, void *args);
 zlog_category_t *my_zlog_init(char *);
 
 bool cli_accessusername(char *name);
-bool cli_accesspassword(char *name, char *passwd);
+bool cli_accesspasswd(char *name, char *passwd);
 bool useronline(char *name);
 void showmainmenu(void);

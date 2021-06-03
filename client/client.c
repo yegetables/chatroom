@@ -53,8 +53,8 @@ int main(int argc, char **argv)
 reconnect:
     if (-1 == connect(cfd, (struct sockaddr *)&addr, addrlen))
     {
-        zlog_debug(cli, "connect failer :%s", strerror(errno));
         sleep(rand() % 3);
+        zlog_debug(cli, "connect failed :%s", strerror(errno));
         if (connect(cfd, (struct sockaddr *)&addr, addrlen) && errno == EISCONN)
             ;
         else
@@ -69,9 +69,9 @@ reconnect:
     printf("注册请输入你想要的用户名\n");
     printf("(不超过15个字符)\n");
     char username[20];
-    char password[20];
+    char passwd[20];
     memset(username, 0, sizeof(username));
-    memset(password, 0, sizeof(password));
+    memset(passwd, 0, sizeof(passwd));
 
     scanf("%16s", username);
     /// login
@@ -80,13 +80,13 @@ reconnect:
         zlog_info(cli, "login %s access success ", username);
         int errornumber = 0;
     again:
-        printf("请输入密码:\n");
-        scanf("%19s", password);
+        // printf("请输入密码:\n");
+        // scanf("%19s", passwd);
+        strcpy(passwd, getpass("请输入密码:\n"));
 
-        if (cli_accesspassword(username, password))
+        if (cli_accesspasswd(username, passwd))
         {
-            zlog_info(cli, "login %s passwd right passwd:%s", username,
-                      password);
+            zlog_info(cli, "login %s passwd right passwd:%s", username, passwd);
             if (useronline(username))
             {
                 zlog_debug(cli, "login %s success 挤掉", username);
@@ -125,14 +125,13 @@ reconnect:
     {
         zlog_info(cli, "sign user: %s", username);
         printf("-----------------注册:\n用户名:%s\n密码:", username);
-        scanf("%19s", password);
+        scanf("%19s", passwd);
 
         /// mysql
 
         printf("-----------------注册成功\n");
-        printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username,
-               password);
-        zlog_info(cli, "注册成功:用户名:%s 密码:%s", username, password);
+        printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username, passwd);
+        zlog_info(cli, "注册成功:用户名:%s 密码:%s", username, passwd);
     }
 
     showmainmenu();

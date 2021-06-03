@@ -2,14 +2,14 @@
 #include PROJECT_CLIENTHEAD
 extern zlog_category_t* cli;
 extern int cfd;
-bool cli_accesspassword(char* name, char* passwd)
+bool cli_accesspasswd(char* name, char* passwd)
 {
     char p[BUFLEN];
     memset(p, 0, sizeof(p));
     sprintf(p, "select * from user where user_name ='%s';", name);
     info ms;
     memset(&ms, 0, sizeof(ms));
-    strcpy(ms.vaule, p);
+    strcpy(ms.value, p);
     ms.type = sql;
     ms.from = -1;
     ms.to   = 0;

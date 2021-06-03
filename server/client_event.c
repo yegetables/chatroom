@@ -25,7 +25,8 @@ void client_event(int cfd, int event, void *args)
     event_del(ev);
     if (ev->js.to == 0)
     {
-        if (ev->js.type == sql) }
+        if (ev->js.type == sql) return;
+    }
     ev->call_back = justwrite;
 
     showevents(ev, __LINE__, __FILE__);

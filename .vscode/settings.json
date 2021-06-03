@@ -48,5 +48,9 @@
         ".clang-format": "bat",
         "*.in": "bat",
         "config.h": "c"
-    }
+    },
+    "cSpell.words": [
+        "lfdaccept",
+        "zlog"
+    ]
 }

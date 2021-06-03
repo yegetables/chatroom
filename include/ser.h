@@ -22,7 +22,7 @@ typedef enum
 
 typedef struct
 {
-    char vaule[BUFLEN];
+    char value[BUFLEN];
     value_type type;
     int from;
     int to;

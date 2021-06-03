@@ -9,7 +9,7 @@ bool cli_accessusername(char* name)
     sprintf(p, "select * from user where user_name ='%s';", name);
     info ms;
     memset(&ms, 0, sizeof(ms));
-    strcpy(ms.vaule, p);
+    strcpy(ms.value, p);
     ms.type = sql;
     ms.from = -1;
     ms.to   = 0;
