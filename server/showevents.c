@@ -6,7 +6,7 @@
 extern zlog_category_t *ser;
 void showevents(events *ev, int line, char *fun)
 {
-    char logbuf[ev->len + 1 + BUFLEN];
+    char logbuf[2 * BUFLEN];
     memset(logbuf, 0, sizeof(logbuf));
     // 函数,行数
     {

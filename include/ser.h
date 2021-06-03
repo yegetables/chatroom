@@ -127,4 +127,4 @@ MYSQL *sql_connect(void);
  * @param sql句柄
  * @return true false
  */
-bool sql_init_table(MYSQL *sql);
+bool sql_init_table(MYSQL *sql_l);

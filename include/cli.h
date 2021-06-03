@@ -35,11 +35,11 @@ zlog_category_t *my_zlog_init(char *category);
 
 /**
  * @brief 构建sql语句并查询
- * @param sql sql语句
+ * @param sql_l sql语句
  * @return true
  * false
  */
-bool cli_sql_if(char *sql);
+bool cli_sql_if(char *sql_l);
 
 /**
  * @brief 客户端发送待验证密码是否正确

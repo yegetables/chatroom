@@ -6,7 +6,7 @@ int epfd;        ///< 全局epfd
 events g_events[MAXCLIENT + 1];
 zlog_category_t *ser = NULL;
 extern char database_name[20];
-MYSQL *sql = NULL;
+MYSQL *sql_l = NULL;
 
 int main(int argc, char **argv)
 {
@@ -53,13 +53,13 @@ int main(int argc, char **argv)
 
     /// sql 连接
     {
-        sql = sql_connect();
-        if (sql == NULL)
+        sql_l = sql_connect();
+        if (sql_l == NULL)
         {
             zlog_error(ser, "sql_connect error");
             exit(-1);
         }
-        if (false == sql_init_table(sql))
+        if (!sql_init_table(sql_l))
         {
             exit(-1);
         }
@@ -92,6 +92,6 @@ int main(int argc, char **argv)
     }
 
     zlog_fini();
-    mysql_close(sql);
+    mysql_close(sql_l);
     return 0;
 }

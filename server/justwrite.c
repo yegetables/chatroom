@@ -4,33 +4,51 @@
 
 extern int epfd;
 extern zlog_category_t *ser;
+
 void justwrite(int cfd, int event, void *args)
 {
+    // 记录返回值
+    int returnnumber = 0;
+    // 记录错误次数
+    int errornumber = 0;
+
     events *ev = (events *)args;
-    strcat(ev->buf, "getted\n");
-    ev->len = strlen(ev->buf);
-    int len = 0;
-
-    if ((len = write(cfd, ev->buf, ev->len)) > 0)
+    // 构造info结构
+    info *ms = &(ev->js);
+    strcat(ms->value, "getted\n");
+    // 发送
     {
-        event_del(ev);
-        showevents(ev, __LINE__, __FILE__);
-
-        ev->len = 0;
-
-        //更改buf  函数
-        // LOG(serverlogpath,"client ev->fd %d  send:%s", ev->fd, ev->buf);
-
-        // write(cfd, ev->buf, len);
-        ev->call_back = client_event;
-        bzero(ev->buf, sizeof(ev->buf));
-        // epoll_set(ev, cfd, client_event, ev);
-        epoll_add(EPOLLIN, ev);
+        errornumber = 0;
+    resend:
+        if (sizeof(info) != (returnnumber = send(cfd, ms, sizeof(info), 0)))
+        {
+            if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
+            {
+                errornumber++;
+                zlog_warn(ser, "send sql failed:%s ,resending~~~~~",
+                          strerror(errno));
+                if (errornumber > 3)
+                {
+                    zlog_error(ser, "send sql failed %s ", strerror(errno));
+                    return;
+                }
+                sleep(rand() % 2);
+                goto resend;
+            }
+            else
+            {
+                close(cfd);
+                memset(ev, 0, sizeof(events));
+                zlog_debug(ser, "close cfd:%d ", cfd);
+                return;
+            }
+        }
     }
-    else if (len < 0)
-    {
-        close(cfd);
-        zlog_error(ser, "close cfd:%d ", cfd);
-    }
+
+    event_del(ev);
+    showevents(ev, __LINE__, __FILE__);  //写出的内容
+
+    ev->call_back = client_event;
+    epoll_add(EPOLLIN, ev);
     return;
 }

@@ -7,7 +7,7 @@ extern int epfd;
 void client_event(int cfd, int event, void *args)
 {
     events *ev = args;
-    info ms    = (ev->js);
+    info *ms   = &(ev->js);
     // 记录返回值
     int returnnumber = 0;
     // 记录错误次数
@@ -15,10 +15,10 @@ void client_event(int cfd, int event, void *args)
 
     // 接受info
     {
-        memset(&ms, 0, sizeof(ms));
+        memset(ms, 0, sizeof(info));
         errornumber = 0;
     rerecv:
-        if ((returnnumber = recv(cfd, &ms, sizeof(ms), 0)) != sizeof(info))
+        if ((returnnumber = recv(cfd, ms, sizeof(info), 0)) != sizeof(info))
         {
             if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
             {
@@ -27,7 +27,7 @@ void client_event(int cfd, int event, void *args)
                 if (errornumber > 3)
                 {
                     zlog_error(ser, "recv cfd_info failed");
-                    return false;
+                    return;
                 }
                 sleep(rand() % 2);
                 goto rerecv;
@@ -43,18 +43,26 @@ void client_event(int cfd, int event, void *args)
     }
 
     event_del(ev);
+    showevents(ev, __LINE__, __FILE__);
+
     if (ev->js.to == 0)
     {
+        // file/sql/cmd
         if (ev->js.type == sql)
-
-            //
-            return;
+        {
+            //查询,判断
+            ;
+        }
+        else
+        {
+            ;  //@todo js.type
+        }
+    }
+    else  // 转发
+    {
+        ;  // file/msg
     }
     ev->call_back = justwrite;
-    showevents(ev, __LINE__, __FILE__);
     epoll_add(EPOLLOUT, ev);
-
-    // epoll_set(ev, cfd, write1, ev);
-
     return;
 }
