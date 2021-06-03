@@ -5,6 +5,7 @@ extern int cfd;
 
 bool cli_sql_if(char* p)
 {
+    if (p == NULL) return false;
     // 记录返回值
     int returnnumber = 0;
     // 记录错误次数
@@ -68,7 +69,7 @@ bool cli_sql_if(char* p)
             }
             else
             {
-                zlog_error(cli, "send sql failed %s", strerror(errno));
+                zlog_error(cli, "recv sql failed %s", strerror(errno));
                 return false;
             }
         }

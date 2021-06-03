@@ -3,6 +3,7 @@
 #endif
 
 #include <arpa/inet.h>
+#include <assert.h>
 #include <bits/sockaddr.h>
 #include <errno.h>
 #include <fcntl.h>

@@ -1,43 +1,56 @@
 #include "config.h"
 #include PROJECT_SERVERHEAD
 
-extern int epfd;
 extern zlog_category_t *ser;
 extern events g_events[MAXCLIENT + 1];
 
 void lfdaccept(int a, int b, void *args)
 {
-    events *lfdevent = (events *)args;
+    events *lfdevent = args;
+    int lfd          = lfdevent->fd;
     struct sockaddr_in clientaddr;
     socklen_t clientaddrlen = sizeof(struct sockaddr_in);
-    // lfd非阻塞
-    int cfd =
-        accept(lfdevent->fd, (struct sockaddr *)&clientaddr, &clientaddrlen);
-    if (cfd == -1)
+
+    // accept
+reaccept:
+    int i   = 0;
+    int cfd = 0;
     {
-        if (errno == EINTR || errno == EAGAIN)
+        cfd = accept(lfd, (struct sockaddr *)&clientaddr,
+                     &clientaddrlen);  //非阻塞accept
+        if (cfd < 0)
         {
-            PRINTEXIT("accept");
+            if (errno == EWOULDBLOCK)
+            {
+                zlog_warn(ser, "accept failed");
+                goto reaccept;
+            }
+            else
+            {
+                zlog_warn(ser, "accper failed :%s", strerror(errno));
+                return;
+            }
         }
-        else
-            PRINTEXIT("accept");
-        return;
-    }
-    int i = 0;
-    for (; i < MAXCLIENT; i++)
-    {
-        if (g_events[i].status == 0) break;
-    }
-    if (i == MAXCLIENT)
-    {
-        zlog_warn(ser, "ERROR[BUSY] no found free events");
-        return;
+
+        for (; i < MAXCLIENT; i++)
+        {
+            if (g_events[i].status == 0) break;
+        }
+        if (i == MAXCLIENT)
+        {
+            zlog_warn(ser, "ERROR[BUSY] no found free events");
+            return;
+        }
     }
 
-    // cfd非阻塞
-    fcntl(cfd, F_SETFL, fcntl(cfd, F_GETFL, 0) | O_NONBLOCK);
-    epoll_set(&g_events[i], cfd, client_event, &g_events[i]);
-    epoll_add(EPOLLIN, &g_events[i]);
+    // 设置cfd非阻塞
+    {
+        fcntl(cfd, F_SETFL, fcntl(cfd, F_GETFL, 0) | O_NONBLOCK);
+
+        epoll_set(&g_events[i], cfd, client_event, &g_events[i]);
+        epoll_add(EPOLLIN, &g_events[i]);
+    }
+
     zlog_debug(ser,
                "\n\n-----------new client-------------\ncfd=%d from [%s:%d], "
                "g_events[%d]\n\n------------------------\n",

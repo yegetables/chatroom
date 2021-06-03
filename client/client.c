@@ -12,8 +12,8 @@ int main(int argc, char **argv)
     int returnnumber = 0;
 
     /// 开日志
-    char cmd[100] = {0};
     {
+        char cmd[100] = {0};
         {
             sprintf(cmd, "rm %s*client*.log", PROJECT_LOGPATH);
             system(cmd);
