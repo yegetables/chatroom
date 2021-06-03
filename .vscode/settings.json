@@ -51,6 +51,12 @@
     },
     "cSpell.words": [
         "lfdaccept",
+        "rerecv",
+        "rerecving",
+        "resending",
+        "resend",
         "zlog"
-    ]
+    ],
+    "todo-tree.tree.showBadges": true,
+    "todo-tree.tree.showCountsInTree": true
 }

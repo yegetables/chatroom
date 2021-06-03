@@ -4,40 +4,25 @@ extern zlog_category_t* cli;
 extern int cfd;
 bool cli_accesspasswd(char* name, char* passwd)
 {
+    // sql语句
     char p[BUFLEN];
-    memset(p, 0, sizeof(p));
-    sprintf(p, "select * from user where user_name ='%s';", name);
-    info ms;
-    memset(&ms, 0, sizeof(ms));
-    strcpy(ms.value, p);
-    ms.type = sql;
-    ms.from = -1;
-    ms.to   = 0;
 
-    //非阻塞写
-
-    if (sizeof(info) != send(cfd, &ms, sizeof(info), 0))
+    // 构造查询语句
     {
-        zlog_warn(cli, "write username failed");
-        return false;
-        //@todo: fix errno
-    }
-    else
-    {
-        //验证结果
-        memset(&ms, 0, sizeof(info));
         memset(p, 0, sizeof(p));
-        bool bo = 0;
-        if (recv(cfd, &bo, sizeof(bool), 0) != sizeof(bool))
+        if (passwd == NULL)
+
         {
-            if (errno == EINTR || errno == SIGPIPE)
-            {
-                return false;
-            }  //@todo: fix errno
+            sprintf(p, "select * from user where user_name ='%s';", name);
         }
-        else if (bo)
-            return true;
         else
-            return false;
+        {
+            sprintf(p,
+                    "select * from user where user_name ='%s' and "
+                    "user_passwd='%s';",
+                    name, passwd);
+        }
     }
+
+    return cli_sql_if(p);
 }

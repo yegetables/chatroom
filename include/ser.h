@@ -7,11 +7,7 @@
 #define BUFLEN 4096
 #define MAXCLIENT 5000
 
-typedef enum
-{
-    true  = 1,  ///<  true=1
-    false = 0   ///<  fales=0
-} bool;
+
 
 typedef enum
 {
