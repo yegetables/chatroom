@@ -1,5 +1,5 @@
 # CMake 最低版本号要求
-cmake_minimum_required (VERSION  3.8 )
+cmake_minimum_required (VERSION  3.20.3 )
 
 
 # 项目信息
