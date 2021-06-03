@@ -1,2 +1,4 @@
-- name: actions-setup-cmake
-  uses: jwlawson/actions-setup-cmake@v1.9
+# - name: actions-setup-cmake
+#   uses: jwlawson/actions-setup-cmake@v1.9
+- name: cmake swiss army knife
+  uses: lpenz/ghaction-cmake@v0.10
