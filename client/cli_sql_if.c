@@ -34,7 +34,8 @@ bool cli_sql_if(char* p)
                           strerror(errno));
                 if (errornumber > 3)
                 {
-                    zlog_error(cli, "send sql failed %s ", strerror(errno));
+                    zlog_error(cli, "send sql failed%d: %s ", errornumber,
+                               strerror(errno));
                     return false;
                 }
                 sleep(rand() % 2);
@@ -42,7 +43,8 @@ bool cli_sql_if(char* p)
             }
             else
             {
-                zlog_error(cli, "send sql failed %s", strerror(errno));
+                zlog_error(cli, "send sql failed %d: %s", errornumber,
+                           strerror(errno));
                 return false;
             }
         }
@@ -58,18 +60,20 @@ bool cli_sql_if(char* p)
             if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
             {
                 errornumber++;
-                zlog_warn(cli, "recv sql-result failed ,rerecving~~~~~");
+                zlog_warn(cli, "recv sql-result failed %d,rerecving~~~~~",
+                          errornumber);
                 if (errornumber > 3)
                 {
                     zlog_error(cli, "recv sql-result failed");
                     return false;
                 }
-                sleep(rand() % 2);
+                sleep(rand() % 3);
                 goto rerecv;
             }
             else
             {
-                zlog_error(cli, "recv sql failed %s", strerror(errno));
+                zlog_error(cli, "recv sql failed %d :%s", errornumber,
+                           strerror(errno));
                 return false;
             }
         }

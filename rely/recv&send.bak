@@ -1,18 +1,12 @@
-#include "config.h"
-#include PROJECT_SERVERHEAD
-
-extern zlog_category_t *ser;
-extern int epfd;
-
-void client_event(int cfd, int event, void *args)
-{
     events *ev = args;
     info *ms   = &(ev->js);
     // 记录返回值
     int returnnumber = 0;
     // 记录错误次数
-    int errornumber = 0;
-
+    int errornumber = 0;   
+   
+   
+   
     // 接受info
     {
         memset(ms, 0, sizeof(info));
@@ -42,26 +36,31 @@ void client_event(int cfd, int event, void *args)
         }
     }
 
-    event_del(ev);
-
-    if (ev->js.to == 0)
+    // 发送
     {
-        // file/sql/cmd
-        if (ev->js.type == sql)
+        errornumber = 0;
+    resend:
+        if (sizeof(info) != (returnnumber = send(cfd, ms, sizeof(info), 0)))
         {
-            //查询,判断
-            ;
-        }
-        else
-        {
-            ;  //@todo js.type
+            if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
+            {
+                errornumber++;
+                zlog_warn(ser, "send sql failed:%s ,resending~~~~~",
+                          strerror(errno));
+                if (errornumber > 3)
+                {
+                    zlog_error(ser, "send sql failed %s ", strerror(errno));
+                    return;
+                }
+                sleep(rand() % 2);
+                goto resend;
+            }
+            else
+            {
+                close(cfd);
+                memset(ev, 0, sizeof(events));
+                zlog_debug(ser, "close cfd:%d ", cfd);
+                return;
+            }
         }
     }
-    else  // 转发
-    {
-        ;  // file/msg
-    }
-    ev->call_back = justwrite;
-    epoll_add(EPOLLOUT, ev);
-    return;
-}

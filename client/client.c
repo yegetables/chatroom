@@ -62,7 +62,8 @@ int main(int argc, char **argv)
 
         errornumber = 0;
     reconnect:
-        if (-1 == connect(cfd, (struct sockaddr *)&addr, addrlen))
+        if (-1 ==
+            (returnnumber = connect(cfd, (struct sockaddr *)&addr, addrlen)))
         {
             sleep(rand() % 3);
             zlog_debug(cli, "connect failed :%s,reconnecting~~~~",
@@ -148,11 +149,18 @@ int main(int argc, char **argv)
         {
             zlog_info(cli, "register user: %s", username);
             printf("-----------------注册:\n用户名:%s\n密码:", username);
-            strcpy(passwd, getpass(NULL));
-
+            scanf("%16s", passwd);
             /// mysql add register
-            while (false == cli_register(username, passwd))
-                ;
+            errornumber = 0;
+            while (false == cli_register(username, passwd) && errornumber++ < 3)
+            {
+                sleep(rand() % 5);
+            }
+            if (errornumber == 3)
+            {
+                zlog_warn(cli, "register failed %s:%s", username, passwd);
+                exit(1);
+            }
             printf("-----------------注册成功\n");
             printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username,
                    passwd);

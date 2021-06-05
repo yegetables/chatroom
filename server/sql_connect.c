@@ -9,6 +9,9 @@ extern int database_port;
 extern zlog_category_t* ser;
 MYSQL* sql_connect(void)
 {
+    // 记录错误次数
+    int errornumber = 0;
+
     zlog_debug(ser, "name:%s user:%s passwd:%s hosts:%s", database_name,
                database_user, database_passwd, database_ip);
     // CREATE DATABASE IF NOT EXISTS RUNOOB DEFAULT CHARSET utf8 COLLATE
@@ -16,14 +19,23 @@ MYSQL* sql_connect(void)
     // 1. 如果数据库不存在则创建，存在则不创建。
     // 2. 创建RUNOOB数据库，并设定编码集为utf8
     MYSQL* conn = NULL;
-    conn        = mysql_init(NULL);
+    errornumber = 0;
+reinit:
+    conn = mysql_init(NULL);
     if (conn == NULL)
     {
+        errornumber++;
         zlog_error(ser,
                    "Failed to init mysql "
                    "Error %u: %s",
                    mysql_errno(conn), mysql_error(conn));
-        return NULL;
+        if (errornumber > 3)
+            return NULL;
+        else
+        {
+            sleep(rand() % 5);
+            goto reinit;
+        }
     }
     else
     {
@@ -31,14 +43,23 @@ MYSQL* sql_connect(void)
     }
 
     /// 连接数据库
+    errornumber = 0;
+reconnect:
     if (mysql_real_connect(conn, database_ip, database_user, database_passwd,
                            NULL, 0, NULL, 0) == NULL)
     {
+        errornumber++;
         zlog_error(ser,
                    "Failed to connect "
                    "Error %u: %s",
                    mysql_errno(conn), mysql_error(conn));
-        return NULL;
+        if (errornumber > 3)
+            return NULL;
+        else
+        {
+            sleep(rand() % 5);
+            goto reconnect;
+        }
     }
     else
     {

@@ -20,8 +20,7 @@ add_executable(client.out ${CLIENT_SRCS}  ${RELY_FUNC_SRCS} )
 
 configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/client/config.h )
 
-
-#add_definitions(  -g -Wall -fsanitize=address -fno-omit-frame-pointer )
+add_definitions(  -g -Wall -DDEBUG -Werror )
 
 
 target_link_libraries(client.out cjson pthread zlog  )
