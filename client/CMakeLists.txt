@@ -23,4 +23,5 @@ configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/client/c
 add_definitions(  -g -Wall -DDEBUG  )
 
 
+
 target_link_libraries(client.out cjson pthread zlog  )

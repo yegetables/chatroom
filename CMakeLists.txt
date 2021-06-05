@@ -2,6 +2,8 @@
 cmake_minimum_required (VERSION  3.20.3 )
 
 
+
+
 # 项目信息
 project (chatroom)
 
@@ -18,8 +20,11 @@ configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/src/conf
 configure_file(${CMAKE_SOURCE_DIR}/rely/s.log.conf.in ${CMAKE_SOURCE_DIR}/log/s.log.conf )
 
 
+set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} -std=gnu11 )
+
+
 # configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/server/config.h )
-# configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/client/config.h )
+# conufigure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/client/config.h )
 
 
 # 添加链接库
