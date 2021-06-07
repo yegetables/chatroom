@@ -1,5 +1,5 @@
 #include "config.h"
-#if defined CLIENT
+#if defined PROJECT_CLIENT
 #include PROJECT_CLIENTHEAD
 extern zlog_category_t* cli;
 #else
@@ -16,14 +16,14 @@ void my_signal(int signal)
     goto over;
     // 不退出信号
     if (signal == SIGCLD) sig = "SIGCLD";
-#if defined CLIENT
+#if defined PROJECT_CLIENT
     zlog_debug(cli, "catch signal %s return", sig);
 #else
     zlog_debug(ser, "catch signal %s return", sig);
 #endif
     return;
 over:
-#if defined CLIENT
+#if defined PROJECT_CLIENT
     zlog_debug(cli, "catch signal %s exit", sig);
 #else
     zlog_debug(ser, "catch signal %s exit", sig);

@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     /// 开日志
     {
         char cmd[100] = {0};
-        sprintf(cmd, "rm %s*sever*.log", PROJECT_LOGPATH);
+        sprintf(cmd, "rm %s*server*.log", PROJECT_LOGPATH);
         system(cmd);
         memset(cmd, 0, sizeof(cmd));
         ser = my_zlog_init("server");
