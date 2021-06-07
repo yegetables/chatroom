@@ -23,17 +23,20 @@ void client_event(int cfd, int event, void *args)
             if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
             {
                 errornumber++;
-                zlog_warn(ser, "recv cfd_info failed ,rerecving~~~~~");
+                zlog_warn(ser,
+                          "recv cfd_info failed %d times :%s rerecving~~~~~",
+                          errornumber, strerror(errno));
                 if (errornumber > 3)
                 {
                     zlog_error(ser, "recv cfd_info failed");
-                    return;
+                    goto over;
                 }
                 sleep(rand() % 2);
                 goto rerecv;
             }
             else
             {
+            over:
                 close(cfd);
                 memset(ev, 0, sizeof(events));
                 zlog_debug(ser, "close cfd:%d ", cfd);

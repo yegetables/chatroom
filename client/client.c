@@ -1,6 +1,7 @@
 #include "config.h"
 #include PROJECT_CLIENTHEAD
 
+#define SLEEP_TIME 10
 zlog_category_t *cli = NULL;
 int cfd;
 int main(int argc, char **argv)
@@ -13,16 +14,21 @@ int main(int argc, char **argv)
 
     /// 开日志
     {
-        char cmd[100] = {0};
+        char *cmd = (char *)calloc(BUFLEN, sizeof(char));
         {
             sprintf(cmd, "rm %s*client*.log", PROJECT_LOGPATH);
             system(cmd);
-            memset(cmd, 0, sizeof(cmd));
         }
+        free(cmd);
         cli = my_zlog_init("client");
         zlog_info(cli, "--------start--------");
     }
 
+    /// 注册信号捕捉函数
+    {
+        signal(SIGQUIT, my_signal);
+        signal(SIGINT, my_signal);
+    }
     /// 解析命令行
     {
         char *options = "h";
@@ -70,7 +76,7 @@ int main(int argc, char **argv)
                        strerror(errno));
             if (errornumber > 3)
             {
-                sleep(10);
+                sleep(SLEEP_TIME);
                 errornumber = 0;
                 if (-1 == connect(cfd, (struct sockaddr *)&addr, addrlen))
                 {
@@ -93,8 +99,8 @@ int main(int argc, char **argv)
         printf("登录请输入你的用户名\n");
         printf("注册请输入你想要的用户名\n");
         printf("(不超过15个字符)\n");
-        char username[20];
-        char passwd[20];
+        char username[BUFLEN];
+        char passwd[BUFLEN];
         memset(username, 0, sizeof(username));
         memset(passwd, 0, sizeof(passwd));
         scanf("%16s", username);
@@ -154,7 +160,7 @@ int main(int argc, char **argv)
             errornumber = 0;
             while (false == cli_register(username, passwd) && errornumber++ < 3)
             {
-                sleep(rand() % 5);
+                sleep(rand() % SLEEP_TIME);
             }
             if (errornumber == 3)
             {

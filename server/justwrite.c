@@ -50,5 +50,4 @@ void justwrite(int cfd, int event, void *args)
 
     ev->call_back = client_event;
     epoll_add(EPOLLIN, ev);
-    return;
 }

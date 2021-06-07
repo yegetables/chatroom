@@ -5,3 +5,5 @@ Doxyfile.bak
 doxygen-qmi-style 
 **/html/**
 node_modules
+.cache
+checks.json
