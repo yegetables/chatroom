@@ -10,6 +10,9 @@ void lfdaccept(int a, int b, void *args)
     int lfd          = lfdevent->fd;
     struct sockaddr_in clientaddr;
     socklen_t clientaddrlen = sizeof(struct sockaddr_in);
+    a                       = 1;  // 设置复用选项
+    setsockopt(lfd, SOL_SOCKET, SO_REUSEADDR, &a, (socklen_t)sizeof(int));
+    setsockopt(lfd, SOL_SOCKET, SO_REUSEPORT, &a, (socklen_t)sizeof(int));
 
     // accept
 reaccept:
