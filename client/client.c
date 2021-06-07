@@ -26,8 +26,8 @@ int main(int argc, char **argv)
 
     /// 注册信号捕捉函数
     {
-        signal(SIGQUIT, my_signal);
-        signal(SIGINT, my_signal);
+        signal(SIGQUIT, signalcatch);
+        signal(SIGINT, signalcatch);
     }
     /// 解析命令行
     {
@@ -72,15 +72,16 @@ int main(int argc, char **argv)
             (returnnumber = connect(cfd, (struct sockaddr *)&addr, addrlen)))
         {
             sleep(rand() % 3);
-            zlog_debug(cli, "connect failed :%s,reconnecting~~~~",
-                       strerror(errno));
+            zlog_debug(cli, "connect failed %s:%s,reconnecting~~~~",
+                       show_errno(errno), strerror(errno));
             if (errornumber > 3)
             {
                 sleep(SLEEP_TIME);
                 errornumber = 0;
                 if (-1 == connect(cfd, (struct sockaddr *)&addr, addrlen))
                 {
-                    zlog_debug(cli, "connect error %s", strerror(errno));
+                    zlog_debug(cli, "connect error %s:%s", show_errno(errno),
+                               strerror(errno));
                     exit(-1);
                 }
             }

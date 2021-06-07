@@ -134,4 +134,19 @@ bool sql_init_table(MYSQL *sql_l);
  * SIG_IGN 终止
  * @param signal 对应信号
  */
-void my_signal(int signal);
+void signalcatch(int signal);
+
+/**
+ * @brief 根据errno转换成被定义的宏
+ * @param errno
+ * @return char* 宏(例如EINTR)
+ */
+char *show_errno(int errno);
+
+/**
+ * @brief 根据signal转换成信号名称
+ * @param signal 信号
+ * @return char* 对应信号名称
+ */
+char *show_signal(int signal);
+

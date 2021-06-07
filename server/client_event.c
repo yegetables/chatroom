@@ -24,9 +24,9 @@ void client_event(int cfd, int event, void *args)
             {
                 errornumber++;
                 zlog_warn(ser,
-                          "recv cfd_info failed %d times :%s "
+                          "recv cfd_info failed %d times %d:%s "
                           "rerecving~~~~~",
-                          errornumber, strerror(errno));
+                          errornumber, errno, strerror(errno));
                 if (errornumber > 3)
                 {
                     zlog_error(ser, "recv cfd_info failed");
