@@ -10,10 +10,13 @@ bool cli_accesspasswd(char* name, char* passwd)
 
     // 构造查询语句
     memset(p, 0, sizeof(p));
-    sprintf(p,
-            "select * from user where user_name ='%s' and "
-            "user_passwd='%s';",
-            name, passwd);
+    if (passwd == NULL)
+        sprintf(p, "select * from user where user_name ='%s';", name);
+    else
+        sprintf(p,
+                "select * from user where user_name ='%s' and "
+                "user_passwd='%s';",
+                name, passwd);
 
     return cli_sql_if(p);
 }

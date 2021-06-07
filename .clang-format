@@ -1,4 +1,3 @@
----
 Language:        Cpp
 BasedOnStyle:  Google
 AccessModifierOffset: -1
@@ -178,5 +177,3 @@ WhitespaceSensitiveMacros:
   - STRINGIZE
   - PP_STRINGIZE
   - BOOST_PP_STRINGIZE
-...
-

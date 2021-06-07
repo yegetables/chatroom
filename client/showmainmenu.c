@@ -4,5 +4,4 @@
 void showmainmenu(void)
 {
     printf("menu:\n\n\n");
-    return;
 }

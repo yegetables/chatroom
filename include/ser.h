@@ -75,7 +75,7 @@ void client_event(int, int, void *args);
 
 /**
  * @brief 测试向cfd写
- * @param args 对应的全局events
+ * @param ev 对应的全局events
  */
 void justwrite(int, int, void *ev);
 
@@ -128,3 +128,10 @@ MYSQL *sql_connect(void);
  * @return true false
  */
 bool sql_init_table(MYSQL *sql_l);
+
+/**
+ * @brief 信号捕捉
+ * SIG_IGN 终止
+ * @param signal 对应信号
+ */
+void my_signal(int signal);

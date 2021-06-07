@@ -18,5 +18,4 @@ void epoll_add(int event, events *ev)
     {
         zlog_error(ser, "event add error");
     }
-    return;
 }

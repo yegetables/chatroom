@@ -16,6 +16,4 @@ void event_del(events *ev)
     temp.data.ptr           = NULL;
     // epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, NULL);
     epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, &temp);
-
-    return;
 }

@@ -81,6 +81,13 @@ bool cli_register(char *username, char *passwd);
  */
 void showmainmenu(void);
 
+/**
+ * @brief 信号捕捉
+ * SIG_IGN 终止
+ * @param signal 对应信号
+ */
+void my_signal(int signal);
+
 // void justwrite(int, int, void *args);
 
 // void showevents(void *args, int line, char *fun);
