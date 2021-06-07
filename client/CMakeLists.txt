@@ -20,7 +20,7 @@ add_executable(client.out ${CLIENT_SRCS}  ${RELY_FUNC_SRCS} )
 
 configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/client/config.h )
 
-add_definitions(  -g -Wall -DDEBUG -DCLIENT )
+add_definitions(  -g -Wall -DDEBUG -DPROJECT_CLIENT )
 
 
 
