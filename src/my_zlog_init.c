@@ -1,5 +1,9 @@
 #include "config.h"
+#ifdef PROJECT_SERVER
 #include PROJECT_SERVERHEAD
+#else
+#include PROJECT_CLIENTHEAD
+#endif
 
 zlog_category_t *my_zlog_init(char *category)
 {

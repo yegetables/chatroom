@@ -46,7 +46,9 @@ void justwrite(int cfd, int event, void *args)
     }
 
     event_del(ev);
-    showevents(ev, __LINE__, __FILE__);  //写出的内容
+    char *tt = showevents(ev);  //写出的内容
+    zlog_debug(ser, tt);
+    free(tt);
 
     ev->call_back = client_event;
     epoll_add(EPOLLIN, ev);

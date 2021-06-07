@@ -6,10 +6,9 @@ bool cli_accesspasswd(char* name, char* passwd)
 {
     if (name == NULL) return false;
     // sql语句
-    char p[BUFLEN];
+    char p[BUFLEN] = {0};
 
     // 构造查询语句
-    memset(p, 0, sizeof(p));
     if (passwd == NULL)
         sprintf(p, "select * from user where user_name ='%s';", name);
     else

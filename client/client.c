@@ -20,14 +20,15 @@ int main(int argc, char **argv)
             system(cmd);
         }
         free(cmd);
+        cmd = NULL;
         cli = my_zlog_init("client");
         zlog_info(cli, "--------start--------");
     }
 
     /// 注册信号捕捉函数
     {
-        signal(SIGQUIT, my_signal);
-        signal(SIGINT, my_signal);
+        signal(SIGQUIT, signalcatch);
+        signal(SIGINT, signalcatch);
     }
     /// 解析命令行
     {
@@ -44,7 +45,7 @@ int main(int argc, char **argv)
              * 如果不希望getopt()打印出错信息，则只要将全域变量opterr设为0即可。
              */
 
-            if (opt == 'h') clienthelp();
+            if (opt == 'h') help();
 
             ///  @todo help手册
             printf("******************************\n");
@@ -110,7 +111,8 @@ int main(int argc, char **argv)
             zlog_info(cli, "login %s access success ", username);
             errornumber = 0;
         again:
-            strcpy(passwd, getpass("请输入密码:\n"));
+            printf("请输入密码:\n");
+            scanf("%16s", passwd);
 
             if (cli_accesspasswd(username, passwd))
             {
@@ -162,7 +164,7 @@ int main(int argc, char **argv)
             {
                 sleep(rand() % SLEEP_TIME);
             }
-            if (errornumber == 3)
+            if (errornumber >= 3)
             {
                 zlog_warn(cli, "register failed %s:%s", username, passwd);
                 exit(1);
