@@ -17,15 +17,8 @@ void justwrite(int cfd, int event, void *args)
         zlog_debug(ser, "close cfd:%d ", cfd);
         return;
     }
-    char *tt = showevents(ev);  //写出的内容
-    zlog_debug(ser, "send ok:%s", tt);
-    free(tt);
 
     ev->call_back = client_event;
     memset(ms, 0, sizeof(info));
     epoll_add(EPOLLIN, ev);
-
-    tt = showevents(ev);  //写出的内容
-    zlog_debug(ser, "client before:%s", tt);
-    free(tt);
 }

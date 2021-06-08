@@ -8,8 +8,6 @@ void client_event(int cfd, int event, void *args)
 {
     events *ev = args;
 
-    zlog_info(ser, "clievent begin:%s", showevents(ev));
-
     // 接受info
     event_del(ev);
     if (false == recv_info(ev->fd, &(ev->js)))
@@ -17,13 +15,11 @@ void client_event(int cfd, int event, void *args)
         //关闭连接清空
         close(ev->fd);
         ev->status = 0;
-        memset(ev, 0, sizeof(events));
-
         zlog_debug(ser, "recv cfd_info failed,close cfd:%d ", ev->fd);
         return;
     }
     // TODO: client事件类别处理
-
+    zlog_error(ser, "recv success:%s", showevents(ev));
     if (ev->js.to == 0)
     {
         // file/sql/cmd

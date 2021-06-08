@@ -24,8 +24,11 @@ bool recv_info(int cfd, info *ms)
 rerecv:
     if ((returnnumber = recv(cfd, ms, sizeof(info), 0)) != sizeof(info))
     {
-        if (errno == EWOULDBLOCK || errno == EAGAIN) goto rerecv;
-
+        zlog_error(tmp, "recv failed %s", show_errno());
+        if (errno == EWOULDBLOCK || errno == EAGAIN)
+        {
+            goto rerecv;
+        }
         errornumber++;
         if (errornumber > 3)
         {

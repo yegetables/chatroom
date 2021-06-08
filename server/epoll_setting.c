@@ -38,13 +38,14 @@ void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
 
 void event_del(events *ev)
 {
+    epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, NULL);
     if (ev->status == 0)
         return;
     else
         ev->status = 0;
     // struct epoll_event temp = {0, {0}};
     // temp.data.ptr           = NULL;
-    epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, NULL);
+
     // epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, &temp);
 }
 
