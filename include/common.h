@@ -49,6 +49,13 @@ char *show_errno(void);
 char *show_signal(int signal);
 
 /**
+ * @brief 显示info信息
+ * @param ms info指针
+ * @return char* 待写入日志
+ */
+char *showinfo(info *ms);
+
+/**
  * @brief 接受fd的info存入ms
  * @param cfd 指定fd
  * @param ms (传出)指向存入位置
@@ -58,8 +65,10 @@ char *show_signal(int signal);
 bool recv_info(int cfd, info *ms);
 
 /**
- * @brief 显示info信息
- * @param ms info指针
- * @return char* 待写入日志
+ * @brief 发送ms的info到fd
+ * @param cfd 指定fd
+ * @param ms (传入)指向待传出位置
+ * @return true
+ * @return false
  */
-char *showinfo(info *ms);
+bool send_info(int cfd, info *ms);

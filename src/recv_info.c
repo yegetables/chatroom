@@ -31,14 +31,13 @@ rerecv:
             {
                 goto over;
             }
-            sleep(rand() % 2);
             goto rerecv;
         }
         else
         {
+        over:
             zlog_warn(tmp, "recv info failed %s:%s over", show_errno(),
                       strerror(errno));
-        over:
             return false;
         }
     }

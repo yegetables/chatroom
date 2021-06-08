@@ -17,6 +17,6 @@ char *showinfo(info *ms)
     if (ms->type == msg) sprintf(&logbuf[strlen(logbuf)], "[msg]");
     if (ms->type == file) sprintf(&logbuf[strlen(logbuf)], "[file]");
     if (ms->type == sql) sprintf(&logbuf[strlen(logbuf)], "[sql]");
-    sprintf(&logbuf[strlen(logbuf)], "%s\n}", ms->value);
+    sprintf(&logbuf[strlen(logbuf)], "%s}", ms->value);
     return logbuf;
 }
