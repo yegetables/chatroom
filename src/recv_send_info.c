@@ -24,22 +24,20 @@ bool recv_info(int cfd, info *ms)
 rerecv:
     if ((returnnumber = recv(cfd, ms, sizeof(info), 0)) != sizeof(info))
     {
-        if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
+        if (errno == EWOULDBLOCK || errno == EAGAIN) goto rerecv;
+
+        errornumber++;
+        if (errornumber > 3)
         {
-            errornumber++;
-            if (errornumber > 3)
-            {
-                goto over;
-            }
-            goto rerecv;
+            zlog_error(tmp, "can't recv info over 3");
+            goto over;
         }
-        else
-        {
-        over:
-            zlog_warn(tmp, "recv info failed %s:%s over", show_errno(),
-                      strerror(errno));
-            return false;
-        }
+        goto rerecv;
+
+    over:
+        zlog_warn(tmp, "recv info failed %s:%s over", show_errno(),
+                  strerror(errno));
+        return false;
     }
     return true;
 }
@@ -60,22 +58,19 @@ bool send_info(int cfd, info *ms)
 resend:
     if (sizeof(info) != (returnnumber = send(cfd, ms, sizeof(info), 0)))
     {
-        if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
+        if (errno == EWOULDBLOCK || errno == EAGAIN) goto resend;
+
+        errornumber++;
+        if (errornumber > 3)
         {
-            errornumber++;
-            if (errornumber > 3)
-            {
-                goto over;
-            }
-            goto resend;
+            goto over;
         }
-        else
-        {
-        over:
-            zlog_warn(tmp, "send info failed %s:%s over", show_errno(),
-                      strerror(errno));
-            return false;
-        }
+        goto resend;
+
+    over:
+        zlog_warn(tmp, "send info failed %s:%s over", show_errno(),
+                  strerror(errno));
+        return false;
     }
     return true;
 }

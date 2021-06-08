@@ -7,6 +7,18 @@
 #define BUFLEN 4096
 #define MAXCLIENT 5000
 
+//是否存在
+#define IF_HAS (1 << 0)
+//是否执行成功
+#define IF_DONE (1 << 1)
+//查到多少
+#define MANY_RESULT (1 << 2)
+// //注册
+// #define REGISTER 3
+// //
+// #define ACCESSNAME 1
+// //
+// #define ACCESSPASSWD 2
 typedef enum
 {
     msg,       // msg 文本消息
@@ -20,6 +32,7 @@ typedef struct
     value_type type;     // type 枚举type(msg/file/sql)
     int from;            // from 客户端用户id(-1->未登录用户)
     int to;              // to 接收者id(0->服务器)
+    int how;             //宏-请求
 } info;                  // 定义info信息,用于网络传输的基本结构
 
 /**

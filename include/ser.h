@@ -36,6 +36,12 @@ void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
 void epoll_add(int event, events *ev);
 
 /**
+ * @brief 取下events,设置status=0
+ * @param ev 指定events
+ */
+void event_del(events *ev);
+
+/**
  * @brief 初始化lfd事件加入epfd
  */
 int epoll_init_lfd(void);
@@ -59,12 +65,6 @@ void justwrite(int, int, void *ev);
  * @param args lfd的全局结构
  */
 void lfdaccept(int, int, void *args);
-
-/**
- * @brief 取下events,设置status=0
- * @param ev 指定events
- */
-void event_del(events *ev);
 
 /**
  * @brief 展示events结构
@@ -93,9 +93,11 @@ MYSQL *sql_connect(void);
  */
 bool sql_init_table(MYSQL *sql_l);
 
-// /**
-//  * @brief 信号捕捉
-//  * SIG_IGN 终止
-//  * @param signal 对应信号
-//  */
-// void signalcatch(int signal);
+/**
+ * @brief 处理type为sql的数据
+ * @param ev events*
+ * @return true 完成
+ */
+bool sql_do(events *ev);
+
+// bool ser_accessname();
