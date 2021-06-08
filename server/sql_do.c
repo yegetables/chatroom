@@ -10,6 +10,22 @@ bool sql_do(events *ev)
     MYSQL_RES *result;
     // 执行
     int returnnumber = mysql_query(sql_l, buf);
+    if (ms->how == IF_DONE)
+    {
+        if (returnnumber)
+        {
+            memset(buf, 0, BUFLEN);
+            zlog_error(ser, "执行时出现异常: %s", mysql_error(sql_l));
+            buf[0] = '0';
+        }
+        else
+        {
+            memset(buf, 0, BUFLEN);
+            buf[0] = '1';
+        }
+        return true;
+    }
+
     if (!returnnumber)
     {
         // mysql_store_result保存查询到的数据到result
@@ -23,20 +39,19 @@ bool sql_do(events *ev)
                 buf[0] = '1';
             else
                 buf[0] = '0';
-
             return true;  //处理完毕
         }
+
         if (ms->how == MANY_RESULT)
         {
             memset(buf, 0, BUFLEN);
             itoa(mysql_num_rows(result), buf, 10);
-            epoll_add(EPOLLOUT, ev);
             return true;  //处理完毕
         }
         zlog_error(ser, "don't know which how");
         return false;
     }
-    zlog_error(ser, "don't know why");
+    zlog_error(ser, "执行时出现异常: %s", mysql_error(sql_l));
     return false;
 }
 // bool ser_accessname() { return false; }

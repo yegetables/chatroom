@@ -7,16 +7,21 @@ extern int epfd;
 void client_event(int cfd, int event, void *args)
 {
     events *ev = args;
+
+    zlog_info(ser, "clievent begin:%s", showevents(ev));
+
     // 接受info
-    if (false == recv_info(cfd, &(ev->js)))
+    event_del(ev);
+    if (false == recv_info(ev->fd, &(ev->js)))
     {
         //关闭连接清空
-        close(cfd);
+        close(ev->fd);
+        ev->status = 0;
         memset(ev, 0, sizeof(events));
-        zlog_debug(ser, "recv cfd_info failed,close cfd:%d ", cfd);
+
+        zlog_debug(ser, "recv cfd_info failed,close cfd:%d ", ev->fd);
         return;
     }
-    event_del(ev);
     // TODO: client事件类别处理
 
     if (ev->js.to == 0)

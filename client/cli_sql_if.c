@@ -24,7 +24,7 @@ bool cli_sql_if(char* p, int how)
     // 接受并验证结果
     if (recv_info(cfd, &mms))
     {
-        tt = showinfo(cfd, &mms);
+        tt = showinfo(&mms);
         zlog_debug(cli, tt);
         free(tt);
         if (mms.how == IF_DONE || mms.how == IF_HAS)  //简单真假判断
