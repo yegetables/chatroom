@@ -179,6 +179,7 @@ int main(int argc, char **argv)
 
     // 进入功能菜单
     showmainmenu();
+    close(cfd);
 
     // 异常退出
     zlog_fini();

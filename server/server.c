@@ -83,14 +83,8 @@ int main(int argc, char **argv)
         for (int i = 0; i < max; i++)
         {
             events *this = tempevents[i].data.ptr;
-            if (this->events & EPOLLIN || tempevents[i].events & EPOLLIN)
-            {
-                this->call_back(this->fd, this->events, this->arg);
-            }
-            else if (tempevents[i].events & EPOLLOUT || this->events & EPOLLOUT)
-            {
-                this->call_back(this->fd, this->events, this->arg);
-            }
+
+            this->call_back(this->fd, this->events, this->arg);
         }
     }
 

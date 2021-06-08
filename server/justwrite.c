@@ -9,20 +9,23 @@ void justwrite(int cfd, int event, void *args)
     events *ev = (events *)args;
     info *ms   = &(ev->js);
     // 发送
+    event_del(ev);
     if (!send_info(cfd, ms))
     {
         close(cfd);
-        memset(ev, 0, sizeof(events));
+        ev->status = 0;
         zlog_debug(ser, "close cfd:%d ", cfd);
         return;
     }
-    event_del(ev);
     char *tt = showevents(ev);  //写出的内容
-    strcat(tt, "has sended\n");
-    zlog_debug(ser, tt);
+    zlog_debug(ser, "send ok:%s", tt);
     free(tt);
 
     ev->call_back = client_event;
-    // memset(&(ev->js), 0, sizeof(info));
+    memset(ms, 0, sizeof(info));
     epoll_add(EPOLLIN, ev);
+
+    tt = showevents(ev);  //写出的内容
+    zlog_debug(ser, "client before:%s", tt);
+    free(tt);
 }

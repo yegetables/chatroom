@@ -6,5 +6,5 @@ simple_simple ="[%U:%L][%V]  %m%n"
 server.DEBUG      "${CMAKE_SOURCE_DIR}/log/serverDEBUG.log";simple_simple
 server.INFO       "${CMAKE_SOURCE_DIR}/log/serverINFO.log";simple
 
-client.DEBUG      "${CMAKE_SOURCE_DIR}/log/clientDEBUG.log";simple
-client.INFO       "${CMAKE_SOURCE_DIR}/log/clientINFO.log";simple
+client.DEBUG      "${CMAKE_SOURCE_DIR}/log/clientDEBUG%p.log";simple
+client.INFO       "${CMAKE_SOURCE_DIR}/log/clientINFO%p.log";simple
