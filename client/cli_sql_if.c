@@ -29,3 +29,37 @@ bool cli_sql_if(char* p)
         return false;
     }
 }
+
+bool cli_register(char* name, char* passwd)
+{
+    if (name == NULL || passwd == NULL) return false;
+    // sql语句
+    char p[BUFLEN] = {0};
+
+    // 构造查询语句
+    sprintf(p, "INSERT INTO user (user_name,user_passwd ) VALUES ( '%s','%s');",
+            name, passwd);
+
+    return cli_sql_if(p);
+}
+
+bool cli_accesspasswd(char* name, char* passwd)
+{
+    if (name == NULL) return false;
+    // sql语句
+    char p[BUFLEN] = {0};
+
+    // 构造查询语句
+    if (passwd == NULL)
+        sprintf(p, "select * from user where user_name ='%s';", name);
+    else
+        sprintf(p,
+                "select * from user where user_name ='%s' and "
+                "user_passwd='%s';",
+                name, passwd);
+
+    return cli_sql_if(p);
+}
+
+// TODO: check online
+bool useronline(char* name) { return true; }
