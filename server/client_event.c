@@ -25,7 +25,11 @@ void client_event(int cfd, int event, void *args)
         if (ev->js.type == sql)
         {
             //查询,判断
-            ;
+            if (sql_do(ev))
+            {
+                ev->call_back = justwrite;
+                epoll_add(EPOLLOUT, ev);
+            }
         }
         else
         {
@@ -36,7 +40,7 @@ void client_event(int cfd, int event, void *args)
     {
         ;  // file/msg
     }
-    ev->call_back = justwrite;
-    epoll_add(EPOLLOUT, ev);
+    // ev->call_back = justwrite;
+    // epoll_add(EPOLLOUT, ev);
     return;
 }

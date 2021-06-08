@@ -31,7 +31,7 @@ char *showevents(events *ev)
     strcpy(&logbuf[strlen(logbuf)], ii);
     free(ii);
 
-    sprintf(&logbuf[strlen(logbuf)], "-----------------over---------\n");
+    sprintf(&logbuf[strlen(logbuf)], "\n-----------------over---------\n");
 
     return logbuf;
 }
