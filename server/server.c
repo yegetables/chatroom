@@ -83,7 +83,7 @@ int main(int argc, char **argv)
         for (int i = 0; i < max; i++)
         {
             events *this = tempevents[i].data.ptr;
-
+            zlog_debug(ser, "\n\n\ncallback %d:%s", i, showevents(this));
             this->call_back(this->fd, this->events, this->arg);
         }
     }
