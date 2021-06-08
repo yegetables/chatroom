@@ -55,8 +55,8 @@ reaccept:
     }
 
     zlog_debug(ser,
-               "\n\n-----------new client-------------\ncfd=%d from [%s:%d], "
-               "g_events[%d]\n\n------------------------\n",
+               "\n-----------new client-------------\ncfd=%d from [%s:%d], "
+               "g_events[%d]\n------------------------",
                cfd, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port),
                i);
     return;

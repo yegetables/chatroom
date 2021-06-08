@@ -1,9 +1,11 @@
-#include <signal.h>
-#include <stddef.h>
+#include "config.h"
+#ifdef PROJECT_SERVER
+#include PROJECT_SERVERHEAD
+#else
+#include PROJECT_CLIENTHEAD
+#endif
 char* show_signal(int signal)
 {
-    if (NULL == signal) return NULL;
-
 #ifdef SIGHUP
     if (signal == SIGHUP) return "SIGHUP";  // 1终端的挂断或进程死亡
 #endif
@@ -102,6 +104,7 @@ char* show_signal(int signal)
 #endif
 #ifdef SIGCLD
     if (signal == SIGCLD) return "SIGCLD";  // 与 SIGCHLD 同义 #endif
+#endif
 #ifdef SIGPWR
     if (signal == SIGPWR) return "SIGPWR";  // 电力故障 (System V)
 #endif

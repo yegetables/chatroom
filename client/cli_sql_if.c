@@ -52,35 +52,15 @@ bool cli_sql_if(char* p)
 
     // 接受并验证结果
     {
-        memset(&ms, 0, sizeof(ms));
-        errornumber = 0;
-    rerecv:
-        if ((returnnumber = recv(cfd, &ms, sizeof(ms), 0)) != sizeof(info))
+        if (recv_info(cfd, &ms))
         {
-            if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
-            {
-                errornumber++;
-                zlog_warn(cli, "recv sql-result failed %d,rerecving~~~~~",
-                          errornumber);
-                if (errornumber > 3)
-                {
-                    zlog_error(cli, "recv sql-result failed");
-                    return false;
-                }
-                sleep(rand() % 3);
-                goto rerecv;
-            }
-            else
-            {
-                zlog_error(cli, "recv sql failed %d :%s", errornumber,
-                           strerror(errno));
-                return false;
-            }
+            if (ms.value[0] == '1' && ms.type == sql) return true;
         }
-        else if (ms.value[0] == '1' && ms.type == sql)
-            return true;
         else
+        {
+            zlog_debug(cli,"recv failed");  // noclose
             return false;
+        }
     }
 
     return false;

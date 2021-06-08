@@ -25,7 +25,7 @@ int main(int argc, char **argv)
              * 如果不希望getopt()打印出错信息，则只要将全域变量opterr设为0即可。
              */
 
-            if (opt == 'h') serverhelp();
+            if (opt == 'h') help();
 
             ///  @todo help手册
             printf("******************************\n");
@@ -41,10 +41,13 @@ int main(int argc, char **argv)
 
     /// 开日志
     {
-        char cmd[100] = {0};
-        sprintf(cmd, "rm %s*server*.log", PROJECT_LOGPATH);
-        system(cmd);
-        memset(cmd, 0, sizeof(cmd));
+        char *cmd = (char *)calloc(BUFLEN, sizeof(char));
+        {
+            sprintf(cmd, "rm %s*server*.log", PROJECT_LOGPATH);
+            system(cmd);
+        }
+        free(cmd);
+        cmd = NULL;
         ser = my_zlog_init("server");
         zlog_info(ser, "--------start--------");
         zlog_info(ser, "pid[%d]   port[%d]", getpid(), port);

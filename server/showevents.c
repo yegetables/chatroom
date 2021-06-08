@@ -1,19 +1,13 @@
-
-
 #include "config.h"
+#ifdef PROJECT_SERVER
 #include PROJECT_SERVERHEAD
+#else
+#include PROJECT_CLIENTHEAD
+#endif
 
-extern zlog_category_t *ser;
-void showevents(events *ev, int line, char *fun)
+char *showevents(events *ev)
 {
-    char logbuf[2 * BUFLEN];
-    memset(logbuf, 0, sizeof(logbuf));
-    // 函数,行数
-    {
-        fun = 1 + strrchr(fun, '/');
-        sprintf(&logbuf[strlen(logbuf)], "\n-------events------\n[%s][%3d]",
-                fun, line);
-    }
+    char *logbuf = (char *)calloc(2 * BUFLEN, sizeof(char));
 
     // events 基本信息
     {
@@ -30,20 +24,14 @@ void showevents(events *ev, int line, char *fun)
         if (ev->status)
             sprintf(&logbuf[strlen(logbuf)], "live");
         else
-            sprintf(&logbuf[strlen(logbuf)], "dead");
+            sprintf(&logbuf[strlen(logbuf)], "dead\n");
     }
 
-    // info 信息
-    {
-        sprintf(&logbuf[strlen(logbuf)], "info:{\nfrom :%d to :%d   \n",
-                ev->js.from, ev->js.to);
+    char *ii = showinfo(&(ev->js));
+    strcpy(&logbuf[strlen(logbuf)], ii);
+    free(ii);
 
-        if (ev->js.type == msg) sprintf(&logbuf[strlen(logbuf)], "[msg]");
-        if (ev->js.type == file) sprintf(&logbuf[strlen(logbuf)], "[file]");
-        if (ev->js.type == sql) sprintf(&logbuf[strlen(logbuf)], "[sql]");
-        sprintf(&logbuf[strlen(logbuf)], "%s\n}", ev->js.value);
-    }
-    sprintf(&logbuf[strlen(logbuf)], "\n-----------------over---------\n");
-    zlog_debug(ser, "%s", logbuf);
-    return;
+    sprintf(&logbuf[strlen(logbuf)], "-----------------over---------\n");
+
+    return logbuf;
 }

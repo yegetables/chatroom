@@ -13,12 +13,15 @@ void signalcatch(int signal)
 #ifdef SIGQUIT
         case SIGQUIT:
 #endif
-            zlog_debug(cli, "catch signal %s exit", show_signal(signal));
+            zlog_debug(
+                cli, "catch signal %s exit",
+                show_signal(signal) == NULL ? "NULL" : show_signal(signal));
             exit(1);
 #ifdef SIGCLD
         case SIGCLD:
 #endif
-            zlog_debug(cli, "catch signal %s return", show_signal(signal););
-            return;
+            zlog_debug(
+                cli, "catch signal %s return",
+                show_signal(signal) == NULL ? "NULL" : show_signal(signal));
     }
 }

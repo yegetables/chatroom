@@ -1,6 +1,11 @@
-#include <errno.h>
-#include <stddef.h>
-char* show_errno(int errno)
+#include "config.h"
+#ifdef PROJECT_SERVER
+#include PROJECT_SERVERHEAD
+#else
+#include PROJECT_CLIENTHEAD
+#endif
+
+char* show_errno(void)
 {
 #ifdef EPERM
     if (errno == EPERM) return "EPERM";

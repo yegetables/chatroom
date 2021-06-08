@@ -7,10 +7,9 @@ bool cli_register(char *name, char *passwd)
 {
     if (name == NULL || passwd == NULL) return false;
     // sql语句
-    char p[BUFLEN];
+    char p[BUFLEN] = {0};
 
     // 构造查询语句
-    memset(p, 0, sizeof(p));
     sprintf(p, "INSERT INTO user (user_name,user_passwd ) VALUES ( '%s','%s');",
             name, passwd);
 
