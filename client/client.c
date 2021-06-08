@@ -30,7 +30,7 @@ int main(int argc, char **argv)
         signal(SIGQUIT, signalcatch);
         signal(SIGINT, signalcatch);
     }
-    
+
     /// 解析命令行
     {
         char *options = "h";
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
             {
                 zlog_info(cli, "login %s passwd right passwd:%s", username,
                           passwd);
-                if (useronline(username))
+                if (cli_accessonline(username))
                 {
                     zlog_debug(cli, "login %s success 挤掉", username);
                     printf("您的账号已在别处下线\n");

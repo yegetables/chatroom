@@ -8,20 +8,20 @@ bool cli_sql_if(char* p)
     if (p == NULL) return false;
 
     // 构造info结构
-    info ms;
+    info mms;
     {
-        memset(&ms, 0, sizeof(ms));
-        strcpy(ms.value, p);
-        ms.type = sql;
-        ms.from = -1;
-        ms.to   = 0;
+        memset(&mms, 0, sizeof(mms));
+        strcpy(mms.value, p);
+        mms.type = sql;
+        mms.from = -1;
+        mms.to   = 0;
     }
 
     // 发送查询sql
-    if (!send_info(cfd, &ms)) return false;  // no close
+    if (!send_info(cfd, &mms)) return false;  // no close
 
     // 接受并验证结果
-    if (recv_info(cfd, &ms) && ms.value[0] == '1' && ms.type == sql)
+    if (recv_info(cfd, &mms) && mms.value[0] == '1' && mms.type == sql)
         return true;
     else
     {
@@ -62,4 +62,4 @@ bool cli_accesspasswd(char* name, char* passwd)
 }
 
 // TODO: check online
-bool useronline(char* name) { return true; }
+bool cli_accessonline(char* name) { return true; }

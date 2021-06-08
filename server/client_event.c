@@ -16,9 +16,8 @@ void client_event(int cfd, int event, void *args)
         zlog_debug(ser, "recv cfd_info failed,close cfd:%d ", cfd);
         return;
     }
-
-    // TODO: client事件类别处理
     event_del(ev);
+    // TODO: client事件类别处理
 
     if (ev->js.to == 0)
     {

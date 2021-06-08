@@ -32,7 +32,7 @@ bool cli_accesspasswd(char *name, char *passwd);
  * @return true 在线
  * false 不在线
  */
-bool useronline(char *name);
+bool cli_accessonline(char *name);
 
 /**
  * @brief 发送注册信息
