@@ -31,14 +31,49 @@ rerecv:
             {
                 goto over;
             }
-            sleep(rand() % 2);
             goto rerecv;
         }
         else
         {
+        over:
             zlog_warn(tmp, "recv info failed %s:%s over", show_errno(),
                       strerror(errno));
+            return false;
+        }
+    }
+    return true;
+}
+
+bool send_info(int cfd, info *ms)
+{
+    zlog_category_t *tmp = NULL;
+#ifdef PROJECT_SERVER
+    tmp = ser;
+#else
+    tmp = cli;
+#endif
+    // 记录返回值
+    int returnnumber = 0;
+    // 记录错误次数
+    int errornumber = 0;
+
+resend:
+    if (sizeof(info) != (returnnumber = send(cfd, ms, sizeof(info), 0)))
+    {
+        if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
+        {
+            errornumber++;
+            if (errornumber > 3)
+            {
+                goto over;
+            }
+            goto resend;
+        }
+        else
+        {
         over:
+            zlog_warn(tmp, "send info failed %s:%s over", show_errno(),
+                      strerror(errno));
             return false;
         }
     }

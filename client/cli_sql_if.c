@@ -6,62 +6,60 @@ extern int cfd;
 bool cli_sql_if(char* p)
 {
     if (p == NULL) return false;
-    // 记录返回值
-    int returnnumber = 0;
-    // 记录错误次数
-    int errornumber = 0;
 
     // 构造info结构
-    info ms;
+    info mms;
     {
-        memset(&ms, 0, sizeof(ms));
-        strcpy(ms.value, p);
-        ms.type = sql;
-        ms.from = -1;
-        ms.to   = 0;
+        memset(&mms, 0, sizeof(mms));
+        strcpy(mms.value, p);
+        mms.type = sql;
+        mms.from = -1;
+        mms.to   = 0;
     }
 
     // 发送查询sql
-    {
-        errornumber = 0;
-    resend:
-        if (sizeof(info) != (returnnumber = send(cfd, &ms, sizeof(info), 0)))
-        {
-            if (errno == EINTR || errno == EWOULDBLOCK || errno == EAGAIN)
-            {
-                errornumber++;
-                zlog_warn(cli, "send sql failed:%s ,resending~~~~~",
-                          strerror(errno));
-                if (errornumber > 3)
-                {
-                    zlog_error(cli, "send sql failed%d: %s ", errornumber,
-                               strerror(errno));
-                    return false;
-                }
-                sleep(rand() % 2);
-                goto resend;
-            }
-            else
-            {
-                zlog_error(cli, "send sql failed %d: %s", errornumber,
-                           strerror(errno));
-                return false;
-            }
-        }
-    }
+    if (!send_info(cfd, &mms)) return false;  // no close
 
     // 接受并验证结果
+    if (recv_info(cfd, &mms) && mms.value[0] == '1' && mms.type == sql)
+        return true;
+    else
     {
-        if (recv_info(cfd, &ms))
-        {
-            if (ms.value[0] == '1' && ms.type == sql) return true;
-        }
-        else
-        {
-            zlog_debug(cli,"recv failed");  // noclose
-            return false;
-        }
+        zlog_debug(cli, "access failed");  // no close
+        return false;
     }
-
-    return false;
 }
+
+bool cli_register(char* name, char* passwd)
+{
+    if (name == NULL || passwd == NULL) return false;
+    // sql语句
+    char p[BUFLEN] = {0};
+
+    // 构造查询语句
+    sprintf(p, "INSERT INTO user (user_name,user_passwd ) VALUES ( '%s','%s');",
+            name, passwd);
+
+    return cli_sql_if(p);
+}
+
+bool cli_accesspasswd(char* name, char* passwd)
+{
+    if (name == NULL) return false;
+    // sql语句
+    char p[BUFLEN] = {0};
+
+    // 构造查询语句
+    if (passwd == NULL)
+        sprintf(p, "select * from user where user_name ='%s';", name);
+    else
+        sprintf(p,
+                "select * from user where user_name ='%s' and "
+                "user_passwd='%s';",
+                name, passwd);
+
+    return cli_sql_if(p);
+}
+
+// TODO: check online
+bool cli_accessonline(char* name) { return true; }

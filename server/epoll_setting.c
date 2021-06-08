@@ -1,9 +1,53 @@
 #include "config.h"
 #include PROJECT_SERVERHEAD
-
-extern int port;
 extern int epfd;
+extern zlog_category_t *ser;
+extern int port;
 extern events g_events[MAXCLIENT + 1];
+
+void epoll_add(int event, events *ev)
+{
+    struct epoll_event temp = {0, {0}};
+    int op                  = EPOLL_CTL_DEL;
+    temp.data.ptr           = ev;
+    temp.events = ev->events = event;
+    if (ev->status == 0)
+    {
+        op         = EPOLL_CTL_ADD;
+        ev->status = 1;
+    }
+
+    if (epoll_ctl(epfd, op, ev->fd, &temp) < 0)
+    {
+        zlog_error(ser, "event add error");
+    }
+}
+
+void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
+               void *arg)
+{
+    ev->fd        = fd;
+    ev->call_back = call_back;
+    ev->arg       = arg;
+    ev->events    = 0;
+    ev->status    = 0;
+    memset(&(ev->js), 0, sizeof(info));
+    // ev->last_active = time(NULL);
+    return;
+}
+
+void event_del(events *ev)
+{
+    if (ev->status == 0)
+        return;
+    else
+        ev->status = 0;
+    // struct epoll_event temp = {0, {0}};
+    // temp.data.ptr           = NULL;
+    epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, NULL);
+    // epoll_ctl(epfd, EPOLL_CTL_DEL, ev->fd, &temp);
+}
+
 int epoll_init_lfd(void)
 {
     int lfd = socket(AF_INET, SOCK_STREAM, 0);
