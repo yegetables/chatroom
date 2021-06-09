@@ -91,6 +91,11 @@ int main(int argc, char **argv)
                 zlog_warn(ser, " EPOLLRDHUP close cfd:%d ", this->fd);
                 continue;
             }
+            // if (tempevents[i].events & EPOLLIN)
+            //     this->call_back(this->fd, tempevents[i].events, this->arg);
+
+            // else if (tempevents[i].events & EPOLLOUT)
+            //     this->call_back(this->fd, tempevents[i].events, this->arg);
 
             // zlog_debug(ser, "\n\n\ncallback %d:%s", i, showevents(this));
             this->call_back(this->fd, this->events, this->arg);
