@@ -30,7 +30,7 @@ reaccept:
             }
             else
             {
-                zlog_warn(ser, "accper failed :%s", strerror(errno));
+                zlog_error(ser, "accpet failed :%s", strerror(errno));
                 return;
             }
         }
@@ -54,10 +54,10 @@ reaccept:
         epoll_add(EPOLLIN, &g_events[i]);
     }
 
-    zlog_debug(ser,
-               "\n-----------new client-------------\ncfd=%d from [%s:%d], "
-               "g_events[%d]\n------------------------",
-               cfd, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port),
-               i);
+    zlog_info(ser,
+              "\n-----------new client-------------\ncfd=%d from [%s:%d], "
+              "g_events[%d]\n------------------------",
+              cfd, inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port),
+              i);
     return;
 }

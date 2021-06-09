@@ -51,7 +51,7 @@ int main(int argc, char **argv)
         ser = my_zlog_init("server");
         zlog_info(ser, "--------start--------");
         zlog_info(ser, "pid[%d]   port[%d]", getpid(), port);
-        zlog_debug(ser, "epfd[%d]", epfd);
+        // zlog_debug(ser, "epfd[%d]", epfd);
     }
 
     /// sql 连接
@@ -83,7 +83,16 @@ int main(int argc, char **argv)
         for (int i = 0; i < max; i++)
         {
             events *this = tempevents[i].data.ptr;
-            zlog_debug(ser, "\n\n\ncallback %d:%s", i, showevents(this));
+            if (tempevents[i].events & EPOLLRDHUP)
+            {
+                // close
+                event_del(this);
+                close(this->fd);
+                zlog_warn(ser, " EPOLLRDHUP close cfd:%d ", this->fd);
+                continue;
+            }
+
+            // zlog_debug(ser, "\n\n\ncallback %d:%s", i, showevents(this));
             this->call_back(this->fd, this->events, this->arg);
         }
     }
