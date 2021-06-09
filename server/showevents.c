@@ -22,7 +22,7 @@ char *showevents(events *ev)
         if (ev->call_back == lfdaccept)
             sprintf(&logbuf[strlen(logbuf)], "[lfdaccept]");
         if (ev->status)
-            sprintf(&logbuf[strlen(logbuf)], "live");
+            sprintf(&logbuf[strlen(logbuf)], "live\n");
         else
             sprintf(&logbuf[strlen(logbuf)], "dead\n");
     }

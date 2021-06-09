@@ -12,8 +12,8 @@ MYSQL* sql_connect(void)
     // 记录错误次数
     int errornumber = 0;
 
-    zlog_debug(ser, "name:%s user:%s passwd:%s hosts:%s", database_name,
-               database_user, database_passwd, database_ip);
+    // zlog_debug(ser, "name:%s user:%s passwd:%s hosts:%s", database_name,
+    // database_user, database_passwd, database_ip);
     // CREATE DATABASE IF NOT EXISTS RUNOOB DEFAULT CHARSET utf8 COLLATE
     // utf8_general_ci;
     // 1. 如果数据库不存在则创建，存在则不创建。
@@ -39,7 +39,7 @@ reinit:
     }
     else
     {
-        zlog_debug(ser, "init mysql success");
+        ;  // zlog_debug(ser, "init mysql success");
     }
 
     /// 连接数据库
@@ -63,7 +63,7 @@ reconnect:
     }
     else
     {
-        zlog_debug(ser, "connect datebase success");
+        zlog_info(ser, "connect datebase success");
     }
 
     char q[BUFLEN];
@@ -74,31 +74,31 @@ reconnect:
             database_name);
     if (mysql_query(conn, q))
     {
-        zlog_warn(ser,
-                  "failed to create "
-                  "Error %u: %s",
-                  mysql_errno(conn), mysql_error(conn));
+        zlog_error(ser,
+                   "failed to create "
+                   "Error %u: %s",
+                   mysql_errno(conn), mysql_error(conn));
         return NULL;
     }
     else
     {
-        zlog_debug(ser, "datebase creat success");
+        ;  // zlog_debug(ser, "datebase creat success");
     }
 
     memset(q, 0, sizeof(q));
     sprintf(q, "use %s", database_name);
     if (mysql_query(conn, q))
     {
-        zlog_warn(ser,
-                  "failed to create "
-                  "Error %u: %s",
-                  mysql_errno(conn), mysql_error(conn));
+        zlog_error(ser,
+                   "failed to create "
+                   "Error %u: %s",
+                   mysql_errno(conn), mysql_error(conn));
 
         return NULL;
     }
     else
     {
-        zlog_debug(ser, "use datebase %s success", database_name);
+        ;  // zlog_debug(ser, "use datebase %s success", database_name);
     }
 
     return conn;
@@ -125,29 +125,29 @@ bool sql_init_table(MYSQL* sql_l)
 
         if (mysql_query(sql_l, q))
         {
-            zlog_warn(ser,
-                      "failed to create "
-                      "Error %u: %s",
-                      mysql_errno(sql_l), mysql_error(sql_l));
+            zlog_error(ser,
+                       "failed to create "
+                       "Error %u: %s",
+                       mysql_errno(sql_l), mysql_error(sql_l));
             return false;
         }
         else
         {
-            zlog_debug(ser, "table user created success");
+            ;  // zlog_debug(ser, "table user created success");
         }
         memset(q, 0, sizeof(q));
         sprintf(q, "ALTER TABLE user AUTO_INCREMENT=10000;");
         if (mysql_query(sql_l, q))
         {
-            zlog_warn(ser,
-                      "failed to create "
-                      "Error %u: %s",
-                      mysql_errno(sql_l), mysql_error(sql_l));
+            zlog_error(ser,
+                       "failed to create "
+                       "Error %u: %s",
+                       mysql_errno(sql_l), mysql_error(sql_l));
             return false;
         }
         else
         {
-            zlog_debug(ser, "table user id auto_increment=10000");
+            ;  // zlog_debug(ser, "table user id auto_increment=10000");
         }
     }
     /// @note relationship
@@ -164,15 +164,15 @@ bool sql_init_table(MYSQL* sql_l)
 
         if (mysql_query(sql_l, q))
         {
-            zlog_warn(ser,
-                      "failed to create "
-                      "Error %u: %s",
-                      mysql_errno(sql_l), mysql_error(sql_l));
+            zlog_error(ser,
+                       "failed to create "
+                       "Error %u: %s",
+                       mysql_errno(sql_l), mysql_error(sql_l));
             return false;
         }
         else
         {
-            zlog_debug(ser, "table relationship created success");
+            ;  // zlog_debug(ser, "table relationship created success");
         }
     }
 

@@ -15,11 +15,16 @@ void client_event(int cfd, int event, void *args)
         //关闭连接清空
         close(ev->fd);
         ev->status = 0;
-        zlog_debug(ser, "recv cfd_info failed,close cfd:%d ", ev->fd);
+        zlog_error(ser, "recv cfd_info failed,close cfd:%d ", ev->fd);
         return;
     }
     // TODO: client事件类别处理
-    zlog_error(ser, "recv success:%s", showevents(ev));
+    zlog_debug(ser, "recv success:%s", showevents(ev));
+    zlog_debug(ser, "========VVV=========");
+    zlog_debug(ser, "========VVV=========");
+    zlog_debug(ser, "========VVV=========");
+    zlog_debug(ser, "========VVV=========");
+
     if (ev->js.to == 0)
     {
         // file/sql/cmd
@@ -43,5 +48,7 @@ void client_event(int cfd, int event, void *args)
     }
     // ev->call_back = justwrite;
     // epoll_add(EPOLLOUT, ev);
+    zlog_debug(ser, "to:%s", showevents(ev));
+
     return;
 }

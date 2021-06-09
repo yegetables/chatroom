@@ -14,7 +14,7 @@ void justwrite(int cfd, int event, void *args)
     {
         close(cfd);
         ev->status = 0;
-        zlog_debug(ser, "close cfd:%d ", cfd);
+        zlog_error(ser, "close cfd:%d ", cfd);
         return;
     }
 

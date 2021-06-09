@@ -15,7 +15,7 @@ bool sql_do(events *ev)
         if (returnnumber)
         {
             memset(buf, 0, BUFLEN);
-            zlog_error(ser, "执行时出现异常: %s", mysql_error(sql_l));
+            zlog_warn(ser, "执行时出现异常: %s", mysql_error(sql_l));
             buf[0] = '0';
         }
         else
@@ -48,7 +48,7 @@ bool sql_do(events *ev)
             itoa(mysql_num_rows(result), buf, 10);
             return true;  //处理完毕
         }
-        zlog_error(ser, "don't know which how");
+        zlog_warn(ser, "don't know which how");
         return false;
     }
     zlog_error(ser, "执行时出现异常: %s", mysql_error(sql_l));
