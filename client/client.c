@@ -1,7 +1,7 @@
 #include "config.h"
 #include PROJECT_CLIENTHEAD
 
-#define SLEEP_TIME 10
+#define SLEEP_TIME 3
 zlog_category_t *cli = NULL;
 int cfd;
 int main(int argc, char **argv)
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
                        strerror(errno));
             if (errornumber > 3)
             {
-                sleep(SLEEP_TIME);
+                sleep(rand() % 3);
                 errornumber = 0;
                 if (-1 == connect(cfd, (struct sockaddr *)&addr, addrlen))
                 {
@@ -89,7 +89,6 @@ int main(int argc, char **argv)
             else
             {
                 errornumber++;
-                zlog_debug(cli, "re connect");
                 goto reconnect;
             }
         }
@@ -109,7 +108,7 @@ int main(int argc, char **argv)
         /// login
         if (cli_accessusername(username))
         {
-            zlog_info(cli, "login %s access success ", username);
+            zlog_info(cli, "login %s", username);
             errornumber = 0;
         again:
             printf("请输入密码:\n");
@@ -140,7 +139,7 @@ int main(int argc, char **argv)
                         "密码错误次数太多，暂时锁定帐号%s,"
                         "一分钟以后重新登陆\n",
                         username);
-                    zlog_info(cli,
+                    zlog_warn(cli,
                               "login %s passwd error passwd error 3 times ",
                               username);
                     exit(0);

@@ -24,7 +24,9 @@ bool recv_info(int cfd, info *ms)
 rerecv:
     if ((returnnumber = recv(cfd, ms, sizeof(info), 0)) != sizeof(info))
     {
+        if (returnnumber == 0) return false;
         zlog_warn(tmp, "recv failed %s", show_errno());
+
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
             // 服务端不能卡死,客户端close之后服务端收到EAGAIN,三次失败直接close
@@ -66,6 +68,7 @@ bool send_info(int cfd, info *ms)
 resend:
     if (sizeof(info) != (returnnumber = send(cfd, ms, sizeof(info), 0)))
     {
+        if (returnnumber == 0) return false;
         zlog_warn(tmp, "send failed %s", show_errno());
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {

@@ -12,9 +12,7 @@ void justwrite(int cfd, int event, void *args)
     event_del(ev);
     if (!send_info(cfd, ms))
     {
-        close(cfd);
-        ev->status = 0;
-        zlog_error(ser, "close cfd:%d ", cfd);
+        epoll_add(EPOLLRDHUP, ev);
         return;
     }
 

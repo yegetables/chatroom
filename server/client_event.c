@@ -12,10 +12,7 @@ void client_event(int cfd, int event, void *args)
     event_del(ev);
     if (false == recv_info(ev->fd, &(ev->js)))
     {
-        //关闭连接清空
-        close(ev->fd);
-        ev->status = 0;
-        zlog_error(ser, "recv cfd_info failed,close cfd:%d ", ev->fd);
+        epoll_add(EPOLLRDHUP, ev);
         return;
     }
     // TODO: client事件类别处理
