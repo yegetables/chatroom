@@ -104,15 +104,43 @@ int main(int argc, char **argv)
         char passwd[BUFLEN];
         memset(username, 0, sizeof(username));
         memset(passwd, 0, sizeof(passwd));
-        scanf("%16s", username);
+        fgets(username, 16, stdin);
+        if (username[strlen(username) - 2] == '\r' &&
+            username[strlen(username) - 1] == '\n')
+            username[strlen(username) - 2] = '\0';
+        if (username[strlen(username) - 1] == '\n')
+            username[strlen(username) - 1] = '\0';
+
         /// login
         if (cli_accessusername(username))
         {
             zlog_info(cli, "login %s", username);
             errornumber = 0;
         again:
+
             printf("请输入密码:\n");
-            scanf("%16s", passwd);
+            printf("忘记密码请输入#forget#email\n");
+
+            fgets(passwd, 16, stdin);
+            {
+                if (passwd[strlen(passwd) - 2] == '\r' &&
+                    passwd[strlen(passwd) - 1] == '\n')
+                    passwd[strlen(passwd) - 2] = '\0';
+                if (passwd[strlen(passwd) - 1] == '\n')
+                    passwd[strlen(passwd) - 1] = '\0';
+            }
+
+            if (strncmp(passwd, "#forget#") == 0 && IsValidEmail(&passwd[8]))
+            {
+                // TODO: 重置密码
+                // send email
+                // scanf 验证码
+                // 重置 密码
+                printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username,
+                       passwd);
+                zlog_info(cli, "重置密码成功:用户名:%s 密码:%s", username,
+                          passwd);
+            }
 
             if (cli_accesspasswd(username, passwd))
             {
@@ -156,8 +184,19 @@ int main(int argc, char **argv)
         else  ///  注册
         {
             zlog_info(cli, "register user: %s", username);
-            printf("-----------------注册:\n用户名:%s\n密码:", username);
-            scanf("%16s", passwd);
+            printf("-----------------注册:\n");
+            printf("密码开头不能是#,不超过15位\n");
+            printf("用户名:%s\n");
+            printf("密码:", username);
+            fgets(passwd, 16, stdin);
+            if (passwd[strlen(passwd) - 2] == '\r' &&
+                    passwd[strlen(passwd) - 1] = '\n')
+                passwd[strlen(passwd) - 2] = '\0';
+            if (passwd[strlen(passwd) - 1] = '\n')
+                passwd[strlen(passwd) - 1] = '\0';
+            printf("输入验证邮箱:");
+            fgets(email, 50, stdin);
+
             /// mysql add register
             errornumber = 0;
             while (false == cli_register(username, passwd) && errornumber++ < 3)
@@ -177,7 +216,9 @@ int main(int argc, char **argv)
     }
 
     // 进入功能菜单
-    showmainmenu();
+
+    entermenu();
+
     close(cfd);
 
     // 异常退出
@@ -204,4 +245,33 @@ void signalcatch(int signal)
 #endif
             zlog_debug(cli, "catch signal %s return", show_signal(signal));
     }
+}
+
+bool IsValidEmail(const char *s)
+{
+    char *ms;
+    if ((ms = strchr(s, '@')) == NULL)
+    {
+        return false;
+    }
+    if (strchr(ms + 1, '@') != NULL)
+    {
+        return false;
+    }
+    if (strchr(ms + 1, '.') == NULL)
+    {
+        return false;
+    }
+    if (strchr(s, '.') < ms)
+    {
+        if (strchr(strchr(s, '.') + 1, '.') < ms)
+        {
+            return false;
+        }
+    }
+    if (strlen(st rrchr(s, '.') + 1) > 4 || strlen(strrchr(s, '.') + 1) < 2)
+    {
+        return false;
+    }
+    return true;
 }
