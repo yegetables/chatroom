@@ -45,9 +45,14 @@ bool cli_accessonline(char *name);
 bool cli_register(char *username, char *passwd);
 
 /**
- * @brief 显示客户端主页
+ * @brief 打印功能列表
  */
 void showmainmenu(void);
+
+/**
+ * @brief 显示客户端主页
+ */
+void entermenu(void);
 
 /**
  * @brief 信号捕捉

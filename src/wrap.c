@@ -237,3 +237,32 @@ char *itoa(int num, char *str, int radix)
     }
     return str;
 }
+
+bool IsValidEmail(const char *s)
+{
+    char *ms;
+    if ((ms = strchr(s, '@')) == NULL)
+    {
+        return false;
+    }
+    if (strchr(ms + 1, '@') != NULL)
+    {
+        return false;
+    }
+    if (strchr(ms + 1, '.') == NULL)
+    {
+        return false;
+    }
+    if (strchr(s, '.') < ms)
+    {
+        if (strchr(strchr(s, '.') + 1, '.') < ms)
+        {
+            return false;
+        }
+    }
+    if (strlen(st rrchr(s, '.') + 1) > 4 || strlen(strrchr(s, '.') + 1) < 2)
+    {
+        return false;
+    }
+    return true;
+}
