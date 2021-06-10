@@ -36,13 +36,21 @@ bool cli_accesspasswd(char *name, char *passwd);
 bool cli_accessonline(char *name);
 
 /**
+ * @brief 设置账号在线
+ * @param name 用户名
+ * @return true  false
+ */
+bool cli_setonline(char *name);
+
+/**
  * @brief 发送注册信息
  * @param username 用户名
  * @param passwd 密码
+ * @param email 邮箱
  * @return true 注册成功
  * false 注册失败
  */
-bool cli_register(char *username, char *passwd);
+bool cli_register(char *username, char *passwd, char *email);
 
 /**
  * @brief 打印功能列表

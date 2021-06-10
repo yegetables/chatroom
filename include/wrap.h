@@ -1,3 +1,4 @@
+
 #ifndef __WRAP_H_
 #define __WRAP_H_
 
@@ -14,6 +15,5 @@ ssize_t Readn(int fd, void *vptr, size_t n);
 ssize_t Writen(int fd, const void *vptr, size_t n);
 ssize_t my_read(int fd, char *ptr);
 ssize_t Readline(int fd, void *vptr, size_t maxlen);
-char *itoa(int num, char *str, int radix);
-bool IsValidEmail(const char *s);
+
 #endif
