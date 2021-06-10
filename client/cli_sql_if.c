@@ -44,15 +44,18 @@ bool cli_sql_if(char* p, int how)
     return false;
 }
 
-bool cli_register(char* name, char* passwd)
+bool cli_register(char* name, char* passwd, char* email)
 {
-    if (name == NULL || passwd == NULL) return false;
+    if (name == NULL || passwd == NULL || email == NULL) return false;
     // sql语句
     char p[BUFLEN] = {0};
 
     // 构造查询语句
-    sprintf(p, "INSERT INTO user (user_name,user_passwd ) VALUES ( '%s','%s');",
-            name, passwd);
+    sprintf(p,
+            "INSERT INTO user (user_name,user_passwd, user_email,user_status ) "
+            "VALUES ( "
+            "'%s','%s','%s',1);",
+            name, passwd, email);
 
     return cli_sql_if(p, IF_DONE);
 }
@@ -76,4 +79,16 @@ bool cli_accesspasswd(char* name, char* passwd)
 }
 
 // TODO: check online
-bool cli_accessonline(char* name) { return false; }
+bool cli_accessonline(char* name)
+{
+    if (name == NULL) return false;
+
+    return false;
+}
+
+bool cli_setonline(char* name)
+{
+    if (name == NULL) return false;
+
+    return false;
+}

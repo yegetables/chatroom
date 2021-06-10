@@ -32,6 +32,7 @@
 
 #include "color.h"
 
+
 #define DEBUGPRINT(FORMAT, ...)                                       \
     {                                                                 \
         char *t = strrchr(__FILE__, '/');                             \

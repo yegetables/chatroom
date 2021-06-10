@@ -100,11 +100,13 @@ int main(int argc, char **argv)
         printf("登录请输入你的用户名\n");
         printf("注册请输入你想要的用户名\n");
         printf("(不超过15个字符)\n");
-        char username[BUFLEN];
-        char passwd[BUFLEN];
+        char username[30];
+        char passwd[30];
+        char email[50];
         memset(username, 0, sizeof(username));
         memset(passwd, 0, sizeof(passwd));
-        fgets(username, 16, stdin);
+        memset(email, 0, sizeof(email));
+        fgets(username, 25, stdin);
         if (username[strlen(username) - 2] == '\r' &&
             username[strlen(username) - 1] == '\n')
             username[strlen(username) - 2] = '\0';
@@ -119,9 +121,9 @@ int main(int argc, char **argv)
         again:
 
             printf("请输入密码:\n");
-            printf("忘记密码请输入#forget#email\n");
+            printf("忘记密码请输入#forget#username#email\n");
 
-            fgets(passwd, 16, stdin);
+            fgets(passwd, 25, stdin);
             {
                 if (passwd[strlen(passwd) - 2] == '\r' &&
                     passwd[strlen(passwd) - 1] == '\n')
@@ -130,7 +132,8 @@ int main(int argc, char **argv)
                     passwd[strlen(passwd) - 1] = '\0';
             }
 
-            if (strncmp(passwd, "#forget#") == 0 && IsValidEmail(&passwd[8]))
+            if (strncmp(passwd, "#forget#", 8) == 0 &&
+                IsValidEmail(&passwd[17]))
             {
                 // TODO: 重置密码
                 // send email
@@ -185,33 +188,41 @@ int main(int argc, char **argv)
         {
             zlog_info(cli, "register user: %s", username);
             printf("-----------------注册:\n");
-            printf("密码开头不能是#,不超过15位\n");
-            printf("用户名:%s\n");
-            printf("密码:", username);
-            fgets(passwd, 16, stdin);
+            printf("用户名:%s\n", username);
+            printf("密码开头不能是#,不超过24位\n");
+            printf("密码:");
+            fgets(passwd, 25, stdin);
             if (passwd[strlen(passwd) - 2] == '\r' &&
-                    passwd[strlen(passwd) - 1] = '\n')
+                passwd[strlen(passwd) - 1] == '\n')
                 passwd[strlen(passwd) - 2] = '\0';
-            if (passwd[strlen(passwd) - 1] = '\n')
+            if (passwd[strlen(passwd) - 1] == '\n')
                 passwd[strlen(passwd) - 1] = '\0';
-            printf("输入验证邮箱:");
+            printf("输入验证邮箱:\n");
+            printf("邮箱不超过48位\n");
             fgets(email, 50, stdin);
-
+            if (email[strlen(email) - 2] == '\r' &&
+                email[strlen(email) - 1] == '\n')
+                email[strlen(email) - 2] = '\0';
+            if (email[strlen(email) - 1] == '\n')
+                email[strlen(email) - 1] = '\0';
             /// mysql add register
             errornumber = 0;
-            while (false == cli_register(username, passwd) && errornumber++ < 3)
+            while (false == cli_register(username, passwd, email) &&
+                   errornumber++ < 3)
             {
                 sleep(rand() % SLEEP_TIME);
             }
             if (errornumber >= 3)
             {
-                zlog_warn(cli, "register failed %s:%s", username, passwd);
+                zlog_warn(cli, "register failed %s:%s:%s", username, passwd,
+                          email);
                 exit(1);
             }
             printf("-----------------注册成功\n");
-            printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username,
-                   passwd);
-            zlog_info(cli, "注册成功:用户名:%s 密码:%s", username, passwd);
+            printf("您的用户名\n%s\n您的密码\n%s\n您的邮箱%s\n请妥善保管\n",
+                   username, passwd, email);
+            zlog_info(cli, "注册成功:用户名:%s 密码:%s 邮箱:%s", username,
+                      passwd, email);
         }
     }
 
@@ -245,33 +256,4 @@ void signalcatch(int signal)
 #endif
             zlog_debug(cli, "catch signal %s return", show_signal(signal));
     }
-}
-
-bool IsValidEmail(const char *s)
-{
-    char *ms;
-    if ((ms = strchr(s, '@')) == NULL)
-    {
-        return false;
-    }
-    if (strchr(ms + 1, '@') != NULL)
-    {
-        return false;
-    }
-    if (strchr(ms + 1, '.') == NULL)
-    {
-        return false;
-    }
-    if (strchr(s, '.') < ms)
-    {
-        if (strchr(strchr(s, '.') + 1, '.') < ms)
-        {
-            return false;
-        }
-    }
-    if (strlen(st rrchr(s, '.') + 1) > 4 || strlen(strrchr(s, '.') + 1) < 2)
-    {
-        return false;
-    }
-    return true;
 }

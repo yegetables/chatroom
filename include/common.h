@@ -85,3 +85,20 @@ bool recv_info(int cfd, info *ms);
  * @return false
  */
 bool send_info(int cfd, info *ms);
+
+/**
+ * @brief 数字转字符串
+ *
+ * @param num 数字
+ * @param str 传出字符串指针
+ * @param radix 进制
+ * @return char* str指针
+ */
+char *itoa(int num, char *str, int radix);
+
+/**
+ * @brief 验证邮箱格式
+ * @param s 邮箱字符串
+ * @return true false
+ */
+bool IsValidEmail(char *s);
