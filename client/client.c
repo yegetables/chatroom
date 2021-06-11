@@ -259,3 +259,32 @@ void signalcatch(int signal)
             // 异常退出
     }
 }
+
+bool IsValidEmail(char *s)
+{
+    char *ms;
+    if ((ms = strchr(s, '@')) == NULL)
+    {
+        return false;
+    }
+    if (strchr(ms + 1, '@') != NULL)
+    {
+        return false;
+    }
+    if (strchr(ms + 1, '.') == NULL)
+    {
+        return false;
+    }
+    if (strchr(s, '.') < ms)
+    {
+        if (strchr(strchr(s, '.') + 1, '.') < ms)
+        {
+            return false;
+        }
+    }
+    if (strlen(strrchr(s, '.') + 1) > 4 || strlen(strrchr(s, '.') + 1) < 2)
+    {
+        return false;
+    }
+    return true;
+}

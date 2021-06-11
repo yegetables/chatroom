@@ -67,3 +67,10 @@ void entermenu(void);
  * @param signal 对应信号
  */
 void signalcatch(int signal);
+
+/**
+ * @brief 验证邮箱格式
+ * @param s 邮箱字符串
+ * @return true false
+ */
+bool IsValidEmail(char *s);

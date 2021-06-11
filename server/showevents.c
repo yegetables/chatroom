@@ -11,11 +11,24 @@ char *showevents(events *ev)
 
     // events 基本信息
     {
-        sprintf(&logbuf[strlen(logbuf)], "fd:[%d]", ev->fd);
-        if (ev->events & EPOLLIN) sprintf(&logbuf[strlen(logbuf)], "[IN]");
-        if (ev->events & EPOLLOUT) sprintf(&logbuf[strlen(logbuf)], "[OUT]");
-        if (ev->events & EPOLLERR) sprintf(&logbuf[strlen(logbuf)], "[ERR]");
-        if (ev->events & EPOLLRDHUP) sprintf(&logbuf[strlen(logbuf)], "[HUP]");
+        sprintf(&logbuf[strlen(logbuf)], "[fd:%d]", ev->fd);
+        if (ev->events & EPOLLRDHUP)
+            sprintf(&logbuf[strlen(logbuf)], "[HUP]");
+        else
+        {
+            if (ev->events & EPOLLERR)
+                sprintf(&logbuf[strlen(logbuf)], "[ERR]");
+            else
+            {
+                if (ev->events & EPOLLIN)
+                    sprintf(&logbuf[strlen(logbuf)], "[IN]");
+                else
+                {
+                    if (ev->events & EPOLLOUT)
+                        sprintf(&logbuf[strlen(logbuf)], "[OUT]");
+                }
+            }
+        }
         if (ev->call_back == justwrite)
             sprintf(&logbuf[strlen(logbuf)], "[justwrite]");
         if (ev->call_back == client_event)

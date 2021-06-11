@@ -105,14 +105,48 @@ bool sql_do(events *ev);
 
 /**
  * @brief 在线时根据uid找到fd
- * @param id uid
- * @return int fd
  */
 int id_to_fd(int id);
 
 /**
  * @brief 在线时根据name找到fd
- * @param name name
- * @return int fd
  */
 int name_to_fd(char *name);
+
+/**
+ * @brief 第一个值,char*放入buf
+ * @return  执行状况 true false
+ */
+bool case_WHAT_FIRST_VALUE(info *ms);
+/**
+ * @brief 有多少行数据
+ * @return  执行状况 true false
+ */
+bool case_MANY_RESULT(info *ms);
+/**
+ * @brief 是否存在
+ * @return  执行状况 true false
+ */
+bool case_IF_HAS(info *ms);
+/**
+ * @brief 执行成功
+ * @return  执行状况 true false
+ */
+bool case_IF_DONE(info *ms);
+
+/**
+ * @brief 执行buf的sql语句
+自动记录报错
+ * @param ms info
+ * @return true  false
+ */
+bool base_sql_query(info *ms);
+
+/**
+ * @brief 设置在线
+ * 先设置status ,获取name,查询id返回
+ * 顺便加入fd_id在线状态
+ * @param events* ev
+ * @return true false
+ */
+bool event_set_online(events *ev);

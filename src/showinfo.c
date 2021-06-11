@@ -9,11 +9,12 @@ char *showinfo(info *ms)
 {
     static char *how[20];
     {
-        how[0] = "[IF_HAS]";
-        how[1] = "[IF_DONE]";
-        how[2] = "[MANY_RESULT]";
-        how[3] = "[WHAT_FIRST_VALUE]";
-        how[4] = "[SET_ONLINE]";
+        how[0] = "[HUP_NO]";
+        how[1] = "[IF_HAS]";
+        how[2] = "[IF_DONE]";
+        how[3] = "[MANY_RESULT]";
+        how[4] = "[WHAT_FIRST_VALUE]";
+        how[5] = "[SET_ONLINE]";
         // strcpy(how[0], "[IF_HAS]");
         // strcpy(how[1], "[IF_DONE]");
         // strcpy(how[2], "[MANY_RESULT]");
@@ -22,9 +23,9 @@ char *showinfo(info *ms)
     }
     static char *type[5];
     {
-        type[0] = "[msg]";
-        type[1] = "[file]";
-        type[2] = "[sql]";
+        type[1] = "[msg]";
+        type[2] = "[file]";
+        type[3] = "[sql]";
         // strcpy(type[0], "[msg]");
         // strcpy(type[1], "[file]");
         // strcpy(type[2], "[sql]");
