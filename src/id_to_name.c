@@ -58,6 +58,7 @@ int name_to_id(char *name)
     }
 
 #else
-    return a;
+    
 #endif
+return a;
 }

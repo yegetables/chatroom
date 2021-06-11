@@ -7,20 +7,21 @@
 #define BUFLEN 4096
 #define MAXCLIENT 5000
 
+#define HUP_NO 0
 // 是否存在
-#define IF_HAS 0
+#define IF_HAS 1
 // 是否执行成功
-#define IF_DONE 1
+#define IF_DONE 2
 // 查到多少行
-#define MANY_RESULT 2
+#define MANY_RESULT 3
 // 第一行第一列值是多少
-#define WHAT_FIRST_VALUE 3
+#define WHAT_FIRST_VALUE 4
 // 设置登录状态
-#define SET_ONLINE 4
+#define SET_ONLINE 5
 
 typedef enum
 {
-    msg,       // msg 文本消息(包括数值)
+    msg = 1,   // msg 文本消息(包括数值)
     file,      // file 文件传输
     sql        // sql 数据库语句
 } value_type;  // 枚举消息类型

@@ -91,10 +91,13 @@ int main(int argc, char **argv)
                 event_del(this);
                 close(this->fd);
                 // status=0;下次accpet会重置
+                char *p = showevents(this);
+                zlog_debug(ser, "rdhup:%s", p);
+                free(p);
                 if (strlen(fd_name[this->fd]))
                 {
-                    zlog_warn(ser, "EPOLLRDHUP close cfd:%d name:%s", this->fd,
-                              fd_name[this->fd]);
+                    zlog_info(ser, "**leave**   fd:%d id:%d name:%s", this->fd,
+                              fd_id[this->fd], fd_name[this->fd]);
                     char *cmd = (char *)calloc(BUFLEN, sizeof(char));
                     sprintf(cmd,
                             "update user set user_status=\'0\' where "
@@ -102,9 +105,9 @@ int main(int argc, char **argv)
                             fd_name[this->fd]);
                     mysql_query(sql_l, cmd);
                     free(cmd);
-                    memset(fd_name[this->fd],0,30);
-                    
-                }fd_id[this->fd]      = 0;
+                    memset(fd_name[this->fd], 0, 30);
+                }
+                fd_id[this->fd] = 0;
 
                 continue;
             }

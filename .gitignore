@@ -6,4 +6,7 @@ doxygen-qmi-style
 **/html/**
 node_modules
 .cache
+.vscode
 checks.json
+*.sh
+*.sql
