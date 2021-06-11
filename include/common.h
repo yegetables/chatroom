@@ -97,13 +97,6 @@ bool send_info(int cfd, info *ms);
 char *itoa(int num, char *str, int radix);
 
 /**
- * @brief 验证邮箱格式
- * @param s 邮箱字符串
- * @return true false
- */
-bool IsValidEmail(char *s);
-
-/**
  * @brief 从user_id 转换user_name
  * @param id user_id
  * @param name  user_name
