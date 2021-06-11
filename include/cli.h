@@ -4,10 +4,9 @@
  * @brief 构建sql语句并查询
  * @param sql_l sql语句
  * @param how 消息功效
- * @return true
- * false
+ * @return info*
  */
-bool cli_sql_if(char *sql_l, int how);
+info *cli_sql_if(char *sql_l, int how);
 
 /**
  * @brief 客户端发送待验证密码是否正确
@@ -40,7 +39,7 @@ bool cli_accessonline(char *name);
  * @param name 用户名
  * @return true  false
  */
-bool cli_setonline(char *name);
+int cli_setonline(char *name);
 
 /**
  * @brief 发送注册信息

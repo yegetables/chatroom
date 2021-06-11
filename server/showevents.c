@@ -15,6 +15,7 @@ char *showevents(events *ev)
         if (ev->events & EPOLLIN) sprintf(&logbuf[strlen(logbuf)], "[IN]");
         if (ev->events & EPOLLOUT) sprintf(&logbuf[strlen(logbuf)], "[OUT]");
         if (ev->events & EPOLLERR) sprintf(&logbuf[strlen(logbuf)], "[ERR]");
+        if (ev->events & EPOLLRDHUP) sprintf(&logbuf[strlen(logbuf)], "[HUP]");
         if (ev->call_back == justwrite)
             sprintf(&logbuf[strlen(logbuf)], "[justwrite]");
         if (ev->call_back == client_event)
@@ -22,9 +23,9 @@ char *showevents(events *ev)
         if (ev->call_back == lfdaccept)
             sprintf(&logbuf[strlen(logbuf)], "[lfdaccept]");
         if (ev->status)
-            sprintf(&logbuf[strlen(logbuf)], "live\n");
+            sprintf(&logbuf[strlen(logbuf)], "[live]\n");
         else
-            sprintf(&logbuf[strlen(logbuf)], "dead\n");
+            sprintf(&logbuf[strlen(logbuf)], "[dead]\n");
     }
 
     char *ii = showinfo(&(ev->js));

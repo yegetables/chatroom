@@ -2,93 +2,128 @@
 #include PROJECT_CLIENTHEAD
 extern zlog_category_t* cli;
 extern int cfd;
+extern int userid;
 
-bool cli_sql_if(char* p, int how)
+info* cli_sql_if(char* p, int how)
 {
-    if (p == NULL) return false;
-    char* tt = NULL;
+    if (p == NULL) return NULL;
+
     // 构造info结构
-    info mms;
+    info* ms = (info*)malloc(sizeof(info));
     {
-        memset(&mms, 0, sizeof(mms));
-        strcpy(mms.value, p);
-        mms.type = sql;
-        mms.from = -1;
-        mms.to   = 0;
-        mms.how  = how;
+        strcpy(ms->value, p);
+        ms->type = sql;
+        ms->from = userid;  //
+        ms->to   = 0;
+        ms->how  = how;
     }
 
     // 发送查询sql
-    if (!send_info(cfd, &mms)) return false;  // no close
-
-    // 接受并验证结果
-    if (recv_info(cfd, &mms))
+    if (!send_info(cfd, ms))
     {
-        tt = showinfo(&mms);
+        if (ms)
+        {
+            free(ms);
+            ms = NULL;
+        }
+        return ms;  // no close
+    }
+    // 接受并展示info
+    if (recv_info(cfd, ms))
+    {
+        char* tt = NULL;
+        tt       = showinfo(ms);
         zlog_debug(cli, tt);
         free(tt);
-        if (mms.how == IF_DONE || mms.how == IF_HAS)  //简单真假判断
-        {
-            if (mms.value[0] == '1')
-                return true;
-            else
-                return false;
-        }
-        return false;
+        return ms;
     }
-    else
+    if (ms)
     {
-        zlog_debug(cli, "access failed");  // no close
-        return false;
+        free(ms);
+        ms = NULL;
     }
-    return false;
+    zlog_debug(cli, "access failed");  // no close
+    return ms;
 }
 
-bool cli_register(char* name, char* passwd, char* email)
+bool cli_register(char* name, char* passwd, char* email)  // IF_DONE
 {
     if (name == NULL || passwd == NULL || email == NULL) return false;
     // sql语句
     char p[BUFLEN] = {0};
 
-    // 构造查询语句
+    // 构造insert语句
     sprintf(p,
-            "INSERT INTO user (user_name,user_passwd, user_email,user_status ) "
+            "INSERT INTO user (user_name,user_passwd, user_email,user_status) "
             "VALUES ( "
-            "'%s','%s','%s',1);",
+            "\'%s\',\'%s\',\'%s\',0);",
             name, passwd, email);
-
-    return cli_sql_if(p, IF_DONE);
+    info* ms = cli_sql_if(p, IF_DONE);
+    int s    = atoi(ms->value);
+    if (ms) free(ms);
+    if (s)
+        return true;
+    else
+        return false;
 }
 
-bool cli_accesspasswd(char* name, char* passwd)
+bool cli_accesspasswd(char* name, char* passwd)  // IF_HAS
 {
     if (name == NULL) return false;
     // sql语句
     char p[BUFLEN] = {0};
 
-    // 构造查询语句
+    // 构造select语句
     if (passwd == NULL)
-        sprintf(p, "select * from user where user_name ='%s';", name);
+        sprintf(p, "select * from user where user_name =\'%s\';", name);
     else
         sprintf(p,
-                "select * from user where user_name ='%s' and "
-                "user_passwd='%s';",
+                "select * from user where user_name =\'%s\' and "
+                "user_passwd=\'%s\';",
                 name, passwd);
 
-    return cli_sql_if(p, IF_HAS);
+    info* ms = cli_sql_if(p, IF_HAS);
+    int s    = atoi(ms->value);
+    if (ms) free(ms);
+    if (s)
+        return true;
+    else
+        return false;
 }
 
-// TODO: check online
-bool cli_accessonline(char* name)
+bool cli_accessonline(char* name)  // WHAT_FIRST_VALUE
 {
     if (name == NULL) return false;
+    // sql语句
+    char p[BUFLEN] = {0};
+    // 构造select语句
+    sprintf(p, "SELECT user_status  FROM user where user_name =\'%s\';", name);
 
-    return false;
+    info* ms = cli_sql_if(p, WHAT_FIRST_VALUE);
+    int s    = atoi(ms->value);
+    if (ms) free(ms);
+    if (s)
+        return true;
+    else
+        return false;
 }
 
-bool cli_setonline(char* name)
+int cli_setonline(char* name)  // SET_ONLINE
 {
-    if (name == NULL) return false;
+    if (name == NULL) return -1;
+    // sql语句
+    char p[BUFLEN] = {0};
+    // 构造update语句
+    sprintf(p, "update user set  user_status= \'1\'  where user_name= \'%s\' ;",
+            name);
 
-    return false;
+    info* ms = cli_sql_if(p, SET_ONLINE);
+    int s    = atoi(ms->value);
+    if (ms) free(ms);
+    if (s > 0)
+        return s;
+    else
+        return -1;
 }
+
+

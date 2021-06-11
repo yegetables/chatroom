@@ -1,12 +1,14 @@
 #include "config.h"
 #include PROJECT_CLIENTHEAD
-
+char username[30];
+int userid;
 #define SLEEP_TIME 3
 zlog_category_t *cli = NULL;
 int cfd;
 int main(int argc, char **argv)
 {
     srand((unsigned)time(NULL));
+    userid = -1;
     // 记录错误次数
     int errornumber = 0;
     // 记录返回值
@@ -100,19 +102,19 @@ int main(int argc, char **argv)
         printf("登录请输入你的用户名\n");
         printf("注册请输入你想要的用户名\n");
         printf("(不超过15个字符)\n");
-        char username[30];
         char passwd[30];
         char email[50];
         memset(username, 0, sizeof(username));
         memset(passwd, 0, sizeof(passwd));
         memset(email, 0, sizeof(email));
         fgets(username, 25, stdin);
-        if (username[strlen(username) - 2] == '\r' &&
-            username[strlen(username) - 1] == '\n')
-            username[strlen(username) - 2] = '\0';
-        if (username[strlen(username) - 1] == '\n')
-            username[strlen(username) - 1] = '\0';
-
+        {
+            if (username[strlen(username) - 2] == '\r' &&
+                username[strlen(username) - 1] == '\n')
+                username[strlen(username) - 2] = '\0';
+            if (username[strlen(username) - 1] == '\n')
+                username[strlen(username) - 1] = '\0';
+        }
         /// login
         if (cli_accessusername(username))
         {
@@ -150,15 +152,8 @@ int main(int argc, char **argv)
                 zlog_info(cli, "login %s passwd right passwd:%s", username,
                           passwd);
                 if (cli_accessonline(username))
-                {
-                    zlog_debug(cli, "login %s success 挤掉", username);
                     printf("您的账号已在别处下线\n");
-                }
-                else
-                {
-                    zlog_info(cli, "login success");
-                }
-
+                zlog_info(cli, "login success");
                 printf("登录成功\n");
             }
             else
@@ -192,34 +187,36 @@ int main(int argc, char **argv)
             printf("密码开头不能是#,不超过24位\n");
             printf("密码:");
             fgets(passwd, 25, stdin);
-            if (passwd[strlen(passwd) - 2] == '\r' &&
-                passwd[strlen(passwd) - 1] == '\n')
-                passwd[strlen(passwd) - 2] = '\0';
-            if (passwd[strlen(passwd) - 1] == '\n')
-                passwd[strlen(passwd) - 1] = '\0';
+            {
+                if (passwd[strlen(passwd) - 2] == '\r' &&
+                    passwd[strlen(passwd) - 1] == '\n')
+                    passwd[strlen(passwd) - 2] = '\0';
+                if (passwd[strlen(passwd) - 1] == '\n')
+                    passwd[strlen(passwd) - 1] = '\0';
+            }
             printf("输入验证邮箱:\n");
             printf("邮箱不超过48位\n");
             fgets(email, 50, stdin);
-            if (email[strlen(email) - 2] == '\r' &&
-                email[strlen(email) - 1] == '\n')
-                email[strlen(email) - 2] = '\0';
-            if (email[strlen(email) - 1] == '\n')
-                email[strlen(email) - 1] = '\0';
-            /// mysql add register
+            {
+                if (email[strlen(email) - 2] == '\r' &&
+                    email[strlen(email) - 1] == '\n')
+                    email[strlen(email) - 2] = '\0';
+                if (email[strlen(email) - 1] == '\n')
+                    email[strlen(email) - 1] = '\0';
+            }  /// mysql add register
             errornumber = 0;
             while (false == cli_register(username, passwd, email) &&
                    errornumber++ < 3)
-            {
                 sleep(rand() % SLEEP_TIME);
-            }
+
             if (errornumber >= 3)
             {
-                zlog_warn(cli, "register failed %s:%s:%s", username, passwd,
-                          email);
+                zlog_warn(cli, "register failed 用户名:%s 密码:%s 邮箱:%s",
+                          username, passwd, email);
                 exit(1);
             }
             printf("-----------------注册成功\n");
-            printf("您的用户名\n%s\n您的密码\n%s\n您的邮箱%s\n请妥善保管\n",
+            printf("您的用户名:%s\n您的密码:%s\n您的邮箱:%s\n请妥善保管\n",
                    username, passwd, email);
             zlog_info(cli, "注册成功:用户名:%s 密码:%s 邮箱:%s", username,
                       passwd, email);
@@ -227,14 +224,13 @@ int main(int argc, char **argv)
     }
 
     // 进入功能菜单
-
-    entermenu();
-
+    userid = cli_setonline(username);
+    if (userid > 0)
+        entermenu();
+    else
+        zlog_error(cli, "userid %d  error", userid);
     close(cfd);
-
-    // 异常退出
     zlog_fini();
-
     return 0;
 }
 
@@ -250,10 +246,16 @@ void signalcatch(int signal)
         case SIGQUIT:
 #endif
             zlog_debug(cli, "catch signal %s exit", show_signal(signal));
+            zlog_fini();
+            close(cfd);
             exit(1);
 #ifdef SIGCLD
         case SIGCLD:
 #endif
             zlog_debug(cli, "catch signal %s return", show_signal(signal));
+            zlog_fini();
+            close(cfd);
+            exit(1);
+            // 异常退出
     }
 }

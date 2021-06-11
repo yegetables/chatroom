@@ -53,7 +53,8 @@ int epoll_init_lfd(void);
 void client_event(int, int, void *args);
 
 /**
- * @brief 测试向cfd写
+ * @brief  先向info->to 写
+ * 如果0/-1 向ev->fd写
  * @param ev 对应的全局events
  */
 void justwrite(int, int, void *ev);
@@ -101,3 +102,17 @@ bool sql_init_table(MYSQL *sql_l);
 bool sql_do(events *ev);
 
 // bool ser_accessname();
+
+/**
+ * @brief 在线时根据uid找到fd
+ * @param id uid
+ * @return int fd
+ */
+int id_to_fd(int id);
+
+/**
+ * @brief 在线时根据name找到fd
+ * @param name name
+ * @return int fd
+ */
+int name_to_fd(char *name);

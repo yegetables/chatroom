@@ -1,13 +1,16 @@
 #include "config.h"
 #include PROJECT_SERVERHEAD
 
-int port = 500;  ///< var 服务器端口
-int epfd;        ///< 全局epfd
+int port = 500;  // var 服务器端口
+int epfd;        // 全局epfd
 events g_events[MAXCLIENT + 1];
 zlog_category_t *ser = NULL;
-extern char database_name[20];
-MYSQL *sql_l = NULL;
+MYSQL *sql_l         = NULL;
+// 在线列表fd->id
+int fd_id[MAXCLIENT];
 
+// 在线列表fd->name
+char fd_name[MAXCLIENT][30];
 int main(int argc, char **argv)
 {
     /// 解析命令行
@@ -85,19 +88,26 @@ int main(int argc, char **argv)
             events *this = tempevents[i].data.ptr;
             if (tempevents[i].events & EPOLLRDHUP)
             {
-                // close
                 event_del(this);
                 close(this->fd);
-                zlog_warn(ser, " EPOLLRDHUP close cfd:%d ", this->fd);
+                // status=0;下次accpet会重置
+                if (strlen(fd_name[this->fd]))
+                {
+                    zlog_warn(ser, "EPOLLRDHUP close cfd:%d name:%s", this->fd,
+                              fd_name[this->fd]);
+                    char *cmd = (char *)calloc(BUFLEN, sizeof(char));
+                    sprintf(cmd,
+                            "update user set user_status=\'0\' where "
+                            "user_name=\'%s\';",
+                            fd_name[this->fd]);
+                    mysql_query(sql_l, cmd);
+                    free(cmd);
+                    memset(fd_name[this->fd],0,30);
+                    
+                }fd_id[this->fd]      = 0;
+
                 continue;
             }
-            // if (tempevents[i].events & EPOLLIN)
-            //     this->call_back(this->fd, tempevents[i].events, this->arg);
-
-            // else if (tempevents[i].events & EPOLLOUT)
-            //     this->call_back(this->fd, tempevents[i].events, this->arg);
-
-            // zlog_debug(ser, "\n\n\ncallback %d:%s", i, showevents(this));
             this->call_back(this->fd, this->events, this->arg);
         }
     }
