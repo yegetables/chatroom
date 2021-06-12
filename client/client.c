@@ -16,13 +16,6 @@ int main(int argc, char **argv)
 
     /// 开日志
     {
-        char *cmd = (char *)calloc(BUFLEN, sizeof(char));
-        {
-            sprintf(cmd, "rm %s*client*.log", PROJECT_LOGPATH);
-            system(cmd);
-        }
-        free(cmd);
-        cmd = NULL;
         cli = my_zlog_init("client");
         zlog_info(cli, "--------start--------");
     }
@@ -226,7 +219,7 @@ int main(int argc, char **argv)
     // 进入功能菜单
     userid = cli_setonline(username);
     if (userid > 0)
-        entermenu();
+        show_main_menu();
     else
         zlog_error(cli, "userid %d  error", userid);
     close(cfd);
@@ -260,31 +253,3 @@ void signalcatch(int signal)
     }
 }
 
-bool IsValidEmail(char *s)
-{
-    char *ms;
-    if ((ms = strchr(s, '@')) == NULL)
-    {
-        return false;
-    }
-    if (strchr(ms + 1, '@') != NULL)
-    {
-        return false;
-    }
-    if (strchr(ms + 1, '.') == NULL)
-    {
-        return false;
-    }
-    if (strchr(s, '.') < ms)
-    {
-        if (strchr(strchr(s, '.') + 1, '.') < ms)
-        {
-            return false;
-        }
-    }
-    if (strlen(strrchr(s, '.') + 1) > 4 || strlen(strrchr(s, '.') + 1) < 2)
-    {
-        return false;
-    }
-    return true;
-}

@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     }
 
     /// 读配置
-    setserconfig(PROJECT_SERCONFIG);
+    ser_setconfig(PROJECT_SERCONFIG);
     printf("server port:%d\n", port);
 
     /// 守护进程
@@ -44,13 +44,15 @@ int main(int argc, char **argv)
 
     /// 开日志
     {
-        char *cmd = (char *)calloc(BUFLEN, sizeof(char));
         {
+            char *cmd = (char *)calloc(BUFLEN, sizeof(char));
             sprintf(cmd, "rm %s*server*.log", PROJECT_LOGPATH);
             system(cmd);
+            sprintf(cmd, "rm %s*client*.log", PROJECT_LOGPATH);
+            system(cmd);
+            free(cmd);
         }
-        free(cmd);
-        cmd = NULL;
+
         ser = my_zlog_init("server");
         zlog_info(ser, "--------start--------");
         zlog_info(ser, "pid[%d]   port[%d]", getpid(), port);
@@ -88,11 +90,11 @@ int main(int argc, char **argv)
             events *this = tempevents[i].data.ptr;
             if (tempevents[i].events & EPOLLRDHUP)
             {
-                event_del(this);
+                epoll_del(this);
                 close(this->fd);
                 // status=0;下次accpet会重置
                 char *p = showevents(this);
-                zlog_debug(ser, "rdhup:%s", p);
+                // zlog_debug(ser, "rdhup:%s", p);
                 free(p);
                 if (strlen(fd_name[this->fd]))
                 {

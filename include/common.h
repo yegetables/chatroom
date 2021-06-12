@@ -18,12 +18,23 @@
 #define WHAT_FIRST_VALUE 4
 // 设置登录状态
 #define SET_ONLINE 5
+// 列出好友列表
+#define FR_LIST 6
+//添加好友
+#define ADD_FRIEND 7
+//转发消息
+#define MESSAGES 8
+//列出申请名单
+#define SHOW_APPLY 9
+//获取几行几列
+#define GET_MANY_VALUE 10
 
 typedef enum
 {
     msg = 1,   // msg 文本消息(包括数值)
     file,      // file 文件传输
-    sql        // sql 数据库语句
+    sql,       // sql 数据库语句
+    request    // 发送请求
 } value_type;  // 枚举消息类型
 
 typedef struct
