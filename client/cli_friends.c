@@ -230,9 +230,9 @@ void show_apply_friends(void)
     char p[BUFLEN] = {0};
     memset(p, 0, BUFLEN);
     sprintf(p,
-            "select requesrs.from,user.user_name from requests  where "
-            "requests.to= \'%d\' and  requests.how= \'%d\' and "
-            "user.user_id=request.from ;",
+            "select requests.from,user.user_name from requests,user  where "
+            "requests.to= %d and  requests.how=%d  and   "
+            " user.user_id=requests.from",
             userid, ADD_FRIEND);
     info* ms = (info*)malloc(sizeof(info));
     {

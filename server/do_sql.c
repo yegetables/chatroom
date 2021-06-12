@@ -19,7 +19,7 @@ bool do_sql(events *ev)
         case GET_MANY_VALUE:
         case SHOW_APPLY:
             if (!base_sql_query(ms)) return false;
-            // if (ser_show_apply(ms) < 0) return false;
+            if (ser_show_apply(ms) < 0) return false;
             ms->to   = ms->from;
             ms->from = 0;
             break;
@@ -228,7 +228,8 @@ int base_GET_MANY_VALUE(info *ms, int fetch)
                 sprintf(&buf[strlen(buf)], "%s\n", rowline[j]);
         }
     }
-    //zlog_error(ser, "get value buf:%s fetch:%d number:%d", buf, fetch, number);
+    // zlog_error(ser, "get value buf:%s fetch:%d number:%d", buf, fetch,
+    // number);
     mysql_free_result(result);
     return number;
 }

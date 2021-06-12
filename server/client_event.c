@@ -84,3 +84,10 @@ void client_event(int cfd, int event, void *args)
 
     return;
 }
+bool ser_add_friend(events *ev)
+{
+    info *ms = &(ev->js);
+    if (!base_sql_query(ms)) return false;  //添加进requests
+    if (!case_IF_DONE(ms)) return false;    // 回复1
+    return false;
+}

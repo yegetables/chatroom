@@ -165,7 +165,14 @@ bool event_set_online(events *ev);
  * @param ms info
  * @return int number
  */
-int ser_show_friends(info *ms);
+#define ser_show_friends(ms) base_GET_MANY_VALUE(ms, 2)
+/**
+ * @brief 获取好友申请列表
+ * 好友name,userid
+ * @param ms info
+ * @return int number
+ */
+#define ser_show_apply(ms) base_GET_MANY_VALUE(ms, 2)
 
 /**
  * @brief 处理添加好友
