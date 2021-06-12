@@ -14,7 +14,7 @@ typedef struct
  * @brief 读取服务端配置
  * @param filename 文件名
  */
-void setserconfig(char *filename);
+void ser_setconfig(char *filename);
 
 /**
  * @brief 初始化events结构
@@ -39,7 +39,7 @@ void epoll_add(int event, events *ev);
  * @brief 取下events,设置status=0
  * @param ev 指定events
  */
-void event_del(events *ev);
+void epoll_del(events *ev);
 
 /**
  * @brief 初始化lfd事件加入epfd
@@ -99,7 +99,7 @@ bool sql_init_table(MYSQL *sql_l);
  * @param ev events*
  * @return true 完成
  */
-bool sql_do(events *ev);
+bool do_sql(events *ev);
 
 // bool ser_accessname();
 
@@ -143,6 +143,14 @@ bool case_IF_DONE(info *ms);
 bool base_sql_query(info *ms);
 
 /**
+ * @brief 设置列数,打印
+ * number\nstr str\n
+ * @param ms 结果存入buf
+ * @param fetch 列数
+ * @return int 行数
+ */
+int base_GET_MANY_VALUE(info *ms, int fetch);
+/**
  * @brief 设置在线
  * 先设置status ,获取name,查询id返回
  * 顺便加入fd_id在线状态
@@ -150,3 +158,19 @@ bool base_sql_query(info *ms);
  * @return true false
  */
 bool event_set_online(events *ev);
+
+/**
+ * @brief 获取好友列表
+ * 好友name,userid
+ * @param ms info
+ * @return int number
+ */
+int ser_show_friends(info *ms);
+
+/**
+ * @brief 处理添加好友
+ * @param ev
+ * @return true false
+ * 处理完成
+ */
+bool ser_add_friend(events *ev);

@@ -25,7 +25,6 @@ rerecv:
     if ((returnnumber = recv(cfd, ms, sizeof(info), 0)) != sizeof(info))
     {
         if (returnnumber == 0) return false;
-        zlog_warn(tmp, "recv failed %s", show_errno());
 
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
@@ -36,6 +35,7 @@ rerecv:
             goto rerecv;
 #endif
         }
+        zlog_warn(tmp, "recv failed %s", show_errno());
         errornumber++;
         if (errornumber > 3)
         {

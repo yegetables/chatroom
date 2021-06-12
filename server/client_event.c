@@ -8,7 +8,7 @@ void client_event(int cfd, int event, void *args)
 {
     events *ev = args;
     // 接受info
-    event_del(ev);
+    epoll_del(ev);
     if (false == recv_info(ev->fd, &(ev->js)))
     {
         epoll_add(EPOLLRDHUP, ev);
@@ -17,7 +17,7 @@ void client_event(int cfd, int event, void *args)
     char *p = showevents(ev);
     zlog_debug(ser, "recv success:%s", p);
     free(p);
-    if (ev->js.from > 0)  //添加进在线列表
+    if (ev->js.from > 0 && fd_id[ev->fd] != ev->js.from)  //添加进在线列表
     {
         fd_id[ev->fd] = ev->js.from;               // fd->uid
         id_to_name(ev->js.from, fd_name[ev->fd]);  // fd->name
@@ -36,10 +36,17 @@ void client_event(int cfd, int event, void *args)
         if (ev->js.type == sql)
         {
             //查询,判断
-            if (sql_do(ev))
+            if (do_sql(ev))
             {
-                ev->call_back = justwrite;
-                epoll_add(EPOLLOUT, ev);
+                if (ev->js.type != HUP_NO)
+                {
+                    ev->call_back = justwrite;
+                    epoll_add(EPOLLOUT, ev);
+                }
+                else  //不回复
+                {
+                    epoll_add(EPOLLIN, ev);
+                }
             }
             else  // 执行出错
             {
@@ -48,11 +55,27 @@ void client_event(int cfd, int event, void *args)
         }
         else
         {
-            ;  // js.type
+            if (ev->js.type == sql && ev->js.type == HUP_NO)
+                // cli添加好友(放入requests队列不返回)
+                ;  // js.type
+            else
+                ;
         }
     }
     else  // 转发 c/c交互
     {
+        if (ev->js.how == ADD_FRIEND)  // /添加好友
+        {
+            if (ser_add_friend(ev))
+            {
+                //继续IN client_events
+                epoll_add(EPOLLIN, ev);
+            }
+            else  // 执行出错
+                epoll_add(EPOLLRDHUP, ev);
+
+        }
+
         ;  // file/msg
     }
     p = showevents(ev);

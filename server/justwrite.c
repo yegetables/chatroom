@@ -10,7 +10,7 @@ void justwrite(int cfd, int event, void *args)
     events *ev = (events *)args;
     info *ms   = &(ev->js);
     // 发送
-    event_del(ev);
+    epoll_del(ev);
     int what_to;
     int returnnumber = -1;
     returnnumber     = id_to_fd(ms->to);
