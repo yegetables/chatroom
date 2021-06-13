@@ -28,6 +28,10 @@
 #define SHOW_APPLY 9
 //获取几行几列
 #define GET_MANY_VALUE 10
+// 同意申请
+#define AGREE_APPLICATION 11
+// TODO:删除匹配信息 
+#define DEL_SELECT 12
 
 typedef enum
 {

@@ -17,9 +17,19 @@ char *showinfo(info *ms)
         how[5]  = "[SET_ONLINE]";
         how[6]  = "[FR_LIST]";
         how[7]  = "[ADD_FRIEND]";
-        how[8]  = "[8]";
-        how[9]  = "[9]";
-        how[10] = "[10]";
+        how[8]  = "[MESSAGES]";
+        how[9]  = "[SHOW_APPLY]";
+        how[10] = "[GET_MANY_VALUE]";
+        how[11] = "[AGREE_APPLICATION]";
+        how[12] = "[DEL_SELECT]";
+        how[13] = "[???]";
+        how[14] = "[???]";
+        how[15] = "[???]";
+        how[16] = "[???]";
+        how[17] = "[???]";
+        how[18] = "[???]";
+        how[19] = "[???]";
+
         // strcpy(how[0], "[IF_HAS]");
         // strcpy(how[1], "[IF_DONE]");
         // strcpy(how[2], "[MANY_RESULT]");

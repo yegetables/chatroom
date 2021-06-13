@@ -30,64 +30,42 @@ void client_event(int cfd, int event, void *args)
     zlog_debug(ser, "========VVV=========");
     zlog_debug(ser, "========VVV=========");
     // TODO: client事件类别处理
-    if (ev->js.to == 0)  // c/s交互
+
+    if (ev->js.type == HUP_NO || ev->js.type == AGREE_APPLICATION)
     {
-        // sql/cmd
-        if (ev->js.type == sql)
+        do_sql(ev);
+        memset(ev->js.value, 0, BUFLEN);
+        epoll_add(EPOLLIN, ev);
+    }
+    else
+    {
+        if (ev->js.to == 0)  // c/s交互
         {
-            //查询,判断
-            if (do_sql(ev))
+            // sql/cmd
+            if (ev->js.type == sql)
             {
-                if (ev->js.type != HUP_NO)
+                //查询,判断
+                if (do_sql(ev))
                 {
                     ev->call_back = justwrite;
                     epoll_add(EPOLLOUT, ev);
                 }
-                else  //不回复
-                {
-                    epoll_add(EPOLLIN, ev);
-                }
+                else
+                    epoll_add(EPOLLRDHUP, ev);
             }
-            else  // 执行出错
-            {
-                epoll_add(EPOLLRDHUP, ev);
-            }
-        }
-        else
-        {
-            if (ev->js.type == sql && ev->js.type == HUP_NO)
-                // cli添加好友(放入requests队列不返回)
-                ;  // js.type
             else
-                ;
-        }
-    }
-    else  // 转发 c/c交互
-    {
-        if (ev->js.how == ADD_FRIEND)  // /添加好友
-        {
-            if (ser_add_friend(ev))
             {
-                //继续IN client_events
-                epoll_add(EPOLLIN, ev);
+                ;
             }
-            else  // 执行出错
-                epoll_add(EPOLLRDHUP, ev);
-
         }
-
-        ;  // file/msg
+        else  // 转发 c/c交互
+        {
+            ;  // file/msg
+        }
     }
     p = showevents(ev);
     zlog_debug(ser, "to:%s", p);
     free(p);
 
     return;
-}
-bool ser_add_friend(events *ev)
-{
-    info *ms = &(ev->js);
-    if (!base_sql_query(ms)) return false;  //添加进requests
-    if (!case_IF_DONE(ms)) return false;    // 回复1
-    return false;
 }
