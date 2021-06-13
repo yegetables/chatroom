@@ -4,6 +4,7 @@ extern zlog_category_t* cli;
 extern int cfd;
 extern int userid;
 extern char username[30];
+
 void cli_show_friends(void)
 {
     char p[BUFLEN] = {0};
@@ -12,6 +13,7 @@ void cli_show_friends(void)
     int number = 0;  //好友数量
     int online = 0;
     int j;
+    info* ms = (info*)malloc(sizeof(info));
     for (j = 0; j < 4; j++)
     {
         memset(p, 0, sizeof(p));
@@ -52,14 +54,14 @@ void cli_show_friends(void)
                     userid, status, shield);
             }
         }
-        info* ms = (info*)malloc(sizeof(info));
+
         {
             strcpy(ms->value, p);
             ms->type = sql;
             ms->from = userid;
             ms->to   = 0;
         }
-        ms = cli_send_recv(ms, FR_LIST);
+        ms = cli_send_recv(ms, FR_LIST);  // base_GET_MANY_VALUE(ms, 2)
         if (ms == NULL) break;
         char* buf = ms->value;
         if (j == 0)
@@ -71,7 +73,7 @@ void cli_show_friends(void)
         int num;
         sscanf(buf, "%d", &num);
         buf = strchr(buf, '\n');
-        memset(p, 0, sizeof(p));                        // name
+        memset(p, 0, BUFLEN);                           // name
         for (int i = 0; i < num && ++buf != NULL; i++)  //本次个数
         {
             int id;
@@ -89,15 +91,16 @@ void cli_show_friends(void)
             else
                 printf("----       (shield)\n");  //离线 屏蔽
         }
-        if (ms) free(ms);
     }
     if (j != 4)
     {
         zlog_error(cli, "can't find all j:%d", j);
+        if (ms) free(ms);
         return;
     }
     printf("sum:%d friends,%d online\n", number, online);  //在线未屏蔽人数
     printf("------------------------\n");
+    if (ms) free(ms);
 }
 
 void cli_del_friend(void)
@@ -122,23 +125,24 @@ void cli_del_friend(void)
         ms->from = userid;
         ms->to   = 0;
     }
-    ms = cli_send_recv(ms, IF_DONE);
+    ms = cli_send_recv(ms, HUP_NO);
     if (ms == NULL)
     {
         zlog_error(cli, "recv none");
         return;
     }
-    char* buf = ms->value;
-    if (buf[0] == '1')
-    {
-        printf("删除%d成功\n", toid);
-        zlog_debug(cli, "%d del %d success", userid, toid);
-    }
-    else
-    {
-        zlog_error(cli, "%d del %d  error", userid, toid);
-        printf("删除%d失败\n", toid);
-    }
+    // char* buf = ms->value;
+    // if (buf[0] == '1')
+    // {
+    printf("删除%d成功\n", toid);
+    zlog_debug(cli, "%d del %d success", userid, toid);
+    // }
+    // else
+    // {
+    //     zlog_error(cli, "%d del %d  error", userid, toid);
+    //     printf("删除%d失败\n", toid);
+    // }
+
     if (ms) free(ms);
 }
 
@@ -162,23 +166,23 @@ void cli_shield_friend(int is)
         ms->from = userid;
         ms->to   = 0;
     }
-    ms = cli_send_recv(ms, IF_DONE);
+    ms = cli_send_recv(ms, HUP_NO);
     if (ms == NULL)
     {
         zlog_error(cli, "recv none");
         return;
     }
-    char* buf = ms->value;
-    if (buf[0] == '1')
-    {
-        printf("屏蔽%d成功\n", toid);
-        zlog_debug(cli, "%d sheild %d success", userid, toid);
-    }
-    else
-    {
-        zlog_error(cli, "%d sheild %d  error", userid, toid);
-        printf("屏蔽%d失败\n", toid);
-    }
+    // char* buf = ms->value;
+    // if (buf[0] == '1')
+    // {
+    printf("屏蔽%d成功\n", toid);
+    zlog_debug(cli, "%d sheild %d success", userid, toid);
+    // }
+    // else
+    // {
+    //     zlog_error(cli, "%d sheild %d  error", userid, toid);
+    //     printf("屏蔽%d失败\n", toid);
+    // }
     if (ms) free(ms);
 }
 
@@ -225,6 +229,51 @@ reshow:
     if (ms) free(ms);
 }
 
+void cli_add_friend(void)
+{
+    int toid;
+    printf("输入对方id\n");
+    scanf("%d", &toid);
+    info* ms = (info*)malloc(sizeof(info));
+
+    char p[BUFLEN]      = {0};
+    char pp[BUFLEN / 2] = {0};
+    {
+        memset(p, 0, sizeof(p));
+        memset(pp, 0, sizeof(pp));
+        sprintf(pp,
+                "INSERT ignore INTO relationship (id_1,id_2,if_shield)"
+                "VALUES (%d,%d,0),(%d,%d,0);",
+                userid, toid, toid, userid);
+        // BUG:ignore 无效
+        sprintf(p,
+                "INSERT INTO requests "
+                "(requests.from,requests.to,requests.type,requests.how,"
+                "requests.value) VALUES (%d,%d,%d,%d,\'%s\');",
+                userid, toid, sql, ADD_FRIEND, pp);  //将来取走时候不回复
+    }
+
+    {
+        strcpy(ms->value, p);
+        ms->type = sql;
+        ms->from = userid;
+        ms->to   = 0;
+        ms->how  = IF_DONE;
+    }
+    ms = cli_send_recv(ms, HUP_NO);
+    if (ms == NULL)
+    {
+        zlog_error(cli, "recv none ");
+        return;
+    }
+    // if (ms->value[0] == '0')
+    //     zlog_error(cli, "add error ");
+    // else
+    printf("请求已发送,等待同意后在好友列表查看\n");
+
+    if (ms) free(ms);
+}
+
 void show_apply_friends(void)
 {
     char p[BUFLEN] = {0};
@@ -242,69 +291,90 @@ void show_apply_friends(void)
         ms->from = userid;
         ms->to   = 0;
     }
-    ms = cli_send_recv(ms, SHOW_APPLY);
+    ms = cli_send_recv(ms, SHOW_APPLY);  // base_GET_MANY_VALUE(ms, 2)
     if (ms == NULL)
     {
         zlog_error(cli, "recv none");
         return;
     }
     char* buf = ms->value;
-    printf("%s\n", buf);
-    // if (buf[0] == '1')
-    // {
-    //     printf("屏蔽%d成功\n", toid);
-    //     zlog_debug(cli, "%d sheild %d success", userid, toid);
-    // }
-    // else
-    // {
-    //     zlog_error(cli, "%d sheild %d  error", userid, toid);
-    //     printf("屏蔽%d失败\n", toid);
-    // }
+    // printf("%s\n", buf);
+    int num = 0;
+    sscanf(buf, "%d", &num);
+    buf = strchr(buf, '\n');                         // name
+    for (int i = 1; i <= num && ++buf != NULL; i++)  //本次个数
+    {
+        int id;
+        sscanf(buf, "%d %s", &id, p);
+        buf = strchr(buf, '\n');
+        printf("%2d-->%15s (%d)\n", i, p, id);
+    }
+    printf("----------sum:%d--------\n", num);
     if (ms) free(ms);
+    return;
 }
 
-void cli_add_friend(void)
+void cli_agree_friend(int is)
 {
-    int toid;
+    int id = 0;
     printf("输入对方id\n");
-    scanf("%d", &toid);
+    scanf("%d", &id);
+    char p[BUFLEN] = {0};
+    memset(p, 0, BUFLEN);
     info* ms = (info*)malloc(sizeof(info));
-
-    char p[BUFLEN]      = {0};
-    char pp[BUFLEN / 2] = {0};
+    if (is == 1)  //同意
     {
-        memset(p, 0, sizeof(p));
-        memset(pp, 0, sizeof(pp));
-        sprintf(pp,
-                "INSERT INTO relationship (id_1,id_2,if_shield)"
-                "VALUES (%d,%d,0),(%d,%d,0);",
-                userid, toid, toid, userid);
         sprintf(p,
-                "INSERT INTO requests "
-                "(requests.from,requests.to,requests.type,requests.how,"
-                "requests.value) VALUES (%d,%d,%d,%d,\'%s\');",
-                userid, toid, sql, ADD_FRIEND, pp);  //将来取走时候不回复
+                "select requests.value  from requests  where "
+                "requests.to= %d and  requests.how=%d and "
+                "requests.from= %d",
+                userid, ADD_FRIEND, id);
+
+        {
+            strcpy(ms->value, p);
+            ms->type = sql;
+            ms->from = userid;
+            ms->to   = 0;
+        }
+        ms =
+            cli_send_recv(ms, AGREE_APPLICATION);  // base_GET_MANY_VALUE(ms, 2)
+        if (ms == NULL)
+        {
+            zlog_error(cli, "recv none");
+            return;
+        }
     }
 
+    memset(p, 0, BUFLEN);
+    //删除
+    sprintf(p,
+            "delete  from requests   where "
+            "requests.to= %d and  requests.how=%d and "
+            "requests.from= %d",
+            userid, ADD_FRIEND, id);
     {
         strcpy(ms->value, p);
         ms->type = sql;
         ms->from = userid;
         ms->to   = 0;
-        ms->how  = IF_DONE;
     }
-    ms = cli_send_recv(ms, IF_DONE);
+    ms = cli_send_recv(ms, HUP_NO);  // base_GET_MANY_VALUE(ms, 2)
     if (ms == NULL)
     {
-        zlog_error(cli, "recv none ");
+        zlog_error(cli, "recv none");
         return;
     }
-    if (ms->value[0] == '0')
-        zlog_error(cli, "add error ");
+    if (is == 1)
+    {
+        zlog_debug(cli, "agree and del from %d to %d ", id, userid);
+        printf("已同意%d的申请\n", id);
+    }
     else
-        printf("请求已发送,等待同意后在好友列表查看\n");
-
+    {
+        zlog_debug(cli, " del from %d to %d ", id, userid);
+        printf("已拒绝%d的申请\n", id);
+    }
     if (ms) free(ms);
+    return;
 }
 
-// void cli_agree_friend(void);

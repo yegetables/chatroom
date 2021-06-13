@@ -21,27 +21,35 @@ info* cli_send_recv(info* ms, int how)
         }
         return ms;  // no close
     }
-    // 接受并展示info
-    if (recv_info(cfd, ms))
+
+    if (how != HUP_NO)
     {
-        char* tt = NULL;
-        tt       = showinfo(ms);
-        zlog_debug(cli, tt);
-        free(tt);
-        return ms;
+        // 接受并展示info
+        if (recv_info(cfd, ms))
+        {
+            char* tt = NULL;
+            tt       = showinfo(ms);
+            zlog_debug(cli, tt);
+            free(tt);
+            return ms;
+        }
+        else
+        {
+            char* t = showinfo(ms);
+            zlog_debug(cli, "access failed:%s", t);
+            free(t);
+            if (ms)
+            {
+                free(ms);
+                ms = NULL;
+            }
+
+            return ms;  // no close
+        }
     }
     else
     {
-        char* t = showinfo(ms);
-        zlog_debug(cli, "access failed:%s", t);
-        free(t);
-        if (ms)
-        {
-            free(ms);
-            ms = NULL;
-        }
-
-        return ms;  // no close
+        return ms;
     }
 }
 

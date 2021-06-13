@@ -16,10 +16,17 @@ bool do_sql(events *ev)
             ms->to   = ms->from;
             ms->from = 0;
             break;
-        case GET_MANY_VALUE:
         case SHOW_APPLY:
+        case FR_LIST:
             if (!base_sql_query(ms)) return false;
-            if (ser_show_apply(ms) < 0) return false;
+            if (base_GET_MANY_VALUE(ms, 2) < 0) return false;
+            ms->to   = ms->from;
+            ms->from = 0;
+            break;
+        case AGREE_APPLICATION:
+            if (!base_sql_query(ms)) return false;
+            if (!case_WHAT_FIRST_VALUE(ms)) return false;
+            if (!base_sql_query(ms)) return false;
             ms->to   = ms->from;
             ms->from = 0;
             break;
@@ -44,12 +51,6 @@ bool do_sql(events *ev)
         case WHAT_FIRST_VALUE:
             if (!base_sql_query(ms)) return false;
             if (!case_WHAT_FIRST_VALUE(ms)) return false;
-            ms->to   = ms->from;
-            ms->from = 0;
-            break;
-        case FR_LIST:  //好友列表
-            if (!base_sql_query(ms)) return false;
-            if (ser_show_friends(ms) < 0) return false;
             ms->to   = ms->from;
             ms->from = 0;
             break;

@@ -63,19 +63,19 @@ void show_management_friends_menu(void);
 
 /**
  * @brief 获取好友列表
- * 好友name,userid,status
+ * 好友name,userid,status,shield,(messages number)
+ *  FR_LIST->base_GET_MANY_VALUE
  */
 void cli_show_friends();
 
 /**
- * @brief 发送添加请求
- * 输入对方id
+ * @brief 输入对方id发送添加请求
+ * IF_DONE ->add(ADD_FRIEND)
  */
 void cli_add_friend();
 
 /**
- * @brief 删除好友
- * 输入对方id
+ * @brief 输入对方id 删除好友
  */
 void cli_del_friend(void);
 
@@ -104,9 +104,22 @@ void update_notices(void);
 void cli_search_user(void);
 
 /**
+ * @brief 进入好友申请管理
+ */
+void show_applicationss_menu(void);
+
+/**
+ * @brief 同意或拒绝申请
+ * @param is 0拒绝1同意
+ */
+void cli_agree_friend(int is);
+
+/**
  * @brief 查看好友申请信息
  * 仅能查看向自己
  * 不能查看自己向别人的的申请状态
+ * SHOW_APPLY->search(ADD_FRIEND)
+ * base_GET_MANY_VALUE
  */
 void show_apply_friends(void);
 

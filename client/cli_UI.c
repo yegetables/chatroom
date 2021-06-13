@@ -88,12 +88,40 @@ reshow:
             cli_shield_friend(0);
             break;
         case 5:  //查看好友申请
-            show_apply_friends();
+            show_applicationss_menu();
             break;
         case 6:  // 搜索用户
             cli_search_user();
             break;
         default:
+            break;
     }
     goto reshow;
+}
+
+void show_applicationss_menu(void)
+{
+    int c;
+
+    printf("-----好友申请----\n");
+    //列出申请列表
+    show_apply_friends();
+    printf("1.同意申请\n");
+    printf("2.拒绝申请\n");
+    printf("0.返回上一层\n");
+    scanf("%d", &c);
+    switch (c)
+    {
+        case 0:  //返回上一层
+            return;
+        case 1:  //同意好友申请
+            cli_agree_friend(1);
+            break;
+        case 2:  //删除好友申请
+            cli_agree_friend(2);
+            break;
+        default:
+            break;
+    }
+    return;
 }
