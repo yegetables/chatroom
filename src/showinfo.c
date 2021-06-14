@@ -22,11 +22,11 @@ char *showinfo(info *ms)
         how[10] = "[GET_MANY_VALUE]";
         how[11] = "[AGREE_APPLICATION]";
         how[12] = "[DEL_SELECT]";
-        how[13] = "[???]";
-        how[14] = "[???]";
-        how[15] = "[???]";
-        how[16] = "[???]";
-        how[17] = "[???]";
+        how[13] = "[SHOW_MESSAGES]";
+        how[14] = "[14]";
+        how[15] = "[15]";
+        how[16] = "[16]";
+        how[17] = "[17]";
         how[18] = "[???]";
         how[19] = "[???]";
 

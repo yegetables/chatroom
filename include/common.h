@@ -16,21 +16,25 @@
 #define MANY_RESULT 3
 // 第一行第一列值是多少
 #define WHAT_FIRST_VALUE 4
-// 设置登录状态
-#define SET_ONLINE 5
+
 // 列出好友列表
 #define FR_LIST 6
+//列出申请名单
+#define SHOW_APPLY 9
+//列出未读消息
+#define SHOW_MESSAGES 13
+//获取几行几列
+#define GET_MANY_VALUE 10
+
+// 设置登录状态
+#define SET_ONLINE 5
+// 同意申请
+#define AGREE_APPLICATION 11
 //添加好友
 #define ADD_FRIEND 7
 //转发消息
 #define MESSAGES 8
-//列出申请名单
-#define SHOW_APPLY 9
-//获取几行几列
-#define GET_MANY_VALUE 10
-// 同意申请
-#define AGREE_APPLICATION 11
-// TODO:删除匹配信息 
+// TODO:删除匹配信息
 #define DEL_SELECT 12
 
 typedef enum

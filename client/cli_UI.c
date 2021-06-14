@@ -30,7 +30,7 @@ void show_main_menu(void)
         printf("4.个人设置\n");
         // printf("8.找回密码\n");//登陆界面
         printf("5.好友设置\n");
-        printf("6.退出登录\n");
+        printf("0.退出登录\n");
         printf("-------------------\n");
 
         scanf("%d", &c);
@@ -43,12 +43,13 @@ void show_main_menu(void)
                 show_management_friends_menu();  //好友管理
                 break;
             case 3:
+                show_secret_chat_menu();  //私聊
                 break;
             case 4:
                 break;
             case 5:
                 break;
-            case 6:
+            case 0:
                 zlog_fini();
                 close(cfd);
                 exit(1);
@@ -102,7 +103,6 @@ reshow:
 void show_applicationss_menu(void)
 {
     int c;
-
     printf("-----好友申请----\n");
     //列出申请列表
     show_apply_friends();
@@ -122,6 +122,49 @@ void show_applicationss_menu(void)
             break;
         default:
             break;
+    }
+    return;
+}
+
+void show_secret_chat_menu(void)
+{
+    int toid;
+    {
+        printf("1.输入对方id\n");
+        printf("0.返回上一层\n");
+        scanf("%d", &toid);
+        if (toid == 0) return;
+    }  //开始进入私聊界面
+
+    int c;
+reshow:
+    printf("-----私聊选项----\n");
+    printf("1.发送消息\n");
+    printf("2.发送文件\n");
+    printf("3.查看消息记录\n");  //消息记录 (近一天?近10条?)
+    printf("0.返回上一层\n");
+    scanf("%d", &c);
+    switch (c)
+    {
+        case 0:  //返回上一层
+            return;
+        case 1:  //私聊
+            message_menu(toid);
+            break;
+        case 2:  //发文件
+
+            break;
+        default:
+            break;
+    }
+    goto reshow;
+}
+void message_menu(int toid)
+{
+    while (1)
+    {
+        recv_secret_message(toid);
+        send_secret_message(toid);
     }
     return;
 }

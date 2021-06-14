@@ -7,6 +7,7 @@ extern int fd_id[MAXCLIENT];
 bool do_sql(events *ev)
 {
     info *ms = &(ev->js);
+    int aasd = 2;
     switch (ms->how)
     {
         //显式更改from to
@@ -16,10 +17,13 @@ bool do_sql(events *ev)
             ms->to   = ms->from;
             ms->from = 0;
             break;
+
+        case GET_MANY_VALUE:
         case SHOW_APPLY:
         case FR_LIST:
+        case SHOW_MESSAGES:
             if (!base_sql_query(ms)) return false;
-            if (base_GET_MANY_VALUE(ms, 2) < 0) return false;
+            if (base_GET_MANY_VALUE(ms, aasd) < 0) return false;
             ms->to   = ms->from;
             ms->from = 0;
             break;

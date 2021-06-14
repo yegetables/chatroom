@@ -86,9 +86,12 @@ void update_notices(void)
     {
         memset(p, 0, sizeof(p));
         sprintf(p,
-                "select * from requests  where requests.to= \'%d\' and "
-                "requests.how=\'%d\';",
-                userid, MESSAGES);
+                "select * from requests,relationship  where requests.to= "
+                "\'%d\' and "
+                "requests.how=\'%d\' and requests.from=relationship.id_2 and "
+                "requests.to=relationship.id_1  and relationship.if_shield=0 "
+                "and requests.if_read=0 ;",
+                userid, MESSAGES);  //未屏蔽的消息
         strcpy(ms->value, p);
         ms->type = sql;
         ms->from = userid;
