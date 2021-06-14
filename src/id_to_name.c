@@ -6,6 +6,7 @@ extern MYSQL *sql_l;
 #else
 #include PROJECT_CLIENTHEAD
 extern zlog_category_t *cli;
+extern int userid;
 #endif
 
 char *id_to_name(int id, char *name)
@@ -29,7 +30,26 @@ char *id_to_name(int id, char *name)
         mysql_free_result(result);
         exit(-1);
     }
+
 #else
+
+    info *ms = (info *)malloc(sizeof(info));
+    {
+        sprintf(ms->value, "select user_name from user where user_id=\'%d\';",
+                id);
+        ms->type = sql;
+        ms->from = userid;
+        ms->to   = 0;
+    }
+    ms = cli_send_recv(ms, WHAT_FIRST_VALUE);
+    if (ms == NULL)
+    {
+        zlog_error(cli, "recv error");
+        return NULL;
+    }
+    strcpy(name, ms->value);
+    if (ms) free(ms);
+
 #endif
     return name;
 }
@@ -59,9 +79,27 @@ int name_to_id(char *name)
 
 #else
 
+    info *ms = (info *)malloc(sizeof(info));
+    {
+        sprintf(ms->value, "select user_id from user where user_name=\'%s\';",
+                name);
+        ms->type = sql;
+        ms->from = userid;
+        ms->to   = 0;
+    }
+    ms = cli_send_recv(ms, WHAT_FIRST_VALUE);
+    if (ms == NULL)
+    {
+        zlog_error(cli, "recv error");
+        return -1;
+    }
+    a = atoi(ms->value);
+    if (ms) free(ms);
+
 #endif
     return a;
 }
+
 char *itoa(int num, char *str, int radix)
 { /*索引表*/
     char index[] = "0123456789ABCDEF";

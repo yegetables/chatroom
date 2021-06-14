@@ -119,7 +119,9 @@ bool sql_init_table(MYSQL* sql_l)
                 "`user_passwd` VARCHAR(30) NOT NULL,"
                 "`user_email` VARCHAR(50) NOT NULL,"
                 "`user_status` TINYINT NOT NULL , "
-                "`user_last_login_time` DATE "
+                "`user_last_login_time` timestamp NOT NULL  "
+                "DEFAULT current_timestamp()"
+                "ON UPDATE current_timestamp()"
                 ")AUTO_INCREMENT=10000 charset utf8;");
         //    AUTO_INCREMENT定义列为自增的属性，一般用于主键，数值会自动加1。
         //    PRIMARY KEY关键字用于定义列为主键。
@@ -163,7 +165,9 @@ bool sql_init_table(MYSQL* sql_l)
                 "`to` int(10) unsigned NOT NULL, "
                 "`type`int(10) NOT NULL,"
                 "`how` int(10) NOT NULL,"
-                "`value` VARCHAR(256) NOT NULL"
+                "`value` VARCHAR(256) NOT NULL,"
+                "`if_read` int(4) NOT NULL,"
+                "`add_time` timestamp NOT NULL DEFAULT current_timestamp()"
                 ") AUTO_INCREMENT=1  CHARSET=utf8;");
         if (mysql_query(sql_l, q))
         {

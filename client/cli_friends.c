@@ -1,7 +1,6 @@
 #include "config.h"
 #include PROJECT_CLIENTHEAD
 extern zlog_category_t* cli;
-extern int cfd;
 extern int userid;
 extern char username[30];
 
@@ -199,34 +198,18 @@ reshow:
     if (t == 1)
     {
         scanf("%d", &iid);
-        sprintf(p, "select user_name from user where user_id=\'%d\';", iid);
+        id_to_name(iid, p);
+        printf("id:%d----name:%s", iid, p);
     }
     else if (t == 2)
     {
         scanf("%s", na);
-        sprintf(p, "select user_id from user where user_name=\'%s\';", na);
+        printf("id:%d----name:%s\n", name_to_id(na), na);
     }
     else if (t == 3)
         return;
     else
         goto reshow;
-
-    info* ms = (info*)malloc(sizeof(info));
-    {
-        strcpy(ms->value, p);
-        ms->type = sql;
-        ms->from = userid;
-        ms->to   = 0;
-    }
-    ms = cli_send_recv(ms, WHAT_FIRST_VALUE);
-    if (ms == NULL) zlog_error(cli, "recv error");
-
-    if (t == 1)
-        printf("id:%d----name:%s", iid, ms->value);
-
-    else if (t == 2)
-        printf("id:%d----name:%s\n", atoi(ms->value), na);
-    if (ms) free(ms);
 }
 
 void cli_add_friend(void)

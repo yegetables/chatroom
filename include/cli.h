@@ -66,13 +66,13 @@ void show_management_friends_menu(void);
  * 好友name,userid,status,shield,(messages number)
  *  FR_LIST->base_GET_MANY_VALUE
  */
-void cli_show_friends();
+void cli_show_friends(void);
 
 /**
  * @brief 输入对方id发送添加请求
  * IF_DONE ->add(ADD_FRIEND)
  */
-void cli_add_friend();
+void cli_add_friend(void);
 
 /**
  * @brief 输入对方id 删除好友
@@ -99,7 +99,6 @@ void update_notices(void);
 /**
  * @brief 输入id或name
  * 返回name 或 id
- * 以及在线状态
  */
 void cli_search_user(void);
 
@@ -136,3 +135,27 @@ void signalcatch(int signal);
  * @return true false
  */
 bool IsValidEmail(char *s);
+
+/**
+ * @brief 私聊选项界面(查看历史,发文件,私聊)
+ */
+void show_secret_chat_menu(void);
+
+/**
+ * @brief 向toid发一条私聊信息
+ * 数据库加一条 MESSAGES
+ * @param toid 对方id
+ */
+void send_secret_message(int toid);
+
+/**
+ * @brief 接收toid私聊消息(所有未读)
+ * @param toid 对方id
+ */
+void recv_secret_message(int toid);
+
+/**
+ * @brief 定时刷新recv未读,随时send
+ * @param toid
+ */
+void message_menu(int toid);

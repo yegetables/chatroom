@@ -31,7 +31,7 @@ void client_event(int cfd, int event, void *args)
     zlog_debug(ser, "========VVV=========");
     // TODO: client事件类别处理
 
-    if (ev->js.type == HUP_NO || ev->js.type == AGREE_APPLICATION)
+    if (ev->js.how == HUP_NO || ev->js.how == AGREE_APPLICATION)
     {
         do_sql(ev);
         memset(ev->js.value, 0, BUFLEN);
@@ -42,7 +42,7 @@ void client_event(int cfd, int event, void *args)
         if (ev->js.to == 0)  // c/s交互
         {
             // sql/cmd
-            if (ev->js.type == sql)
+            if (ev->js.type == sql || ev->js.type == msg)
             {
                 //查询,判断
                 if (do_sql(ev))
