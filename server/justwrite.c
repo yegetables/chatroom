@@ -8,7 +8,7 @@ extern int fd_id[MAXCLIENT];
 void justwrite(int cfd, int event, void *args)
 {
     events *ev = (events *)args;
-    info *ms   = &(ev->js);
+    info *ms   = &ev->js;
     // 发送
     epoll_del(ev);
     int what_to;
@@ -24,8 +24,27 @@ void justwrite(int cfd, int event, void *args)
         epoll_add(EPOLLRDHUP, ev);
         return;
     }
-    ev->call_back = client_event;
-    epoll_add(EPOLLIN, ev);
+
+    //回调,事件,返回
+    if (ms->how == SEND_FILE_REDY)
+    {
+        ev->call_back = IN_recvfile;
+        epoll_add(EPOLLIN, ev);
+        return;
+    }
+    else if (ms->how == AGREE_RECV_FILE)
+    {
+        ev->call_back = OUT_sendfile;
+        epoll_add(EPOLLOUT, ev);
+        return;
+    }
+    else
+    {
+        ev->call_back = client_event;
+        epoll_add(EPOLLIN, ev);
+        return;
+    }
+
     return;
 }
 int id_to_fd(int id)

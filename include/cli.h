@@ -91,11 +91,14 @@ void cli_shield_friend(int is);
  * @brief 固定信息栏,在任何界面都可更新
  */
 void information_bar(void);
-/**
- * @brief 更新applications与messages
- */
-void update_notices(void);
 
+/**
+ * @brief 更新applications与messages与files
+ * @param 消息来源存入数组
+ * @param who_send_msg 消息来源数组
+ * @param who_send_files 文件来源数组
+ */
+void update_notices(char *user_msg, char *user_files);
 /**
  * @brief 输入id或name
  * 返回name 或 id
@@ -112,6 +115,26 @@ void show_applicationss_menu(void);
  * @param is 0拒绝1同意
  */
 void cli_agree_friend(int is);
+
+/**
+ * @brief 同意或拒绝文件
+ * @param toid
+ * @param is 0拒绝1同意
+ */
+void cli_recv_file(int toid, int is);
+
+/**
+ * @brief 接受或拒绝文件
+ *
+ * @param toid
+ */
+void show_file_menu(int toid);
+
+/**
+ * @brief 显示toid发送的文件们
+ * @param 对方id
+ */
+void show_apply_files(int toid);
 
 /**
  * @brief 查看好友申请信息
@@ -145,8 +168,9 @@ void show_secret_chat_menu(void);
  * @brief 向toid发一条私聊信息
  * 数据库加一条 MESSAGES
  * @param toid 对方id
+ * @return 0返回非0继续聊天
  */
-void send_secret_message(int toid);
+int send_secret_message(int toid);
 
 /**
  * @brief 接收toid私聊消息(所有未读)
@@ -155,7 +179,28 @@ void send_secret_message(int toid);
 void recv_secret_message(int toid);
 
 /**
+ * @brief toid私聊消息历史
+ * @param toid 对方id
+ */
+void show_secret_message(int toid);
+
+/**
  * @brief 定时刷新recv未读,随时send
  * @param toid
  */
 void message_menu(int toid);
+
+/**
+ * @brief 包括发送文件请求和发送文件到服务器
+ * 对方确认接受从服务器接受
+ * @param toid 对方id
+ * 只在数据库添加文件信息和路径
+ */
+void send_file_menu(int toid);
+
+/**
+ * @brief Get the file size object
+ * @param path 路径
+ * @return long int 失败-1
+ */
+long int get_file_size(char *path);

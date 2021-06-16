@@ -6,7 +6,7 @@ extern char fd_name[MAXCLIENT][30];
 extern int fd_id[MAXCLIENT];
 bool do_sql(events *ev)
 {
-    info *ms = &(ev->js);
+    info *ms = &ev->js;
     int aasd = 2;
     switch (ms->how)
     {
@@ -17,20 +17,50 @@ bool do_sql(events *ev)
             ms->to   = ms->from;
             ms->from = 0;
             break;
-
-        case GET_MANY_VALUE:
+        case GET_MESSAGE_FROM:
+            aasd = 1;
         case SHOW_APPLY:
         case FR_LIST:
         case SHOW_MESSAGES:
+        case GET_MANY_VALUE:
             if (!base_sql_query(ms)) return false;
             if (base_GET_MANY_VALUE(ms, aasd) < 0) return false;
             ms->to   = ms->from;
             ms->from = 0;
             break;
+        case AGREE_RECV_FILE:
+            if (!base_sql_query(ms)) return false;
+            if (base_GET_MANY_VALUE(ms, 2) < 0) return false;
+            //没找到要接收的文件,或者找到文件太多
+            if (atoi(ms->value) != 1)
+            {
+                strcpy(ms->value, "0");
+                //使用justwrite-cli_event普通传输
+                ms->how  = MANY_RESULT;
+                ms->to   = ms->from;
+                ms->from = 0;
+                break;
+            }
+            else  //唯一
+            {
+                ms->to   = ms->from;
+                ms->from = 0;
+                //改为准备文件发送状态
+                break;
+            }
         case AGREE_APPLICATION:
             if (!base_sql_query(ms)) return false;
             if (!case_WHAT_FIRST_VALUE(ms)) return false;
             if (!base_sql_query(ms)) return false;
+            if (!case_IF_DONE(ms)) return false;
+            ms->to   = ms->from;
+            ms->from = 0;
+            break;
+        case SEND_FILE_REDY:
+            if (event_recv_file_ready(ev) < 0) return false;
+            //插入数据到数据库
+            if (!base_sql_query(&ev->js)) return false;
+            if (!case_IF_DONE(ms)) return false;
             ms->to   = ms->from;
             ms->from = 0;
             break;
@@ -103,7 +133,6 @@ bool base_sql_query(info *ms)
         return true;
 }
 
-//询问第一个值是多少
 bool case_WHAT_FIRST_VALUE(info *ms)
 {
     char *buf         = ms->value;
@@ -123,7 +152,6 @@ bool case_WHAT_FIRST_VALUE(info *ms)
     return true;
 }
 
-//询问有多少行数据
 bool case_MANY_RESULT(info *ms)
 {
     char *buf         = ms->value;
@@ -141,7 +169,6 @@ bool case_MANY_RESULT(info *ms)
     return true;
 }
 
-//询问存在
 bool case_IF_HAS(info *ms)
 {
     char *buf         = ms->value;
@@ -162,7 +189,6 @@ bool case_IF_HAS(info *ms)
     return true;
 }
 
-//执行成功
 bool case_IF_DONE(info *ms)
 {
     char *buf = ms->value;
@@ -171,10 +197,9 @@ bool case_IF_DONE(info *ms)
     return true;
 }
 
-//设置在线
 bool event_set_online(events *ev)
 {  // get name(设置status=1)
-    info *ms  = &(ev->js);
+    info *ms  = &ev->js;
     char *buf = ms->value;
     {  //获取name更改为查询id
         char na[30] = {0};
@@ -200,8 +225,6 @@ bool event_set_online(events *ev)
     return true;
 }
 
-// 先sscanf
-//提前执行
 int base_GET_MANY_VALUE(info *ms, int fetch)
 {
     char *buf  = ms->value;

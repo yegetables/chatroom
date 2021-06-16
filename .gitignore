@@ -10,3 +10,11 @@ node_modules
 checks.json
 *.sh
 *.sql
+package.json
+.cz-config.js
+package-lock.json
+commitlint.config.js
+husky.config.js
+yarn.lock
+yarn-error.log
+.husky

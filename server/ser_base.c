@@ -38,7 +38,7 @@ void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
     ev->arg       = arg;
     ev->events    = 0;
     ev->status    = 0;
-    memset(&(ev->js), 0, sizeof(info));
+    memset(&ev->js, 0, sizeof(info));
     // ev->last_active = time(NULL);
     return;
 }
@@ -206,7 +206,7 @@ char *showevents(events *ev)
             sprintf(&logbuf[strlen(logbuf)], "[dead]\n");
     }
 
-    char *ii = showinfo(&(ev->js));
+    char *ii = showinfo(&ev->js);
     strcpy(&logbuf[strlen(logbuf)], ii);
     free(ii);
 
@@ -214,7 +214,6 @@ char *showevents(events *ev)
 
     return logbuf;
 }
-
 
 int creat_daemon(void)
 {
@@ -260,9 +259,10 @@ int creat_daemon(void)
     // umask(0);
 
     // 5.关文件
-    for (int i = 0; i < NOFILE; close(i++)) {
+    for (int i = 0; i < NOFILE; close(i++))
+    {
         ;
-}
+    }
 
     // 6.信号处理
     //如果对于信号处理通过怕生成子进程执行,要设置信号忽略SIGCHLD信号,可以避免子进程成为僵尸
@@ -270,10 +270,9 @@ int creat_daemon(void)
 
     // 7.其他,可以处理别的
     //也可以返回主程序,执行任务,此时主程序成为守护进程
-    
+
     return 0;
 }
-
 
 void lfdaccept(int a, int b, void *args)
 {
@@ -332,5 +331,3 @@ reaccept:
               i);
     return;
 }
-
-

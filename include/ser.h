@@ -2,6 +2,14 @@
 
 typedef struct
 {
+    int from_id;
+    long f_size;
+    char path[PATH_MAX / 2];
+    off_t offset;
+
+} file_ready;
+typedef struct
+{
     int fd;      //  要监听的文件描述符
     int events;  //  对应的监听事件
     void *arg;   //  泛型参数
@@ -18,7 +26,7 @@ void ser_setconfig(char *filename);
 
 /**
  * @brief 初始化events结构
- *填入fd,回调
+ * 填入fd,回调
  * @param ev 指定全局events结构
  * @param fd 对应的fd(lfd/cfd)
  * @param call_back
@@ -101,7 +109,23 @@ bool sql_init_table(MYSQL *sql_l);
  */
 bool do_sql(events *ev);
 
-// bool ser_accessname();
+/**
+ * @brief 构造uuid路径,和数据库
+ * 消息,设置回调为IN_recvfile
+ * @param ev
+ * @return long int 文件大小
+ */
+long int event_recv_file_ready(events *ev);
+
+/**
+ * @brief 接受文件的epin事件回调函数
+ * 写回IF_DONE,被ready的justwrite设置
+ * 肯定是上一个要发文件的人的id
+ * @param cfd
+ * @param event
+ * @param args
+ */
+void IN_recvfile(int cfd, int event, void *args);
 
 /**
  * @brief 在线时根据uid找到fd
@@ -181,3 +205,11 @@ bool event_set_online(events *ev);
  * 处理完成
  */
 bool ser_add_friend(events *ev);
+
+/**
+ * @brief 服务器发送文件
+ * @param cfd
+ * @param event
+ * @param args
+ */
+void OUT_sendfile(int cfd, int event, void *args);

@@ -141,11 +141,11 @@ bool sql_init_table(MYSQL* sql_l)
         memset(q, 0, sizeof(q));
         sprintf(q,
                 "CREATE TABLE IF NOT EXISTS `relationship` ("
-                "`num` int(10) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,"
                 "`id_1` int(10) unsigned NOT NULL,"
                 "`id_2` int(10) unsigned NOT NULL, "
-                "`if_shield` tinyint(4) NOT NULL"
-                ") AUTO_INCREMENT=1  CHARSET=utf8;");
+                "`if_shield` tinyint(4) NOT NULL,"
+                " PRIMARY KEY (`id_1`,`id_2`) "
+                ")   DEFAULT CHARSET=utf8 ;");
         if (mysql_query(sql_l, q))
         {
             zlog_error(ser,
@@ -179,5 +179,23 @@ bool sql_init_table(MYSQL* sql_l)
         }
     }
 
+    ///@note group
+    {
+        memset(q, 0, sizeof(q));
+        sprintf(q,
+                "CREATE TABLE  IF NOT EXISTS `group` ("
+                "`group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
+                "`group_name` varchar(30) NOT NULL,"
+                "PRIMARY KEY (`user_id`)"
+                ") ENGINE=InnoDB AUTO_INCREMENT=50000 DEFAULT CHARSET=utf8");
+        if (mysql_query(sql_l, q))
+        {
+            zlog_error(ser,
+                       "failed to create "
+                       "Error %u: %s",
+                       mysql_errno(sql_l), mysql_error(sql_l));
+            return false;
+        }
+    }
     return true;
 }

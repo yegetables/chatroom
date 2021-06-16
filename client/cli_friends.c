@@ -232,7 +232,7 @@ void cli_add_friend(void)
         sprintf(p,
                 "INSERT INTO requests "
                 "(requests.from,requests.to,requests.type,requests.how,"
-                "requests.value) VALUES (%d,%d,%d,%d,\'%s\');",
+                "requests.value,requests.if_read) VALUES (%d,%d,%d,%d,\'%s\',0);",
                 userid, toid, sql, ADD_FRIEND, pp);  //将来取走时候不回复
     }
 

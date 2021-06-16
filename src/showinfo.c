@@ -23,9 +23,9 @@ char *showinfo(info *ms)
         how[11] = "[AGREE_APPLICATION]";
         how[12] = "[DEL_SELECT]";
         how[13] = "[SHOW_MESSAGES]";
-        how[14] = "[14]";
-        how[15] = "[15]";
-        how[16] = "[16]";
+        how[14] = "[GET_MESSAGE_FROM]";
+        how[15] = "[SEND_FILE_REDY]";
+        how[16] = "[SEND_FILE]";
         how[17] = "[17]";
         how[18] = "[???]";
         how[19] = "[???]";

@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <getopt.h>
+#include <libgen.h>
 #include <linux/limits.h>
 #include <netinet/in.h>
 #include <pthread.h>
@@ -20,6 +21,7 @@
 #include <sys/epoll.h>
 #include <sys/mman.h>
 #include <sys/param.h>
+#include <sys/sendfile.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -31,7 +33,6 @@
 #include <unistd.h>
 
 #include "color.h"
-
 
 #define DEBUGPRINT(FORMAT, ...)                                       \
     {                                                                 \

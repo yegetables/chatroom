@@ -6,10 +6,10 @@ extern char fd_name[MAXCLIENT][30];
 extern int fd_id[MAXCLIENT];
 void client_event(int cfd, int event, void *args)
 {
-    events *ev = args;
+    events *ev = (events *)args;
     // 接受info
     epoll_del(ev);
-    if (false == recv_info(ev->fd, &(ev->js)))
+    if (false == recv_info(ev->fd, &ev->js))
     {
         epoll_add(EPOLLRDHUP, ev);
         return;
@@ -29,40 +29,30 @@ void client_event(int cfd, int event, void *args)
     zlog_debug(ser, "========VVV=========");
     zlog_debug(ser, "========VVV=========");
     zlog_debug(ser, "========VVV=========");
-    // TODO: client事件类别处理
 
-    if (ev->js.how == HUP_NO || ev->js.how == AGREE_APPLICATION)
+    if (ev->js.how == HUP_NO)
     {
         do_sql(ev);
         memset(ev->js.value, 0, BUFLEN);
         epoll_add(EPOLLIN, ev);
+        goto over;
     }
-    else
+
+    // sql/cmd
+    if (ev->js.type == sql || ev->js.type == msg)
     {
-        if (ev->js.to == 0)  // c/s交互
+        //查询,判断
+        if (do_sql(ev))
         {
-            // sql/cmd
-            if (ev->js.type == sql || ev->js.type == msg)
-            {
-                //查询,判断
-                if (do_sql(ev))
-                {
-                    ev->call_back = justwrite;
-                    epoll_add(EPOLLOUT, ev);
-                }
-                else
-                    epoll_add(EPOLLRDHUP, ev);
-            }
-            else
-            {
-                ;
-            }
+            ev->call_back = justwrite;
+            epoll_add(EPOLLOUT, ev);
         }
-        else  // 转发 c/c交互
-        {
-            ;  // file/msg
-        }
+        else
+            epoll_add(EPOLLRDHUP, ev);
+        goto over;
     }
+
+over:
     p = showevents(ev);
     zlog_debug(ser, "to:%s", p);
     free(p);

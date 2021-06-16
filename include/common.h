@@ -1,3 +1,5 @@
+#include <sys/sendfile.h>
+
 #include "cJSON.h"
 #include "mysql/mysql.h"
 #include "sdebug.info.h"
@@ -17,6 +19,8 @@
 // 第一行第一列值是多少
 #define WHAT_FIRST_VALUE 4
 
+//消息来源(单一列名字)
+#define GET_MESSAGE_FROM 14
 // 列出好友列表
 #define FR_LIST 6
 //列出申请名单
@@ -28,12 +32,18 @@
 
 // 设置登录状态
 #define SET_ONLINE 5
-// 同意申请
+// 同意好友申请
 #define AGREE_APPLICATION 11
+// 客户同意文件接收,服务器可发
+#define AGREE_RECV_FILE 17
 //添加好友
 #define ADD_FRIEND 7
 //转发消息
 #define MESSAGES 8
+//即将发送文件
+#define SEND_FILE_REDY 15
+//发送文件
+#define SEND_FILE 16
 // TODO:删除匹配信息
 #define DEL_SELECT 12
 
@@ -129,3 +139,21 @@ char *id_to_name(int id, char *name);
  * @return int user_id
  */
 int name_to_id(char *name);
+
+/**
+ * @brief 发送文件到cfd
+ * @param cfd 接收方fd
+ * @param pathname 文件上传路径
+ * @param f_size 文件大小
+ * @return true false
+ */
+bool send_file(int cfd, char *pathname, long int f_size);
+
+/**
+ * @brief 接受文件从cfd
+ * @param cfd 文件来源
+ * @param pathname 文件保存路径
+ * @param f_size 文件大小
+ * @return true false
+ */
+bool recv_file(int cfd, char *pathname, long int f_size);
