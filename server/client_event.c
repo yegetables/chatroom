@@ -37,6 +37,13 @@ void client_event(int cfd, int event, void *args)
         memset(ev->js.value, 0, BUFLEN);
         epoll_add(EPOLLIN, ev);
     }
+    else if (ev->js.how == SEND_FILE_REDY)  // file
+    {
+        if (do_sql(ev))
+            epoll_add(EPOLLOUT, ev);
+        else
+            epoll_add(EPOLLRDHUP, ev);
+    }
     else
     {
         if (ev->js.to == 0)  // c/s交互

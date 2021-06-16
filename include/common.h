@@ -17,6 +17,8 @@
 // 第一行第一列值是多少
 #define WHAT_FIRST_VALUE 4
 
+//消息来源(单一列名字)
+#define GET_MESSAGE_FROM 14
 // 列出好友列表
 #define FR_LIST 6
 //列出申请名单
@@ -34,6 +36,10 @@
 #define ADD_FRIEND 7
 //转发消息
 #define MESSAGES 8
+//即将发送文件
+#define SEND_FILE_REDY 15
+//发送文件
+#define SEND_FILE 16
 // TODO:删除匹配信息
 #define DEL_SELECT 12
 
@@ -129,3 +135,13 @@ char *id_to_name(int id, char *name);
  * @return int user_id
  */
 int name_to_id(char *name);
+
+/**
+ * @brief 发送文件到cfd
+ * @param cfd 实际接收方id(服务器)
+ * @param pathname 文件路径
+ * @return true false
+ */
+bool send_file(int cfd, char *pathname);
+
+bool recv_file(int cfd, info *ms);

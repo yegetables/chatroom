@@ -91,10 +91,12 @@ void cli_shield_friend(int is);
  * @brief 固定信息栏,在任何界面都可更新
  */
 void information_bar(void);
+
 /**
  * @brief 更新applications与messages
+ * @param 消息来源存入数组
  */
-void update_notices(void);
+void update_notices(int *who_send);
 
 /**
  * @brief 输入id或name
@@ -145,8 +147,9 @@ void show_secret_chat_menu(void);
  * @brief 向toid发一条私聊信息
  * 数据库加一条 MESSAGES
  * @param toid 对方id
+ * @return 0返回非0继续聊天
  */
-void send_secret_message(int toid);
+int send_secret_message(int toid);
 
 /**
  * @brief 接收toid私聊消息(所有未读)
@@ -155,7 +158,21 @@ void send_secret_message(int toid);
 void recv_secret_message(int toid);
 
 /**
+ * @brief toid私聊消息历史
+ * @param toid 对方id
+ */
+void show_secret_message(int toid);
+
+/**
  * @brief 定时刷新recv未读,随时send
  * @param toid
  */
 void message_menu(int toid);
+
+/**
+ * @brief 包括发送文件请求和发送文件到服务器
+ * 对方确认接受从服务器接受
+ * @param toid 对方id
+ * 只在数据库添加文件信息和路径
+ */
+void send_file_menu(int toid)

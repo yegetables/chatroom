@@ -17,11 +17,13 @@ bool do_sql(events *ev)
             ms->to   = ms->from;
             ms->from = 0;
             break;
-
-        case GET_MANY_VALUE:
+        case GET_MESSAGE_FROM:
+            aasd = 1;
         case SHOW_APPLY:
         case FR_LIST:
         case SHOW_MESSAGES:
+            aasd = 2;
+        case GET_MANY_VALUE:
             if (!base_sql_query(ms)) return false;
             if (base_GET_MANY_VALUE(ms, aasd) < 0) return false;
             ms->to   = ms->from;
@@ -33,6 +35,9 @@ bool do_sql(events *ev)
             if (!base_sql_query(ms)) return false;
             ms->to   = ms->from;
             ms->from = 0;
+            break;
+        case SEND_FILE_REDY:
+
             break;
         case IF_DONE:
             if (!base_sql_query(ms)) return false;
@@ -237,4 +242,25 @@ int base_GET_MANY_VALUE(info *ms, int fetch)
     // number);
     mysql_free_result(result);
     return number;
+}
+
+bool event_recv_file_ready(info *ms)
+{
+    int ufd = open("/proc/sys/kernel/random/uuid", O_RDONLY);
+    if (uid < 0)
+    {
+        zlog_error(ser, "/proc/sys/kernel/random/uuid can't open");
+    }
+    char p[BUFLEN] = {0};
+    read(ufd, p, 37);
+    strcat(p, ms->value);
+    char path[MAX_PATH] = {0};
+    sscanf(ms->value, "%s", path);  //获取文件name
+    sprintf(p,
+            "insert into requests "
+            "(requests.from,requests.to,requests.type,requests.how,requests."
+            "value,requests.if_read) values (%d,%d,%d,%d,\'%s%s\',0 )",
+            ms->from, ms->to, ms->type, ms->how, p);  // uuid(36)+path
+
+    memset(buf, 0, BUFLEN);
 }

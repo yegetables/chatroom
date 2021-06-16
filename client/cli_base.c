@@ -53,7 +53,7 @@ info* cli_send_recv(info* ms, int how)
     }
 }
 
-void update_notices(void)
+void update_notices(int* who_send)
 {
     applications   = 0;
     messages       = 0;
@@ -86,7 +86,8 @@ void update_notices(void)
     {
         memset(p, 0, sizeof(p));
         sprintf(p,
-                "select * from requests,relationship  where requests.to= "
+                "select distinct requests.from from requests,relationship  "
+                "where requests.to= "
                 "\'%d\' and "
                 "requests.how=\'%d\' and requests.from=relationship.id_2 and "
                 "requests.to=relationship.id_1  and relationship.if_shield=0 "
@@ -96,16 +97,26 @@ void update_notices(void)
         ms->type = sql;
         ms->from = userid;
         ms->to   = 0;
-        ms->how  = MANY_RESULT;
-        ms       = cli_send_recv(ms, MANY_RESULT);
+        ms       = cli_send_recv(ms, GET_MESSAGE_FROM);
         if (ms == NULL)
         {
             zlog_error(cli, "get messages failed ");
             return;
         }
     }
-
     messages = atoi(ms->value);
+    char* b  = strchr(ms->value, '\n');
+    if (b == NULL)
+    {
+        zlog_error(cli, "value:%s", ms->value);
+        exit(-1);
+    }
 
+    b++;
+    for (int i = 0; i < messages && b != NULL; i++, b++)
+    {
+        sscanf(b, "%d", &who_send[i]);
+        b = strchr(b, '\n');
+    }
     if (ms) free(ms);
 }

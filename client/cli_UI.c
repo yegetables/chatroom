@@ -8,9 +8,15 @@ int applications;
 int messages;
 void information_bar(void)
 {
-    update_notices();
+    int who_send[MAXCLIENT];
+    memset(who_send, 0, sizeof(who_send));
+    char buf[MAXCLIENT * 30];
+    memset(buf, 0, sizeof(buf));
+    update_notices(who_send);
+    for (int i = 0; i < messages; i++)
+        sprintf(&buf[strlen(buf)], "%d ", who_send[i]);
     printf("----------%d:applications--------\n", applications);
-    printf("------------%d:messages----------\n", messages);
+    printf("------------%d:messages from (%s)----------\n", messages, buf);
 }
 void show_main_menu(void)
 {
@@ -130,12 +136,18 @@ void show_secret_chat_menu(void)
 {
     int toid;
     {
-        printf("1.输入对方id\n");
+        printf("输入对方id\n");
         printf("0.返回上一层\n");
         scanf("%d", &toid);
         if (toid == 0) return;
     }  //开始进入私聊界面
-
+    char buf[1024] = {0};
+    if (strlen(id_to_name(toid, buf)) == 0)
+    {
+        printf("error id, input again\n");
+        zlog_debug(cli, "error id, input again\n");
+        return;
+    }
     int c;
 reshow:
     printf("-----私聊选项----\n");
@@ -146,13 +158,16 @@ reshow:
     scanf("%d", &c);
     switch (c)
     {
-        case 0:  //返回上一层
+        case 0:  // 返回上一层
             return;
-        case 1:  //私聊
+        case 1:  // 私聊
             message_menu(toid);
             break;
-        case 2:  //发文件
-
+        case 2:  // 发文件
+            send_file_menu(toid);
+            break;
+        case 3:  // 历史记录(不显示文件历史)
+            show_secret_message(toid);
             break;
         default:
             break;
@@ -161,10 +176,57 @@ reshow:
 }
 void message_menu(int toid)
 {
-    while (1)
+    int returnnumber = 1;
+    printf("随时输入(#return#)返回上一层\n");
+    while (returnnumber)
     {
         recv_secret_message(toid);
-        send_secret_message(toid);
+        returnnumber = send_secret_message(toid);
     }
     return;
+}
+
+void send_file_menu(int toid)
+{
+    // cat /proc/sys/kernel/random/uuid 随机uuid
+    printf("输入文件路径\n");
+    char path[MAX_PATH] = {0};
+    scanf("%s", path);
+    //检测文件权限
+
+    if (!access(path, F_OK) && !access(path, R_OK))
+    {
+        struct stat statbuf;
+        memset(&statbuf, 0, sizeof(struct stat));
+        if (lstat(path, &statbuf))
+        {
+            zlog_error(ser, "fstat error %s", strerror(errno));
+            return false;
+        };
+        statbuf.printf("waiting transmission\n");
+        //发送文件通知
+        info* ms = (info*)malloc(sizeof(info));
+        ms->from = userid;
+        ms->to   = toid;
+        ms->type = msg;
+        sprintf(ms->value, "%s", path);
+        ms = cli_send_recv(ms, SEND_FILE_REDY);
+        if (ms == NULL)
+        {
+            zlog_error(cli, "send file requuest rejust");
+            return;
+        }
+
+        //真正发送文件
+        if (!send_file(cfd, path))
+        {
+            zlog_error("send file error: %s", path);
+            return;
+        }
+    }
+    else
+    {
+        zlog_error("path:%s can't read ");
+        return;
+    }
 }

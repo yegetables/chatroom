@@ -92,3 +92,68 @@ resend:
     }
     return true;
 }
+// TODO:recv_file
+bool recv_file(int cfd, info *ms)
+{
+    zlog_category_t *tmp = NULL;
+#ifdef PROJECT_SERVER
+    tmp = ser;
+#else
+    tmp = cli;
+#endif
+    // 记录返回值
+    int returnnumber = 0;
+    // 记录错误次数
+    int errornumber = 0;
+}
+
+bool send_file(int cfd, char *pathname)
+{
+    zlog_category_t *tmp = NULL;
+#ifdef PROJECT_SERVER
+    tmp = ser;
+#else
+    tmp = cli;
+#endif
+    // 记录返回值
+    int returnnumber = 0;
+    // 记录错误次数
+    int errornumber = 0;
+
+    int fd = open(path, O_RDONLY);
+    struct stat statbuf;
+    memset(&statbuf, 0, sizeof(struct stat));
+    if (fstat(fd, &statbuf))
+    {
+        zlog_error(tmp, "fstat error %s", strerror(errno));
+        return false;
+    };
+
+resend:
+    if (sizeof(info) !=
+        (returnnumber = sendfile(fd, cfd, NULL, statbuf.st_size)))
+    {
+        if (returnnumber == 0) return false;
+        zlog_warn(tmp, "send failed %s", show_errno());
+        if (errno == EWOULDBLOCK || errno == EAGAIN)
+        {
+#ifdef PROJECT_CLIENT
+            sleep(1);  // magic number
+            goto resend;
+#endif
+        }
+        errornumber++;
+        if (errornumber > 3)
+        {
+            zlog_warn(tmp, "can't send info over 3");
+            goto over;
+        }
+        goto resend;
+
+    over:
+        zlog_error(tmp, "send info failed %s:%s over", show_errno(),
+                   strerror(errno));
+        return false;
+    }
+    return true;
+}
