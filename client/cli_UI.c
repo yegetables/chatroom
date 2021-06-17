@@ -23,7 +23,6 @@ void show_main_menu(void)
     int c;
     while (1)
     {
-        // gudingxinxi
         information_bar();
 
         printf("1.好友列表\n");  //在线/昵称/id/屏蔽
@@ -95,7 +94,7 @@ reshow:
             cli_shield_friend(0);
             break;
         case 5:  //查看好友申请
-            show_applicationss_menu();
+            show_applications_menu();
             break;
         case 6:  // 搜索用户
             cli_search_user();
@@ -106,7 +105,7 @@ reshow:
     goto reshow;
 }
 
-void show_applicationss_menu(void)
+void show_applications_menu(void)
 {
     int c;
     printf("-----好友申请----\n");
@@ -190,43 +189,48 @@ void send_file_menu(int toid)
 {
     // cat /proc/sys/kernel/random/uuid 随机uuid
     printf("输入文件路径\n");
-    char path[MAX_PATH] = {0};
+    char path[PATH_MAX] = {0};
+
     scanf("%s", path);
     //检测文件权限
-
-    if (!access(path, F_OK) && !access(path, R_OK))
+    if (strlen(path) > 50)
     {
-        struct stat statbuf;
-        memset(&statbuf, 0, sizeof(struct stat));
-        if (lstat(path, &statbuf))
-        {
-            zlog_error(ser, "fstat error %s", strerror(errno));
-            return false;
-        };
-        statbuf.printf("waiting transmission\n");
-        //发送文件通知
-        info* ms = (info*)malloc(sizeof(info));
-        ms->from = userid;
-        ms->to   = toid;
-        ms->type = msg;
-        sprintf(ms->value, "%s", path);
-        ms = cli_send_recv(ms, SEND_FILE_REDY);
-        if (ms == NULL)
-        {
-            zlog_error(cli, "send file requuest rejust");
-            return;
-        }
-
-        //真正发送文件
-        if (!send_file(cfd, path))
-        {
-            zlog_error("send file error: %s", path);
-            return;
-        }
-    }
-    else
-    {
-        zlog_error("path:%s can't read ");
+        printf("file name too long \n");
+        zlog_error(cli, "file name too long ");
         return;
     }
+    if (access(path, F_OK) || access(path, R_OK))
+    {
+        zlog_error(cli, "path:%s can't read ", path);
+        printf("error path\n");
+        return;
+    }
+    
+    char* filename = basename(path);
+    printf("waiting transmission\n");
+    
+    //发送文件通知
+    info* ms = (info*)malloc(sizeof(info));
+    ms->from = userid;
+    ms->to   = toid;
+    ms->type = msg;
+    sprintf(ms->value, "%s", filename);
+
+    zlog_debug(cli, "sendfile ready value: %s", ms->value);
+    ms = cli_send_recv(ms, SEND_FILE_REDY);
+    // if (ms == NULL || !atoi(ms->value))
+    // {
+    //     zlog_error(cli, "send file request rejust");
+    //     return;
+    // }
+    
+    //真正发送文件
+    if (!send_file(cfd, path))
+    {
+        zlog_error(cli, "send file error: %s", path);
+        return;
+    }
+
+    zlog_info(cli, "from %d to %d 文件%s发送完毕", userid, toid, path);
+    printf("文件%s发送完毕\n", path);
 }

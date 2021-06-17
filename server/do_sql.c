@@ -247,20 +247,48 @@ int base_GET_MANY_VALUE(info *ms, int fetch)
 bool event_recv_file_ready(info *ms)
 {
     int ufd = open("/proc/sys/kernel/random/uuid", O_RDONLY);
-    if (uid < 0)
+    if (ufd < 0)
     {
         zlog_error(ser, "/proc/sys/kernel/random/uuid can't open");
+        return false;
     }
-    char p[BUFLEN] = {0};
-    read(ufd, p, 37);
-    strcat(p, ms->value);
-    char path[MAX_PATH] = {0};
-    sscanf(ms->value, "%s", path);  //获取文件name
-    sprintf(p,
+    char uid[40] = {0};  //获取uuid
+    read(ufd, uid, 39);
+
+    zlog_info(ser, "uid:%s", uid);
+
+    char file[100] = {0};
+    strapy(file, ms->value);  //文件name
+    memset(ms->value, 0, BUFLEN);
+
+    zlog_info(ser, "fille:%s", file);
+    sprintf(ms->value,
             "insert into requests "
             "(requests.from,requests.to,requests.type,requests.how,requests."
-            "value,requests.if_read) values (%d,%d,%d,%d,\'%s%s\',0 )",
-            ms->from, ms->to, ms->type, ms->how, p);  // uuid(36)+path
+            "value,requests.if_read) values (%d,%d,%d,%d,\'/tmp/%s/%s\',0 )",
+            ms->from, ms->to, ms->type, ms->how, uid, file);  // uuid(36)+path
+    if (!base_sql_query(ms)) return false;
+    //插入数据到数据库
+    char savepath[PATH_MAX] = {0};
+    sprintf(savepath, "/tmp/%s/", uid);
+    if (mkdir(savepath, 0755))
+    {
+        zlog_error(ser, "%s can't creat", savepath);
+        return false;
+    }
+    strcat(savepath, file);
+    int fd = open(savepath, O_WRONLY | O_TRUNC | O_CREAT, 0777);
+    if (fd < 0)
+    {
+        zlog_error(ser, "%s can't creat file ", savepath);
+        return false;
+    }
 
-    memset(buf, 0, BUFLEN);
+    if (!recv_file(cfd, path))
+    {
+        zlog_error(cli, "send file error: %s", path);
+        return;
+    }
+
+    return true;
 }

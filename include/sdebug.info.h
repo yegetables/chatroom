@@ -1,6 +1,5 @@
 #ifndef MYINCLUDE
 #define MYINCLUDE
-#endif
 
 #include <arpa/inet.h>
 #include <assert.h>
@@ -8,6 +7,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <getopt.h>
+#include <libgen.h>
 #include <linux/limits.h>
 #include <netinet/in.h>
 #include <pthread.h>
@@ -33,7 +33,6 @@
 
 #include "color.h"
 
-
 #define DEBUGPRINT(FORMAT, ...)                                       \
     {                                                                 \
         char *t = strrchr(__FILE__, '/');                             \
@@ -53,3 +52,4 @@
                 __FUNCTION__, __LINE__, ##__VA_ARGS__, strerror(errno)); \
         exit(-1);                                                        \
     }
+#endif

@@ -107,7 +107,7 @@ bool recv_file(int cfd, info *ms)
     int errornumber = 0;
 }
 
-bool send_file(int cfd, char *pathname)
+bool send_file(int cfd, char *path)
 {
     zlog_category_t *tmp = NULL;
 #ifdef PROJECT_SERVER

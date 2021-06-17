@@ -107,7 +107,7 @@ void cli_search_user(void);
 /**
  * @brief 进入好友申请管理
  */
-void show_applicationss_menu(void);
+void show_applications_menu(void);
 
 /**
  * @brief 同意或拒绝申请
@@ -175,4 +175,4 @@ void message_menu(int toid);
  * @param toid 对方id
  * 只在数据库添加文件信息和路径
  */
-void send_file_menu(int toid)
+void send_file_menu(int toid);
