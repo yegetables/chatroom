@@ -71,7 +71,7 @@ void show_main_menu(void)
 void show_management_friends_menu(void)
 {
     int c;
-reshow:
+reshow:;
     printf("-----好友管理----\n");
     printf("1.添加好友\n");
     printf("2.删除好友\n");
@@ -142,7 +142,7 @@ void cli_recv_file(int toid, int is)
     char sname[BUFLEN];    //本地保存文件路径
     char relname[BUFLEN/2];  //服务器真实文件名
     char* b;
-resdd:
+resdd:;
     memset(fname, 0, PATH_MAX);
     printf("输入文件名\n");
     scanf("%s", fname);
@@ -324,7 +324,7 @@ void show_secret_chat_menu(void)
         return;
     }
     int c;
-reshow:
+reshow:;
     printf("-----私聊选项----\n");
     printf("1.发送消息\n");
     printf("2.发送文件\n");

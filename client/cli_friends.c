@@ -187,7 +187,7 @@ void cli_shield_friend(int is)
 
 void cli_search_user(void)
 {
-reshow:
+reshow:;
     printf("1.输入id    2.输入namen 3.返回上一层\n");
     int t = 1;
     scanf("%d", &t);

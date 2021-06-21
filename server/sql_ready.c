@@ -20,7 +20,7 @@ MYSQL* sql_connect(void)
     // 2. 创建RUNOOB数据库，并设定编码集为utf8
     MYSQL* conn = NULL;
     errornumber = 0;
-reinit:
+reinit:;
     conn = mysql_init(NULL);
     if (conn == NULL)
     {

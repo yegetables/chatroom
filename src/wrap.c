@@ -18,7 +18,7 @@ int Accept(int fd, struct sockaddr *sa, socklen_t *salenptr)
 {
     int n;
 
-again:
+again:;
     if ((n = accept(fd, sa, salenptr)) < 0)
     {
         if ((errno == ECONNABORTED) || (errno == EINTR))
@@ -69,7 +69,7 @@ ssize_t Read(int fd, void *ptr, size_t nbytes)
 {
     ssize_t n;
 
-again:
+again:;
     if ((n = read(fd, ptr, nbytes)) == -1)
     {
         if (errno == EINTR)
@@ -84,7 +84,7 @@ ssize_t Write(int fd, const void *ptr, size_t nbytes)
 {
     ssize_t n;
 
-again:
+again:;
     if ((n = write(fd, ptr, nbytes)) == -1)
     {
         if (errno == EINTR)
@@ -163,7 +163,7 @@ static ssize_t my_read(int fd, char *ptr)
 
     if (read_cnt <= 0)
     {
-    again:
+    again:;
         if ((read_cnt = read(fd, read_buf, sizeof(read_buf))) < 0)
         {
             if (errno == EINTR) goto again;

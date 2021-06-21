@@ -52,7 +52,7 @@ void client_event(int cfd, int event, void *args)
         goto over;
     }
 
-over:
+over:;
     p = showevents(ev);
     zlog_debug(ser, "to:%s", p);
     free(p);
