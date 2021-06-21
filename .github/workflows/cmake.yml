@@ -21,8 +21,6 @@ jobs:
         shell: bash
       - name: checkout chatroom
         uses: actions/checkout@master
-      - name: ls2 
-        run: ls $GITHUB_WORKSPACE/
       - name: cmake 
         run: mkdir $GITHUB_WORKSPACE/build && cd $GITHUB_WORKSPACE/build && cmake $GITHUB_WORKSPACE  --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug 
         shell: bash
