@@ -7,20 +7,21 @@ include_directories(${CMAKE_SOURCE_DIR}/server)
 
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
-link_directories(${CMAKE_SOURCE_DIR}/lib/cjson)
-link_directories(${CMAKE_SOURCE_DIR}/lib/zlog)
+# link_directories(${CMAKE_SOURCE_DIR}/lib/cjson)
+# link_directories(${CMAKE_SOURCE_DIR}/lib/zlog)
 
 
 set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 
-add_executable(server.out ${SERVER_SRCS}  ${RELY_FUNC_SRCS} )
+add_executable(server.out  ${SERVER_SRCS}  ${RELY_FUNC_SRCS} )
 
 configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/server/config.h )
 
 
-add_definitions(  -g -Wall -DDEBUG -DPROJECT_SERVER )
+add_definitions(   -DDEBUG -DPROJECT_SERVER )
+add_compile_options(-g -Wall  -std=c17 )
 # -fsanitize=address -fno-omit-frame-pointer
 
 

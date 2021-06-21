@@ -1,22 +1,20 @@
 #include "common.h"
 
-typedef struct
-{
-    int from_id;
-    long f_size;
-    char path[PATH_MAX / 2];
-    off_t offset;
+typedef struct {
+	int from_id;
+	long f_size;
+	char path[PATH_MAX / 2];
+	off_t offset;
 
 } file_ready;
-typedef struct
-{
-    int fd;      //  要监听的文件描述符
-    int events;  //  对应的监听事件
-    void *arg;   //  泛型参数
-    void (*call_back)(int fd, int events, void *arg);  //  回调函数
-    int status;  //  是否在监听:1->在红黑树上(监听), 0->不在(不监听)
-    info js;  // 消息结构
-} events;     // epoll事件的void*
+typedef struct {
+	int fd; //  要监听的文件描述符
+	int events; //  对应的监听事件
+	void *arg; //  泛型参数
+	void (*call_back)(int fd, int events, void *arg); //  回调函数
+	int status; //  是否在监听:1->在红黑树上(监听), 0->不在(不监听)
+	info js; // 消息结构
+} events; // epoll事件的void*
 
 /**
  * @brief 读取服务端配置
@@ -33,7 +31,7 @@ void ser_setconfig(char *filename);
  * @param arg
  */
 void epoll_set(events *ev, int fd, void (*call_back)(int, int, void *),
-               void *arg);
+	       void *arg);
 
 /**
  * @brief 添加事件进入epfd
