@@ -21,7 +21,7 @@ bool recv_info(int cfd, info *ms)
     int returnnumber = 0;
     // 记录错误次数
     int errornumber = 0;
-rerecv:
+rerecv:;
     if ((returnnumber = recv(cfd, ms, sizeof(info), 0)) != sizeof(info))
     {
         if (returnnumber == 0) return false;
@@ -44,7 +44,7 @@ rerecv:
         }
         goto rerecv;
 
-    over:
+    over:;
         zlog_error(tmp, "recv info failed %s:%s over", show_errno(),
                    strerror(errno));
         return false;
@@ -65,7 +65,7 @@ bool send_info(int cfd, info *ms)
     // 记录错误次数
     int errornumber = 0;
 
-resend:
+resend:;
     if (sizeof(info) != (returnnumber = send(cfd, ms, sizeof(info), 0)))
     {
         if (returnnumber == 0) return false;
@@ -85,7 +85,7 @@ resend:
         }
         goto resend;
 
-    over:
+    over:;
         zlog_error(tmp, "send info failed %s:%s over", show_errno(),
                    strerror(errno));
         return false;
@@ -133,7 +133,7 @@ bool recv_file(int cfd, char *path, long int f_size)
         return false;
     }
     // off_t offset = 0;
-resend:
+resend:;
     // if (f_size != offset + (returnnumber = recv(cfd, buf, f_size - offset,
     // 0)))
     if (f_size != (returnnumber = recv(cfd, buf, f_size, 0)))
@@ -159,7 +159,7 @@ resend:
             }
             goto resend;
 
-        over:
+        over:;
             zlog_error(tmp, "recv file failed %s:%s over", show_errno(),
                        strerror(errno));
             return false;
@@ -199,7 +199,7 @@ bool send_file(int cfd, char *path, long int f_size)
     }
 
 // off_t offset = 0;
-resend:
+resend:;
     /*
     ：sendfile——在文件描述符之间传输数据描述ssize_t sendfile(int out_fd, int
     in_fd, off_t *offset, size_t
@@ -236,7 +236,7 @@ resend:
             }
             goto resend;
 
-        over:
+        over:;
             zlog_error(tmp, "send file failed %s:%s over", show_errno(),
                        strerror(errno));
             return false;

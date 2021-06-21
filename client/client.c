@@ -64,7 +64,7 @@ int main(int argc, char **argv)
         socklen_t addrlen = sizeof(addr);
 
         errornumber = 0;
-    reconnect:
+    reconnect:;
         if (-1 ==
             (returnnumber = connect(cfd, (struct sockaddr *)&addr, addrlen)))
         {
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
         {
             zlog_info(cli, "login %s", username);
             errornumber = 0;
-        again:
+        again:;
 
             printf("请输入密码:\n");
             printf("忘记密码请输入#forget#username#email\n");

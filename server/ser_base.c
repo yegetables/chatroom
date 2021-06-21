@@ -285,7 +285,7 @@ void lfdaccept(int a, int b, void *args)
     setsockopt(lfd, SOL_SOCKET, SO_REUSEPORT, &a, (socklen_t)sizeof(int));
 
     // accept
-reaccept:
+reaccept:;
     int i   = 0;
     int cfd = 0;
     {

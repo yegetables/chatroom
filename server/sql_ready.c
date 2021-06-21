@@ -20,7 +20,7 @@ MYSQL* sql_connect(void)
     // 2. 创建RUNOOB数据库，并设定编码集为utf8
     MYSQL* conn = NULL;
     errornumber = 0;
-reinit:
+reinit:;
     conn = mysql_init(NULL);
     if (conn == NULL)
     {
@@ -186,7 +186,7 @@ bool sql_init_table(MYSQL* sql_l)
                 "CREATE TABLE  IF NOT EXISTS `group` ("
                 "`group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
                 "`group_name` varchar(30) NOT NULL,"
-                "PRIMARY KEY (`user_id`)"
+                "PRIMARY KEY (`group_id`)"
                 ") ENGINE=InnoDB AUTO_INCREMENT=50000 DEFAULT CHARSET=utf8");
         if (mysql_query(sql_l, q))
         {

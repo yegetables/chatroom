@@ -1,0 +1,39 @@
+name: CMake
+
+on:
+  push:
+    branches: [ chatroom , dev]
+  pull_request:
+    branches: [ chatroom , dev]
+
+jobs:
+  build_make:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout CJSON
+        uses: actions/checkout@master
+        with:
+          repository: 'DaveGamble/cJSON'
+          path: "$GITHUB_WORKSPACE/.."          
+      - name: build cjson
+        run:  cmake . && make &&  sudo make install 
+        shell: bash    
+
+      - name: checkout ZLOG
+        uses: actions/checkout@master
+        with:
+          repository: 'HardySimpson/zlog'
+          path: "$GITHUB_WORKSPACE/.."          
+      - name: build zlog
+        run:  cmake . && make &&  sudo make install && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
+        shell: bash
+        
+      - name: checkout chatroom
+        uses: actions/checkout@master
+      - name: cmake 
+        run: mkdir $GITHUB_WORKSPACE/build && cd $GITHUB_WORKSPACE/build && cmake $GITHUB_WORKSPACE  --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug 
+        shell: bash
+      - name:  make
+        run: cd $GITHUB_WORKSPACE/build && make
+        shell: bash
+      
