@@ -8,18 +8,18 @@ include_directories(${CMAKE_SOURCE_DIR}/client)
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 link_directories(${CMAKE_SOURCE_DIR}/lib/cjson)
-link_directories(${CMAKE_SOURCE_DIR}/lib/zlog)
 
 
 set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 
-add_executable(client.out ${CLIENT_SRCS}  ${RELY_FUNC_SRCS} )
+add_executable(client.out  ${CLIENT_SRCS}  ${RELY_FUNC_SRCS} )
 
 configure_file(${CMAKE_SOURCE_DIR}/rely/config.h.in ${CMAKE_SOURCE_DIR}/client/config.h )
 
-add_definitions(  -g -Wall -DDEBUG -DPROJECT_CLIENT )
+add_definitions(   -DDEBUG -DPROJECT_CLIENT )
+add_compile_options(-g -Wall  -std=c17 )
 
 
 
