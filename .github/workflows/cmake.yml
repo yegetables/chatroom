@@ -16,7 +16,7 @@ jobs:
           repository: 'DaveGamble/cJSON'
           path: "$GITHUB_WORKSPACE/.."          
       - name: build cjson
-        run:  cmake .. && make &&  sudo make install 
+        run:  cmake . &&  make &&  sudo make install 
         shell: bash    
 
       - name: checkout ZLOG
@@ -26,7 +26,7 @@ jobs:
           path: "$GITHUB_WORKSPACE/.."          
 
       - name: build zlog
-        run:  cmake .. && make &&  sudo make install && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
+        run:   cmake . && make &&  sudo make install && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
         shell: bash
         
       - name: checkout chatroom
