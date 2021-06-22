@@ -23,7 +23,7 @@ jobs:
         with:
           repository: 'HardySimpson/zlog'      
       - name: build zlog
-        run:  mkdir build && cd build && cmake ..  && make && sudo make install  && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
+        run:  make && sudo make install  && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
         shell: bash
         
       - name: checkout chatroom
