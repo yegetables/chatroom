@@ -7,7 +7,7 @@ include_directories(${CMAKE_SOURCE_DIR}/server)
 
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
-link_directories(${CMAKE_SOURCE_DIR}/lib/cjson)
+# link_directories(${CMAKE_SOURCE_DIR}/lib/cjson)
 # link_directories(${CMAKE_SOURCE_DIR}/lib/zlog)
 
 

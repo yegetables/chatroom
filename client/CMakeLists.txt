@@ -7,7 +7,6 @@ include_directories(${CMAKE_SOURCE_DIR}/client)
 
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
-link_directories(${CMAKE_SOURCE_DIR}/lib/cjson)
 
 
 set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_BINARY_DIR})
