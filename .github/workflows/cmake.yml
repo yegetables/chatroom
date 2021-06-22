@@ -13,27 +13,29 @@ jobs:
       - name: checkout CJSON
         uses: actions/checkout@master
         with:
-          repository: 'DaveGamble/cJSON'
-          path: "$GITHUB_WORKSPACE"          
+          repository: 'DaveGamble/cJSON'      
       - name: build cjson
-        run:  pwd && ls $GITHUB_WORKSPACE -R && cmake . && make &&  sudo make install 
+        run:  mkdir build && cd build && cmake .. -DENABLE_CJSON_UTILS=On -DENABLE_CJSON_TEST=Off -DCMAKE_INSTALL_PREFIX=/usr && make && sudo make DESTDIR=$pkgdir install 
         shell: bash    
 
       - name: checkout ZLOG
         uses: actions/checkout@master
         with:
-          repository: 'HardySimpson/zlog'
-          path: "$GITHUB_WORKSPACE/.."          
+          repository: 'HardySimpson/zlog'      
       - name: build zlog
-        run:  cmake . && make &&  sudo make install && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
+        run:  mkdir build && cd build && cmake ..  && make && sudo make install  && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
         shell: bash
         
       - name: checkout chatroom
         uses: actions/checkout@master
       - name: cmake 
-        run: mkdir $GITHUB_WORKSPACE/build && cd $GITHUB_WORKSPACE/build && cmake $GITHUB_WORKSPACE  --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug 
+        run:  cmake  --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
+        -B$GITHUB_WORKSPACE/build
+        -G "Unix Makefiles"
         shell: bash
+
       - name:  make
-        run: cd $GITHUB_WORKSPACE/build && make
+        run: cmake --build $GITHUB_WORKSPACE/build --config Debug --target all -j 10 --
         shell: bash
       
+ 
