@@ -7,7 +7,7 @@ on:
     branches: [ chatroom ]
 
 jobs:
-  zlog_job:
+  build&make_job:
     runs-on: ubuntu-latest
     steps:
       - name: checkout ZLOG
@@ -15,7 +15,6 @@ jobs:
         with:
           repository: 'HardySimpson/zlog'
           path: "$GITHUB_WORKSPACE/.."
-          
       - name: build zlog
         run:  make &&  sudo make install && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
         shell: bash
