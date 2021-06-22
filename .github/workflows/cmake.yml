@@ -14,9 +14,9 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: 'DaveGamble/cJSON'
-          path: "$GITHUB_WORKSPACE/.."          
+          path: "$GITHUB_WORKSPACE"          
       - name: build cjson
-        run:  cmake . && make &&  sudo make install 
+        run:  pwd && ls $GITHUB_WORKSPACE -R && cmake . && make &&  sudo make install 
         shell: bash    
 
       - name: checkout ZLOG
