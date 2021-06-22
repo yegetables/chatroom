@@ -1,8 +1,6 @@
 name: Clang-tidy
 
 on:
-  push:
-    branches: [ chatroom ]
   pull_request:
     branches: [ chatroom ]
 
