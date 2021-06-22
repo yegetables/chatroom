@@ -7,7 +7,7 @@ on:
     branches: [ chatroom ]
 
 jobs:
-  build&make-job:
+  build make:
     runs-on: ubuntu-latest
     steps:
       - name: checkout ZLOG
