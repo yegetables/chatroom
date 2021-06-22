@@ -29,9 +29,7 @@ jobs:
       - name: checkout chatroom
         uses: actions/checkout@master
       - name: cmake 
-        run:  cmake  --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug
-        -B$GITHUB_WORKSPACE/build
-        -G "Unix Makefiles"
+        run:  cmake  --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -B$GITHUB_WORKSPACE/build -G "Unix Makefiles"
         shell: bash
 
       - name:  make
