@@ -14,16 +14,19 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: 'DaveGamble/cJSON'  
+      - mame: make cjson
         run:  mkdir build && cd build && cmake .. -DENABLE_CJSON_UTILS=On -DENABLE_CJSON_TEST=Off -DCMAKE_INSTALL_PREFIX=/usr && make && sudo make DESTDIR=$pkgdir install 
         shell: bash   
       - name: build zlog
         uses: actions/checkout@master
         with:
           repository: 'HardySimpson/zlog'      
+      - name: make zlog  
         run:  make && sudo make install  && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
         shell: bash
       - name: build chatroom
         uses: actions/checkout@master
+      - name: make chatroom
         run:  cmake  --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -B$GITHUB_WORKSPACE/build -G "Unix Makefiles" && cmake --build $GITHUB_WORKSPACE/build --config Debug --target all -j 10 --
         shell: bash
       
