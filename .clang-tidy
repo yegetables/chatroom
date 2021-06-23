@@ -1,5 +1,2 @@
-Checks:          'llvm-*,google-*,misc-*,readability-*'
-WarningsAsErrors: ''
-HeaderFilterRegex: ''
-AnalyzeTemporaryDtors: false
+Checks:          'google-*,readability-*'
 FormatStyle:     Google
