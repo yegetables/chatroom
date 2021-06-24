@@ -33,6 +33,15 @@
 #include <unistd.h>
 
 #include "color.h"
+#define move_up(nums) printf("\r\033[%dA", nums);
+#define move_down(nums) printf("\r\033[%dB", nums);
+#define move_left(nums) printf("\033[%dC", nums);
+#define move_right(nums) printf("\033[%dD", nums);
+#define move_save printf("\033[s"); // 保存光标位置
+#define move_reset printf("\033[u"); //恢复光标位置
+#define move_cll printf("\r\033[K"); //清行
+#define move_cls printf("\033[2J"); //清屏
+
 
 #define DEBUGPRINT(FORMAT, ...)                                               \
 	{                                                                     \

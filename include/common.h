@@ -7,7 +7,13 @@
 
 #define BUFLEN 4096
 #define MAXCLIENT 5000
-
+/*
+#if defined _WIN64 || defined _WIN32
+#define CLREAR "cls"
+#elif defined __linux
+#define CLREAR "clear"
+#endif
+*/
 #define HUP_NO 0
 // 是否存在
 #define IF_HAS 1
