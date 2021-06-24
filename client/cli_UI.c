@@ -7,29 +7,24 @@ extern int cfd;
 int applications;
 int messages;
 int files;
-
+extern int show_line;
+extern char who_send_msg[BUFLEN];
+extern char who_send_file[BUFLEN];
 void information_bar(void)
 {
-	char *who_send_msg = (char *)calloc(BUFLEN, sizeof(char));
-	char *who_send_file = (char *)calloc(BUFLEN, sizeof(char));
-	update_notices(who_send_msg, who_send_file);
 	//准备消息来源名单
 	printf("----------%d:applications--------\n", applications);
 	printf("------------%d:messages from (%s)----------\n", messages,
 	       who_send_msg);
 	printf("-----------%d:files from (%s)--------------\n", files,
 	       who_send_file);
-	free(who_send_msg);
-	free(who_send_file);
 }
 
 void show_main_menu(void)
 {
 	int c;
 	while (1) {
-		// gudingxinxi
-		information_bar();
-
+		re_show();
 		printf("1.好友列表\n"); //在线/昵称/id/屏蔽
 		printf("2.好友管理\n"); // id
 		printf("3.开始私聊\n");
@@ -40,9 +35,8 @@ void show_main_menu(void)
 		// printf("8.找回密码\n");//登陆界面
 		printf("8.好友设置\n");
 		printf("0.退出登录\n");
-		printf("-------------------\n");
-
 		scanf("%d", &c);
+		show_line += 10;
 		switch (c) {
 		case 1:
 			cli_show_friends(); //好友列表
@@ -73,6 +67,7 @@ void show_management_friends_menu(void)
 {
 	int c;
 reshow:;
+	re_show();
 	printf("-----好友管理----\n");
 	printf("1.添加好友\n");
 	printf("2.删除好友\n");
@@ -82,6 +77,7 @@ reshow:;
 	printf("6.搜索用户\n");
 	printf("0.返回上一层\n");
 	scanf("%d", &c);
+	show_line += 9;
 	switch (c) {
 	case 0: //返回上一层
 		return;
@@ -112,6 +108,7 @@ reshow:;
 void show_applicationss_menu(void)
 {
 	int c;
+	re_show();
 	printf("-----好友申请----\n");
 	//列出申请列表
 	show_apply_friends();
@@ -119,6 +116,7 @@ void show_applicationss_menu(void)
 	printf("2.拒绝申请\n");
 	printf("0.返回上一层\n");
 	scanf("%d", &c);
+	show_line += 5;
 	switch (c) {
 	case 0: //返回上一层
 		return;

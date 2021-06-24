@@ -49,6 +49,8 @@ void update_notices(char *user_msg, char *user_files)
 	files = 0;
 	int id_num[30000] = { 0 };
 	char p[BUFLEN] = { 0 };
+	memset(user_msg, 0, BUFLEN);
+	memset(user_files, 0, BUFLEN);
 	info *ms = (info *)malloc(sizeof(info));
 	{
 		memset(p, 0, sizeof(p));

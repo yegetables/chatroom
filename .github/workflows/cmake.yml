@@ -1,8 +1,6 @@
 name: CMake
 
 on:
-  push:
-    branches: [ chatroom , dev]
   pull_request:
     branches: [ chatroom , dev]
 
@@ -10,6 +8,8 @@ jobs:
   build_make:
     runs-on: ubuntu-latest
     steps:
+
+
       - name: build cjson
         uses: actions/checkout@master
         with:
@@ -17,6 +17,8 @@ jobs:
       - name: make cjson
         run:  mkdir build && cd build && cmake .. -DENABLE_CJSON_UTILS=On -DENABLE_CJSON_TEST=Off -DCMAKE_INSTALL_PREFIX=/usr && make && sudo make DESTDIR=$pkgdir install 
         shell: bash   
+      
+
       - name: build zlog
         uses: actions/checkout@master
         with:
@@ -24,6 +26,8 @@ jobs:
       - name: make zlog  
         run:  make && sudo make install  && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
         shell: bash
+
+
       - name: build chatroom
         uses: actions/checkout@master
       - name: make chatroom

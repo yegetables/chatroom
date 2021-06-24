@@ -216,3 +216,12 @@ void cli_show_groups(void);
  *
  */
 void show_management_groups_menu(void);
+
+/**
+ * @brief 重新刷新信息栏
+ *
+ * @param nums 向上移动行数
+ */
+void re_show(void);
+
+void move_clln(int nums);

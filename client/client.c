@@ -5,6 +5,9 @@ int userid;
 #define SLEEP_TIME 3
 zlog_category_t *cli = NULL;
 int cfd;
+int show_line = 0;
+char who_send_msg[BUFLEN];
+char who_send_file[BUFLEN];
 int main(int argc, char **argv)
 {
 	srand((unsigned)time(NULL));
@@ -24,6 +27,7 @@ int main(int argc, char **argv)
 	{
 		signal(SIGQUIT, signalcatch);
 		signal(SIGINT, signalcatch);
+		signal(SIGALRM, signalcatch);
 	}
 
 	/// 解析命令行
@@ -46,6 +50,7 @@ int main(int argc, char **argv)
 
 			///  @todo help手册
 			printf("******************************\n");
+			show_line++;
 		}
 		if (argc < 2) {
 			printf("usage: ./client ipaddr port \n");
@@ -92,6 +97,7 @@ int main(int argc, char **argv)
 		printf("登录请输入你的用户名\n");
 		printf("注册请输入你想要的用户名\n");
 		printf("(不超过15个字符)\n");
+
 		char passwd[30];
 		char email[50];
 		memset(username, 0, sizeof(username));
@@ -105,6 +111,7 @@ int main(int argc, char **argv)
 			if (username[strlen(username) - 1] == '\n')
 				username[strlen(username) - 1] = '\0';
 		}
+		show_line += 4;
 		/// login
 		if (cli_accessusername(username)) {
 			zlog_info(cli, "login %s", username);
@@ -113,8 +120,8 @@ int main(int argc, char **argv)
 
 			printf("请输入密码:\n");
 			printf("忘记密码请输入#forget#username#email\n");
-
 			fgets(passwd, 25, stdin);
+			show_line += 3;
 			{
 				if (passwd[strlen(passwd) - 2] == '\r' &&
 				    passwd[strlen(passwd) - 1] == '\n')
@@ -131,6 +138,7 @@ int main(int argc, char **argv)
 				// 重置 密码
 				printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n",
 				       username, passwd);
+				show_line++;
 				zlog_info(cli, "重置密码成功:用户名:%s 密码:%s",
 					  username, passwd);
 			}
@@ -139,16 +147,20 @@ int main(int argc, char **argv)
 				zlog_info(cli,
 					  "login %s passwd right passwd:%s",
 					  username, passwd);
-				if (cli_accessonline(username))
+				if (cli_accessonline(username)) {
+					show_line++;
 					printf("您的账号已在别处下线\n");
+				}
 				zlog_info(cli, "login success");
 				printf("登录成功\n");
+				show_line++;
 			} else {
 				errornumber++;
 				if (errornumber == 3) {
 					printf("密码错误次数太多，暂时锁定帐号%s,"
 					       "一分钟以后重新登陆\n",
 					       username);
+					show_line++;
 					zlog_warn(
 						cli,
 						"login %s passwd error passwd error 3 times ",
@@ -160,6 +172,7 @@ int main(int argc, char **argv)
 						"login %s passwd error  %d times ",
 						username, errornumber);
 					printf("密码错误\n");
+					show_line++;
 					goto again;
 				}
 			}
@@ -170,6 +183,7 @@ int main(int argc, char **argv)
 			printf("用户名:%s\n", username);
 			printf("密码开头不能是#,不超过24位\n");
 			printf("密码:");
+			show_line += 5;
 			fgets(passwd, 25, stdin);
 			{
 				if (passwd[strlen(passwd) - 2] == '\r' &&
@@ -180,6 +194,7 @@ int main(int argc, char **argv)
 			}
 			printf("输入验证邮箱:\n");
 			printf("邮箱不超过48位\n");
+			show_line += 3;
 			fgets(email, 50, stdin);
 			{
 				if (email[strlen(email) - 2] == '\r' &&
@@ -205,14 +220,17 @@ int main(int argc, char **argv)
 			       username, passwd, email);
 			zlog_info(cli, "注册成功:用户名:%s 密码:%s 邮箱:%s",
 				  username, passwd, email);
+			show_line += 2;
 		}
 	}
 
 	// 进入功能菜单
 	userid = cli_setonline(username);
-	if (userid > 0)
+	if (userid > 0) {
+		// system("clear");
+		alarm(10);
 		show_main_menu();
-	else
+	} else
 		zlog_error(cli, "userid %d  error", userid);
 	close(cfd);
 	zlog_fini();
@@ -223,23 +241,16 @@ void signalcatch(int signal)
 {
 	// 退出信号
 	switch (signal) {
-#ifdef SIGINT
 	case SIGINT:
-#endif
-#ifdef SIGQUIT
 	case SIGQUIT:
-#endif
 		zlog_debug(cli, "catch signal %s exit", show_signal(signal));
 		zlog_fini();
 		close(cfd);
 		exit(1);
-#ifdef SIGCLD
-	case SIGCLD:
-#endif
-		zlog_debug(cli, "catch signal %s return", show_signal(signal));
-		zlog_fini();
-		close(cfd);
-		exit(1);
+	case SIGALRM:
+		update_notices(who_send_msg, who_send_file);
+		alarm(10);
+		return;
 		// 异常退出
 	}
 }
