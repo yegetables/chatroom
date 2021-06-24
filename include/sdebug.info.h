@@ -34,22 +34,22 @@
 
 #include "color.h"
 
-#define DEBUGPRINT(FORMAT, ...)                                       \
-    {                                                                 \
-        char *t = strrchr(__FILE__, '/');                             \
-        printf("[%s]", t);                                            \
-        printf("[%s][%d]" YELLOW FORMAT NONECOLOR "\n", __FUNCTION__, \
-               __LINE__, ##__VA_ARGS__);                              \
-    }
+#define DEBUGPRINT(FORMAT, ...)                                               \
+	{                                                                     \
+		char *t = strrchr(__FILE__, '/');                             \
+		printf("[%s]", t);                                            \
+		printf("[%s][%d]" YELLOW FORMAT NONECOLOR "\n", __FUNCTION__, \
+		       __LINE__, ##__VA_ARGS__);                              \
+	}
 
-#define PRINTEXIT(FORMAT, ...)                                           \
-    {                                                                    \
-        char *t = strrchr(__FILE__, '/');                                \
-        fprintf(stderr, "[%s]", t);                                      \
-        fprintf(stderr,                                                  \
-                "[%s][%d]" YELLOW FORMAT NONECOLOR                       \
-                ":%s"                                                    \
-                "\n",                                                    \
-                __FUNCTION__, __LINE__, ##__VA_ARGS__, strerror(errno)); \
-        exit(-1);                                                        \
-    }
+#define PRINTEXIT(FORMAT, ...)                                   \
+	{                                                        \
+		char *t = strrchr(__FILE__, '/');                \
+		fprintf(stderr, "[%s]", t);                      \
+		fprintf(stderr,                                  \
+			"[%s][%d]" YELLOW FORMAT NONECOLOR ":%s" \
+			"\n",                                    \
+			__FUNCTION__, __LINE__, ##__VA_ARGS__,   \
+			strerror(errno));                        \
+		exit(-1);                                        \
+	}
