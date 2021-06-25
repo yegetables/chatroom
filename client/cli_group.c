@@ -3,10 +3,9 @@
 extern zlog_category_t *cli;
 extern int userid;
 extern char username[30];
-
+extern int show_line;
 void cli_show_groups(void)
 {
-   
 	char p[BUFLEN] = { 0 };
 	int status; //在线
 	int shield; // 屏蔽
@@ -100,6 +99,23 @@ void cli_show_groups(void)
 	}
 }
 
-void show_management_groups_menu(void)
+int cli_create_group(int uid)
 {
+	char groupname[20] = { 0 };
+	int groupid = -1;
+	printf("输入群聊名称\n");
+	scanf("%s", groupname);
+
+	char p[BUFLEN] = { 0 };
+	sprintf(p, "aa");
+	info *ms = cli_creatinfo(userid, 0, sql, WHAT_FIRST_VALUE, p);
+	if (ms == NULL) {
+		zlog_error(cli, "recv none ");
+		return groupid;
+	}
+	groupid = atoi(ms->value);
+
+	if (ms)
+		free(ms);
+	return groupid;
 }

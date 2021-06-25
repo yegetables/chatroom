@@ -7,22 +7,14 @@ bool cli_register(char *name, char *passwd, char *email) // IF_DONE
 {
 	if (name == NULL || passwd == NULL || email == NULL)
 		return false;
-
 	char p[BUFLEN] = { 0 };
-
 	sprintf(p,
 		"INSERT INTO user (user_name,user_passwd, user_email,user_status) "
 		"VALUES ( "
 		"\'%s\',\'%s\',\'%s\',0);",
 		name, passwd, email);
-	info *ms = (info *)malloc(sizeof(info));
-	{
-		strcpy(ms->value, p);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, IF_DONE);
+	info *ms = NULL;
+	ms = cli_creatinfo(userid, 0, sql, IF_DONE, p);
 	if (ms == NULL)
 		return false;
 	int s = atoi(ms->value);
@@ -48,15 +40,7 @@ bool cli_accesspasswd(char *name, char *passwd) // IF_HAS
 			"select * from user where user_name =\'%s\' and "
 			"user_passwd=\'%s\';",
 			name, passwd);
-
-	info *ms = (info *)malloc(sizeof(info));
-	{
-		strcpy(ms->value, p);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, IF_HAS);
+	info *ms = cli_creatinfo(userid, 0, sql, IF_HAS, p);
 	if (ms == NULL)
 		return false;
 	int s = atoi(ms->value);
@@ -77,15 +61,7 @@ bool cli_accessonline(char *name) // WHAT_FIRST_VALUE
 
 	sprintf(p, "SELECT user_status  FROM user where user_name =\'%s\';",
 		name);
-
-	info *ms = (info *)malloc(sizeof(info));
-	{
-		strcpy(ms->value, p);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, WHAT_FIRST_VALUE);
+	info *ms = cli_creatinfo(userid, 0, sql, WHAT_FIRST_VALUE, p);
 	if (ms == NULL)
 		return false;
 	int s = atoi(ms->value);
@@ -105,14 +81,7 @@ int cli_setonline(char *name) // SET_ONLINE
 	sprintf(p,
 		"update user set  user_status= \'1\'  where user_name= \'%s\' ;",
 		name);
-	info *ms = (info *)malloc(sizeof(info));
-	{
-		strcpy(ms->value, p);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, SET_ONLINE);
+	info *ms = cli_creatinfo(userid, 0, sql, SET_ONLINE, p);
 	if (ms == NULL)
 		return -1;
 	int s = atoi(ms->value);

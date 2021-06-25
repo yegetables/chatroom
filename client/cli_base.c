@@ -51,23 +51,15 @@ void update_notices(char *user_msg, char *user_files)
 	char p[BUFLEN] = { 0 };
 	memset(user_msg, 0, BUFLEN);
 	memset(user_files, 0, BUFLEN);
-	info *ms = (info *)malloc(sizeof(info));
+	info *ms = NULL;
+
 	{
-		memset(p, 0, sizeof(p));
+		memset(p, 0, BUFLEN);
 		sprintf(p,
 			"select * from requests  where requests.to= \'%d\' and "
 			"requests.how=\'%d\';",
 			userid, ADD_FRIEND);
-
-		{
-			memset(ms->value, 0, sizeof(ms->value));
-			strcpy(ms->value, p);
-			ms->type = sql;
-			ms->from = userid;
-			ms->to = 0;
-			ms->how = MANY_RESULT;
-		}
-		ms = cli_send_recv(ms, MANY_RESULT);
+		ms = cli_creatinfo(userid, 0, sql, MANY_RESULT, p);
 		if (ms == NULL) {
 			zlog_error(cli, "get applications failed ");
 			return;
@@ -87,12 +79,7 @@ void update_notices(char *user_msg, char *user_files)
 				"requests.to=relationship.id_1  and relationship.if_shield=0 "
 				"and requests.if_read=0 ;",
 				userid, MESSAGES); //未屏蔽的消息
-			memset(ms->value, 0, sizeof(ms->value));
-			strcpy(ms->value, p);
-			ms->type = sql;
-			ms->from = userid;
-			ms->to = 0;
-			ms = cli_send_recv(ms, GET_MESSAGE_FROM); // 1
+			ms = cli_creatinfo(userid, 0, sql, GET_MESSAGE_FROM, p);
 			if (ms == NULL) {
 				zlog_error(cli, "get messages failed ");
 				return;
@@ -131,7 +118,6 @@ void update_notices(char *user_msg, char *user_files)
 
 	{
 		memset(p, 0, sizeof(p));
-
 		sprintf(p,
 			"select  requests.from from requests,relationship  "
 			"where requests.to= \'%d\' and requests.type=\'%d\'"
@@ -139,12 +125,7 @@ void update_notices(char *user_msg, char *user_files)
 			"requests.to=relationship.id_1  and relationship.if_shield=0 "
 			"and requests.if_read=0 ;",
 			userid, file); //未屏蔽的文件
-		memset(ms->value, 0, sizeof(ms->value));
-		strcpy(ms->value, p);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-		ms = cli_send_recv(ms, GET_MESSAGE_FROM); // 1
+		ms = cli_creatinfo(userid, 0, sql, GET_MESSAGE_FROM, p);
 		if (ms == NULL) {
 			zlog_error(cli, "get messages failed ");
 			return;
@@ -152,31 +133,34 @@ void update_notices(char *user_msg, char *user_files)
 	}
 
 	files = atoi(ms->value);
-	char *b = strchr(ms->value, '\n');
-	if (b == NULL) {
-		zlog_error(cli, "value:%s", ms->value);
-		exit(-1);
-	}
 
-	b++;
-	int maxid = 0;
-	int minid = 300000;
-	memset(id_num, 0, sizeof(id_num));
-	for (int i = 0; i < files && b != NULL; i++, b++) {
-		int id;
-		sscanf(b, "%d", &id);
+	{
+		char *b = strchr(ms->value, '\n');
+		if (b == NULL) {
+			zlog_error(cli, "value:%s", ms->value);
+			exit(-1);
+		}
 
-		if (id > maxid)
-			maxid = id;
-		if (id < minid)
-			minid = id;
-		id_num[id]++;
-		b = strchr(b, '\n');
-	}
-	for (int j = minid; j <= maxid; j++) {
-		if (id_num[j] > 0)
-			sprintf(&user_files[strlen(user_files)], "[%d:%d]", j,
-				id_num[j]);
+		b++;
+		int maxid = 0;
+		int minid = 300000;
+		memset(id_num, 0, sizeof(id_num));
+		for (int i = 0; i < files && b != NULL; i++, b++) {
+			int id;
+			sscanf(b, "%d", &id);
+
+			if (id > maxid)
+				maxid = id;
+			if (id < minid)
+				minid = id;
+			id_num[id]++;
+			b = strchr(b, '\n');
+		}
+		for (int j = minid; j <= maxid; j++) {
+			if (id_num[j] > 0)
+				sprintf(&user_files[strlen(user_files)],
+					"[%d:%d]", j, id_num[j]);
+		}
 	}
 
 	if (ms)
@@ -205,4 +189,16 @@ long int get_file_size(char *path)
 		return -1;
 	}
 	return statbuf.st_size;
+}
+
+info *cli_creatinfo(int from, int to, value_type type, int how, char *value)
+{
+	info *ms = (info *)malloc(sizeof(info));
+	strcpy(ms->value, value);
+	ms->how = how;
+	ms->type = type;
+	ms->from = from;
+	ms->to = to;
+	ms = cli_send_recv(ms, how);
+	return ms;
 }

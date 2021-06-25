@@ -224,4 +224,29 @@ void show_management_groups_menu(void);
  */
 void re_show(void);
 
+/**
+ * @brief 光标移动,定行清除
+ *
+ * @param nums 从本行向下数nums行
+ */
 void move_clln(int nums);
+
+/**
+ * @brief 创建新群组
+ *
+ * @param uid userid
+ * @return int gruopid
+ */
+int cli_create_group(int uid);
+
+/**
+ * @brief 创建json请求并发送
+ * 记得free
+ * @param from 
+ * @param to 
+ * @param type 
+ * @param how 
+ * @param value 
+ * @return info* 返回的info,要求free
+ */
+info *cli_creatinfo(int from, int to, value_type type, int how, char *value);
