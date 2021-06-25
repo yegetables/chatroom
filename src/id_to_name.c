@@ -31,15 +31,10 @@ char *id_to_name(int id, char *name)
 
 #else
 
-	info *ms = (info *)malloc(sizeof(info));
-	{
-		sprintf(ms->value,
-			"select user_name from user where user_id=\'%d\';", id);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, WHAT_FIRST_VALUE);
+	info *ms = NULL;
+	char p[BUFLEN] = { 0 };
+	sprintf(p, "select user_name from user where user_id=\'%d\';", id);
+	ms = cli_creatinfo(userid, 0, sql, WHAT_FIRST_VALUE, p);
 	if (ms == NULL) {
 		zlog_error(cli, "recv error");
 		return NULL;
@@ -47,7 +42,6 @@ char *id_to_name(int id, char *name)
 	strcpy(name, ms->value);
 	if (ms)
 		free(ms);
-
 #endif
 	return name;
 }
@@ -75,16 +69,10 @@ int name_to_id(char *name)
 
 #else
 
-	info *ms = (info *)malloc(sizeof(info));
-	{
-		sprintf(ms->value,
-			"select user_id from user where user_name=\'%s\';",
-			name);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, WHAT_FIRST_VALUE);
+	info *ms = NULL;
+	char p[BUFLEN] = { 0 };
+	sprintf(p, "select user_id from user where user_name=\'%s\';", name);
+	ms = cli_creatinfo(userid, 0, sql, WHAT_FIRST_VALUE, p);
 	if (ms == NULL) {
 		zlog_error(cli, "recv error");
 		return -1;
