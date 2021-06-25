@@ -1,5 +1,25 @@
 #include "common.h"
 
+// q->u
+//禁言
+#define NO_TALK 1
+//不禁言
+#define TALK 0
+
+// u->q
+//群主
+#define OWNER 7
+//管理员
+#define MANER 3
+//群员
+#define PEOPLE 1
+//未加入
+#define NO_PEORPLE0
+//屏蔽
+#define SHIELD 8
+//不屏蔽
+#define NO_SHIELD 0
+
 typedef struct {
 	int from_id;
 	long f_size;
@@ -221,8 +241,10 @@ void OUT_sendfile(int cfd, int event, void *args);
  */
 bool event_AGREE_RECV_FILE(info *ms);
 
-
 bool event_DEL_GROUP(info *ms);
 
 bool event_CREATE_GROUP(info *ms);
 
+void set_relationship(int id1, int id2, int is);
+
+void del_relationship(int *id1, int *id2);
