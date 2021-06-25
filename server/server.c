@@ -80,39 +80,40 @@ int main(int argc, char **argv)
 	zlog_debug(ser, "lfd:%d", lfd);
 
 	//仅供调用回调
+	events *thiss = NULL;
 	struct epoll_event tempevents[MAXCLIENT + 1];
 	while (1) {
 		int max = epoll_wait(epfd, tempevents, MAXCLIENT, 0);
 		for (int i = 0; i < max; i++) {
-			events *this = tempevents[i].data.ptr;
+			thiss = (events *)(tempevents[i].data.ptr);
 			if (tempevents[i].events & EPOLLRDHUP) {
-				epoll_del(this);
-				close(this->fd);
+				epoll_del(thiss);
+				close(thiss->fd);
 				// status=0;下次accpet会重置
-				char *p = showevents(this);
+				char *p = showevents(thiss);
 				// zlog_debug(ser, "rdhup:%s", p);
 				free(p);
-				if (strlen(fd_name[this->fd])) {
+				if (strlen(fd_name[thiss->fd])) {
 					zlog_info(
 						ser,
 						"**leave**   fd:%d id:%d name:%s",
-						this->fd, fd_id[this->fd],
-						fd_name[this->fd]);
+						thiss->fd, fd_id[thiss->fd],
+						fd_name[thiss->fd]);
 					char *cmd = (char *)calloc(
 						BUFLEN, sizeof(char));
 					sprintf(cmd,
 						"update user set user_status=\'0\' where "
 						"user_name=\'%s\';",
-						fd_name[this->fd]);
+						fd_name[thiss->fd]);
 					mysql_query(sql_l, cmd);
 					free(cmd);
-					memset(fd_name[this->fd], 0, 30);
+					memset(fd_name[thiss->fd], 0, 30);
 				}
-				fd_id[this->fd] = 0;
+				fd_id[thiss->fd] = 0;
 
 				continue;
 			}
-			this->call_back(this->fd, this->events, this->arg);
+			thiss->call_back(thiss->fd, thiss->events, thiss->arg);
 		}
 	}
 
