@@ -113,13 +113,9 @@ void del_relationship(int *id1, int *id2)
 			"delete  from relationship where id_1=%d and id_2=%d ;",
 			*id1, *id2);
 	} else if (id1 == NULL && id2 != NULL) {
-		sprintf(p,
-			"delete  from relationship where id_1=* and id_2=%d ;",
-			*id2);
+		sprintf(p, "delete  from relationship where  id_2=%d ;", *id2);
 	} else if (id1 != NULL && id2 == NULL) {
-		sprintf(p,
-			"delete  from relationship where id_1=%d and id_2=* ;",
-			*id1);
+		sprintf(p, "delete  from relationship where id_1=%d  ;", *id1);
 	} else {
 		return;
 	}
@@ -133,4 +129,3 @@ void del_relationship(int *id1, int *id2)
 		return;
 	}
 }
-
