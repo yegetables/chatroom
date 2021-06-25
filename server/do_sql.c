@@ -11,6 +11,7 @@ bool do_sql(events *ev)
 	switch (ms->how) {
 	//显式更改from to
 	case SET_ONLINE: //设置在线
+	{
 		if (!base_sql_query(ms))
 			return false;
 		if (!event_set_online(ev))
@@ -18,12 +19,13 @@ bool do_sql(events *ev)
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
+	}
 	case GET_MESSAGE_FROM:
 		aasd = 1;
 	case SHOW_APPLY:
 	case FR_LIST:
 	case SHOW_MESSAGES:
-	case GET_MANY_VALUE:
+	case GET_MANY_VALUE: {
 		if (!base_sql_query(ms))
 			return false;
 		if (base_GET_MANY_VALUE(ms, aasd) < 0)
@@ -31,7 +33,8 @@ bool do_sql(events *ev)
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
-	case AGREE_RECV_FILE:
+	}
+	case AGREE_RECV_FILE: {
 		if (!base_sql_query(ms))
 			return false;
 		if (base_GET_MANY_VALUE(ms, 2) < 0)
@@ -51,7 +54,8 @@ bool do_sql(events *ev)
 			//改为准备文件发送状态
 			break;
 		}
-	case AGREE_APPLICATION:
+	}
+	case AGREE_APPLICATION: {
 		if (!base_sql_query(ms))
 			return false;
 		if (!case_WHAT_FIRST_VALUE(ms))
@@ -63,7 +67,47 @@ bool do_sql(events *ev)
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
-	case SEND_FILE_REDY:
+	}
+	case ADD_GROUP: {
+		if (!base_sql_query(ms))
+			return false;
+		memset(ms->value, 0, BUFLEN);
+		sprintf(ms->value, "SELECT LAST_INSERT_ID();");
+		if (!base_sql_query(ms))
+			return false;
+		if (!case_WHAT_FIRST_VALUE(ms))
+			return false;
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	// 优化其他多次查询,一次返回自增主键
+	case DEL_GROUP: {
+		if (!base_sql_query(ms))
+			return false;
+		int group_id = -1;
+		int user_id = -1;
+		sscanf(ms->value,
+		       "select * from groups where  group_id=%d  and master_id=%d;",
+		       &group_id, &user_id);
+		if (!case_MANY_RESULT(ms))
+			return false;
+		memset(ms->value, 0, BUFLEN);
+		if (atoi(ms->value) == 1) {
+			sprintf(ms->value,
+				"delete from groups where  group_id=%d  and master_id=%d;",
+				group_id, user_id);
+			if (!base_sql_query(ms))
+				return false;
+			strcpy(ms->value, "1");
+		} else {
+			sprintf(ms->value, "-1");
+		}
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	case SEND_FILE_REDY: {
 		if (event_recv_file_ready(ev) < 0)
 			return false;
 		//插入数据到数据库
@@ -74,7 +118,8 @@ bool do_sql(events *ev)
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
-	case IF_DONE:
+	}
+	case IF_DONE: {
 		if (!base_sql_query(ms))
 			return false;
 		if (!case_IF_DONE(ms))
@@ -82,7 +127,8 @@ bool do_sql(events *ev)
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
-	case IF_HAS:
+	}
+	case IF_HAS: {
 		if (!base_sql_query(ms))
 			return false;
 		if (!case_IF_HAS(ms))
@@ -90,7 +136,8 @@ bool do_sql(events *ev)
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
-	case MANY_RESULT:
+	}
+	case MANY_RESULT: {
 		if (!base_sql_query(ms))
 			return false;
 		if (!case_MANY_RESULT(ms))
@@ -98,7 +145,8 @@ bool do_sql(events *ev)
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
-	case WHAT_FIRST_VALUE:
+	}
+	case WHAT_FIRST_VALUE: {
 		if (!base_sql_query(ms))
 			return false;
 		if (!case_WHAT_FIRST_VALUE(ms))
@@ -106,14 +154,17 @@ bool do_sql(events *ev)
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
-	case HUP_NO:
+	}
+	case HUP_NO: {
 		if (!base_sql_query(ms))
 			return false;
 		ms->to = ms->from = 0;
 		break;
-	default:
+	}
+	default: {
 		zlog_warn(ser, "don't know which how");
 		return false;
+	}
 	}
 	return true;
 
@@ -276,8 +327,8 @@ int base_GET_MANY_VALUE(info *ms, int fetch)
 				sprintf(&buf[strlen(buf)], "%s\n", rowline[j]);
 		}
 	}
-	// zlog_error(ser, "get value buf:%s fetch:%d number:%d", buf, fetch,
-	// number);
+	// zlog_error(ser, "get value buf:%s fetch:%d number:%d", buf,
+	// fetch, number);
 	mysql_free_result(result);
 	return number;
 }

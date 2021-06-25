@@ -240,13 +240,19 @@ void move_clln(int nums);
 int cli_create_groups(int uid);
 
 /**
+ * @brief 删除群组根据id
+ * @return true
+ * @return false
+ */
+bool cli_del_groups(int userid);
+/**
  * @brief 创建json请求并发送
  * 记得free
- * @param from 
- * @param to 
- * @param type 
- * @param how 
- * @param value 
+ * @param from
+ * @param to
+ * @param type
+ * @param how
+ * @param value
  * @return info* 返回的info,要求free
  */
 info *cli_creatinfo(int from, int to, value_type type, int how, char *value);

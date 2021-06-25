@@ -128,6 +128,7 @@ void show_management_groups_menu(void)
 			cli_create_groups(userid);
 			break;
 		case 2:
+			cli_del_groups(userid);
 			break;
 		case 3:
 			break;
@@ -180,6 +181,7 @@ void show_file_menu(int toid)
 	printf("2.拒绝文件\n");
 	printf("0.返回上一层\n");
 	scanf("%d", &c);
+	show_line += 5;
 	switch (c) {
 	case 0: //返回上一层
 		return;
@@ -202,17 +204,20 @@ void show_secret_chat_menu(void)
 		printf("输入对方id\n");
 		printf("0.返回上一层\n");
 		scanf("%d", &toid);
+		show_line += 3;
 		if (toid == 0)
 			return;
 	} //开始进入私聊界面
 	char buf[1024] = { 0 };
 	if (strlen(id_to_name(toid, buf)) == 0) {
 		printf("error id, input again\n");
+		show_line++;
 		zlog_debug(cli, "error id, input again\n");
 		return;
 	}
 	int c;
 	while (1) {
+		re_show();
 		printf("-----私聊选项----\n");
 		printf("1.发送消息\n");
 		printf("2.发送文件\n");
@@ -220,6 +225,7 @@ void show_secret_chat_menu(void)
 		printf("4.接收文件\n");
 		printf("0.返回上一层\n");
 		scanf("%d", &c);
+		show_line += 7;
 		switch (c) {
 		case 0: // 返回上一层
 			return;

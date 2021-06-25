@@ -168,6 +168,7 @@ bool sql_init_table(MYSQL *sql_l)
 			"CREATE TABLE  IF NOT EXISTS `groups` ("
 			"`group_id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
 			"`group_name` varchar(30) NOT NULL,"
+			"`master_id` int(10) unsigned NOT NULL,"
 			"PRIMARY KEY (`group_id`)"
 			") ENGINE=InnoDB AUTO_INCREMENT=50000 DEFAULT CHARSET=utf8");
 		if (mysql_query(sql_l, q)) {

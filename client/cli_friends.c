@@ -78,10 +78,11 @@ void cli_show_friends(void) // TODO:ready to perf
 		zlog_error(cli, "can't find all j:%d", j);
 		if (ms)
 			free(ms);
-		printf("任意键退出\n");
-		getchar();
-		getchar();
-		show_line += 2;
+		// printf("任意键退出\n");
+		// getchar();
+		// getchar();
+		// show_line += 2;
+		PAUSE;
 		return;
 	}
 
@@ -90,10 +91,12 @@ void cli_show_friends(void) // TODO:ready to perf
 	printf("------------------------\n");
 	if (ms)
 		free(ms);
-	printf("任意键退出\n");
-	getchar();
-	getchar();
-	show_line += 4 + number;
+	// printf("任意键退出\n");
+	// getchar();
+	// getchar();
+	PAUSE;
+	// show_line += 4 + number;
+	show_line += 2 + number;
 	return;
 }
 
@@ -119,10 +122,9 @@ void cli_del_friend(void)
 		if (ms)
 			free(ms);
 	}
-	printf("删除%d成功,任意键退出\n", toid);
-	getchar();
-	getchar();
-	show_line += 4;
+	printf("删除%d成功\n", toid);
+	PAUSE;
+	show_line += 3;
 }
 
 void cli_shield_friend(int is)
@@ -143,9 +145,10 @@ void cli_shield_friend(int is)
 	} else {
 		zlog_debug(cli, "%d sheild %d success", userid, toid);
 	}
-	printf("屏蔽%d成功,任意键退出\n", toid);
-	getchar();
-	show_line += 4;
+	printf("屏蔽%d成功\n", toid);
+	// getchar();
+	PAUSE;
+	show_line += 3;
 
 	if (ms)
 		free(ms);
@@ -164,10 +167,14 @@ reshow:;
 	if (t == 1) {
 		scanf("%d", &iid);
 		id_to_name(iid, p);
-		printf("id:%d----name:%s", iid, p);
+		printf("id:%d----name:%s\n", iid, p);
+		PAUSE;
+		show_line += 4;
 	} else if (t == 2) {
 		scanf("%s", na);
 		printf("id:%d----name:%s\n", name_to_id(na), na);
+		PAUSE;
+		show_line += 4;
 	} else if (t == 3)
 		return;
 	else
@@ -196,7 +203,9 @@ void cli_add_friend(void)
 		zlog_error(cli, "recv none ");
 		return;
 	}
-	printf("请求已发送,等待同意后在好友列表查看\n");
+	printf("请求已发送,等待同意后在好友列表查看");
+	PAUSE;
+	show_line += 2;
 	if (ms)
 		free(ms);
 }
@@ -227,6 +236,7 @@ void show_apply_friends(void)
 	}
 	printf("----------sum:%d--------\n", num);
 	show_line += num + 1;
+	PAUSE;
 	if (newms)
 		free(newms);
 	return;
@@ -275,6 +285,8 @@ void cli_agree_friend(int is)
 		zlog_debug(cli, " del from %d to %d ", id, userid);
 		printf("已拒绝%d的申请\n", id);
 	}
+	show_line += 3;
+	PAUSE;
 	if (ms)
 		free(ms);
 	return;
