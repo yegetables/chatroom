@@ -97,3 +97,14 @@ void show_secret_message(int toid)
 	if (ms)
 		free(ms);
 }
+
+void message_menu(int toid)
+{
+	int returnnumber = 1;
+	printf("随时输入(#return#)返回上一层\n");
+	while (returnnumber) {
+		recv_secret_message(toid);
+		returnnumber = send_secret_message(toid);
+	}
+	return;
+}

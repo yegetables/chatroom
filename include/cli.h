@@ -204,3 +204,15 @@ void send_file_menu(int toid);
  * @return long int 失败-1
  */
 long int get_file_size(char *path);
+
+/**
+ * @brief 显示群聊列表和未读消息
+ *
+ */
+void cli_show_groups(void);
+
+/**
+ * @brief 群聊管理列表
+ *
+ */
+void show_management_groups_menu(void);
