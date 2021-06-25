@@ -10,8 +10,7 @@ bool do_sql(events *ev)
 	int aasd = 2;
 	switch (ms->how) {
 	//显式更改from to
-	case SET_ONLINE: //设置在线
-	{
+	case SET_ONLINE: { //设置在线
 		if (!base_sql_query(ms))
 			return false;
 		if (!event_set_online(ev))
@@ -39,21 +38,9 @@ bool do_sql(events *ev)
 			return false;
 		if (base_GET_MANY_VALUE(ms, 2) < 0)
 			return false;
-		//没找到要接收的文件,或者找到文件太多
-		if (atoi(ms->value) != 1) {
-			strcpy(ms->value, "0");
-			//使用justwrite-cli_event普通传输
-			ms->how = MANY_RESULT;
-			ms->to = ms->from;
-			ms->from = 0;
-			break;
-		} else //唯一
-		{
-			ms->to = ms->from;
-			ms->from = 0;
-			//改为准备文件发送状态
-			break;
-		}
+		if (!event_AGREE_RECV_FILE(ms))
+			return false;
+		break;
 	}
 	case AGREE_APPLICATION: {
 		if (!base_sql_query(ms))
@@ -68,14 +55,10 @@ bool do_sql(events *ev)
 		ms->from = 0;
 		break;
 	}
-	case ADD_GROUP: {
+	case CREATE_GROUP: {
 		if (!base_sql_query(ms))
 			return false;
-		memset(ms->value, 0, BUFLEN);
-		sprintf(ms->value, "SELECT LAST_INSERT_ID();");
-		if (!base_sql_query(ms))
-			return false;
-		if (!case_WHAT_FIRST_VALUE(ms))
+		if (!event_CREATE_GROUP(ms))
 			return false;
 		ms->to = ms->from;
 		ms->from = 0;
@@ -85,24 +68,8 @@ bool do_sql(events *ev)
 	case DEL_GROUP: {
 		if (!base_sql_query(ms))
 			return false;
-		int group_id = -1;
-		int user_id = -1;
-		sscanf(ms->value,
-		       "select * from groups where  group_id=%d  and master_id=%d;",
-		       &group_id, &user_id);
-		if (!case_MANY_RESULT(ms))
+		if (!event_DEL_GROUP(ms))
 			return false;
-		memset(ms->value, 0, BUFLEN);
-		if (atoi(ms->value) == 1) {
-			sprintf(ms->value,
-				"delete from groups where  group_id=%d  and master_id=%d;",
-				group_id, user_id);
-			if (!base_sql_query(ms))
-				return false;
-			strcpy(ms->value, "1");
-		} else {
-			sprintf(ms->value, "-1");
-		}
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
@@ -266,38 +233,6 @@ bool case_IF_DONE(info *ms)
 	return true;
 }
 
-bool event_set_online(events *ev)
-{ // get name(设置status=1)
-	info *ms = &ev->js;
-	char *buf = ms->value;
-	{ //获取name更改为查询id
-		char na[30] = { 0 };
-		sscanf(buf,
-		       "update user set  user_status= \'1\'  where user_name= \'%s\' ;",
-		       na);
-		na[strlen(na) - 1] = 0;
-		// zlog_debug(ser, "na = %s", na);
-		memset(buf, 0, BUFLEN);
-		sprintf(buf,
-			"select user_id  from user where user_name=\'%s\';",
-			na);
-	}
-	if (!base_sql_query(ms))
-		return false;
-	//将id返回
-	if (!case_WHAT_FIRST_VALUE(ms))
-		return false;
-	{ //设置在线状态
-		int id = atoi(buf);
-		fd_id[ev->fd] = id;
-		id_to_name(id, fd_name[ev->fd]); // fd->name
-		zlog_info(ser, "**online**   fd:%d id:%d name:%s", ev->fd,
-			  fd_id[ev->fd], fd_name[ev->fd]);
-	}
-
-	return true;
-}
-
 int base_GET_MANY_VALUE(info *ms, int fetch)
 {
 	char *buf = ms->value;
@@ -332,3 +267,40 @@ int base_GET_MANY_VALUE(info *ms, int fetch)
 	mysql_free_result(result);
 	return number;
 }
+
+
+bool event_set_online(events *ev)
+{ // get name(设置status=1)
+	info *ms = &ev->js;
+	char *buf = ms->value;
+	{ //获取name更改为查询id
+		char na[30] = { 0 };
+		sscanf(buf,
+		       "update user set  user_status= \'1\'  where user_name= \'%s\' ;",
+		       na);
+		na[strlen(na) - 1] = 0;
+		// zlog_debug(ser, "na = %s", na);
+		memset(buf, 0, BUFLEN);
+		sprintf(buf,
+			"select user_id  from user where user_name=\'%s\';",
+			na);
+	}
+	if (!base_sql_query(ms))
+		return false;
+	//将id返回
+	if (!case_WHAT_FIRST_VALUE(ms))
+		return false;
+	{ //设置在线状态
+		int id = atoi(buf);
+		fd_id[ev->fd] = id;
+		id_to_name(id, fd_name[ev->fd]); // fd->name
+		zlog_info(ser, "**online**   fd:%d id:%d name:%s", ev->fd,
+			  fd_id[ev->fd], fd_name[ev->fd]);
+	}
+
+	return true;
+}
+
+
+
+

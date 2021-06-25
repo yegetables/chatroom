@@ -211,3 +211,18 @@ bool ser_add_friend(events *ev);
  * @param args
  */
 void OUT_sendfile(int cfd, int event, void *args);
+
+/**
+ * @brief 准备处理文件接收
+ *
+ * @param ms
+ * @return true
+ * @return false
+ */
+bool event_AGREE_RECV_FILE(info *ms);
+
+
+bool event_DEL_GROUP(info *ms);
+
+bool event_CREATE_GROUP(info *ms);
+

@@ -62,11 +62,11 @@
 		exit(-1);                                        \
 	}
 
-#define PAUSE                         \
-	{                             \
+#define PAUSE                            \
+	{                                \
 		printf("   任意键返回"); \
-		fflush(stdout);       \
-		getchar();            \
-		getchar();            \
-		show_line++;          \
+		fflush(stdout);          \
+		getchar();               \
+		getchar();               \
+		show_line++;             \
 	}

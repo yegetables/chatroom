@@ -46,7 +46,7 @@
 //删除群组
 #define DEL_GROUP 19
 //创建群组
-#define ADD_GROUP 18
+#define CREATE_GROUP 18
 //转发消息
 #define MESSAGES 8
 //即将发送文件
