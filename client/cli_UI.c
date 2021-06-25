@@ -125,7 +125,7 @@ void show_management_groups_menu(void)
 		case 0: //返回上一层
 			return;
 		case 1:
-			cli_create_group(userid);
+			cli_create_groups(userid);
 			break;
 		case 2:
 			break;

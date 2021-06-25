@@ -237,7 +237,7 @@ void move_clln(int nums);
  * @param uid userid
  * @return int gruopid
  */
-int cli_create_group(int uid);
+int cli_create_groups(int uid);
 
 /**
  * @brief 创建json请求并发送
