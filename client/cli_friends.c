@@ -15,8 +15,9 @@ void cli_show_friends(void)
 	printf("---------好友列表-----------\n");
 	printf("yourname:%s  yourid:%d\n", username, userid);
 	show_line += 2;
-	info *ms = (info *)malloc(sizeof(info));
+	info *ms = NULL;
 	for (j = 0; j < 4; j++) {
+		memset(p, 0, BUFLEN);
 		//更改状态
 		{ // 0->在线未屏蔽 10
 			// 1->离线未屏蔽 00
@@ -35,20 +36,19 @@ void cli_show_friends(void)
 				status = 0;
 				shield = 1;
 			}
-			sprintf(ms->value,
+			sprintf(p,
 				"select user.user_id,user.user_name from "
 				"relationship,user where "
 				"relationship.id_1= '%d' and "
 				"user.user_id=relationship.id_2 and "
 				"user.user_status= '%d' and relationship.if_shield= '%d' ;",
 				userid, status, shield);
-			ms->type = sql;
-			ms->from = userid;
-			ms->to = 0;
+
+			ms = cli_creatinfo(userid, 0, sql, FR_LIST, p);
+
+			if (ms == NULL)
+				break;
 		}
-		ms = cli_send_recv(ms, FR_LIST); // base_GET_MANY_VALUE(ms, 2)
-		if (ms == NULL)
-			break;
 		char *buf = ms->value;
 		// show //%d\n%d %s\n%d %s\n
 		int num;
@@ -75,28 +75,27 @@ void cli_show_friends(void)
 		}
 	}
 
-	{
-		if (j != 4) {
-			zlog_error(cli, "can't find all j:%d", j);
-			if (ms)
-				free(ms);
-			printf("任意键退出\n");
-			getchar();
-			getchar();
-			show_line += 2;
-			return;
-		}
-		printf("sum:%d friends,%d online\n", number,
-		       online); //在线未屏蔽人数
-		printf("------------------------\n");
+	if (j != 4) {
+		zlog_error(cli, "can't find all j:%d", j);
 		if (ms)
 			free(ms);
 		printf("任意键退出\n");
 		getchar();
 		getchar();
-		show_line += 4 + number;
+		show_line += 2;
 		return;
 	}
+
+	printf("sum:%d friends,%d online\n", number,
+	       online); //在线未屏蔽人数
+	printf("------------------------\n");
+	if (ms)
+		free(ms);
+	printf("任意键退出\n");
+	getchar();
+	getchar();
+	show_line += 4 + number;
+	return;
 }
 
 void cli_del_friend(void)
@@ -104,20 +103,16 @@ void cli_del_friend(void)
 	int toid;
 	printf("输入对方id\n");
 	scanf("%d", &toid);
-	info *ms = (info *)malloc(sizeof(info));
-	sprintf(ms->value,
+	char p[BUFLEN] = { 0 };
+	info *ms = NULL;
+	sprintf(p,
 		"delete from relationship where "
 		"( relationship.id_1= '%d' and "
 		"relationship.id_2= '%d' ) or "
 		"( relationship.id_1= '%d' and "
 		"relationship.id_2= '%d' ) ;",
 		userid, toid, toid, userid);
-	ms->how = IF_DONE;
-	ms->type = sql;
-	ms->from = userid;
-	ms->to = 0;
-
-	ms = cli_send_recv(ms, HUP_NO);
+	ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
 	if (ms == NULL) {
 		zlog_error(cli, "recv none");
 	} else {
@@ -136,19 +131,14 @@ void cli_shield_friend(int is)
 	int toid;
 	printf("输入对方id\n");
 	scanf("%d", &toid);
-	info *ms = (info *)malloc(sizeof(info));
-	sprintf(ms->value,
+	char p[BUFLEN] = { 0 };
+	info *ms = NULL;
+	sprintf(p,
 		"update relationship set if_shield= '%d' where "
 		"relationship.id_1= '%d' and "
 		"relationship.id_2= '%d' ;",
 		is, userid, toid);
-	ms->how = IF_DONE;
-	ms->type = sql;
-	ms->from = userid;
-	ms->to = 0;
-
-	ms = cli_send_recv(ms, HUP_NO);
-
+	ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
 	if (ms == NULL) {
 		zlog_error(cli, "recv none");
 	} else {
@@ -190,41 +180,24 @@ void cli_add_friend(void)
 	int toid;
 	printf("输入对方id\n");
 	scanf("%d", &toid);
-	info *ms = (info *)malloc(sizeof(info));
-
+	info *ms = NULL;
 	char p[BUFLEN] = { 0 };
 	char pp[BUFLEN / 2] = { 0 };
-	{
-		memset(p, 0, sizeof(p));
-		memset(pp, 0, sizeof(pp));
-		sprintf(pp,
-			"INSERT ignore INTO relationship (id_1,id_2,if_shield)"
-			"VALUES (%d,%d,0),(%d,%d,0);",
-			userid, toid, toid, userid);
-		sprintf(p,
-			"INSERT INTO requests "
-			"(requests.from,requests.to,requests.type,requests.how,"
-			"requests.value,requests.if_read) VALUES (%d,%d,%d,%d,\'%s\',0);",
-			userid, toid, sql, ADD_FRIEND, pp); //将来取走时候不回复
-	}
-
-	{
-		strcpy(ms->value, p);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-		ms->how = IF_DONE;
-	}
-	ms = cli_send_recv(ms, HUP_NO);
+	sprintf(pp,
+		"INSERT ignore INTO relationship (id_1,id_2,if_shield)"
+		"VALUES (%d,%d,0),(%d,%d,0);",
+		userid, toid, toid, userid);
+	sprintf(p,
+		"INSERT INTO requests "
+		"(requests.from,requests.to,requests.type,requests.how,"
+		"requests.value,requests.if_read) VALUES (%d,%d,%d,%d,\'%s\',0);",
+		userid, toid, sql, ADD_FRIEND, pp); //将来取走时候不回复
+	ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
 	if (ms == NULL) {
 		zlog_error(cli, "recv none ");
 		return;
 	}
-	// if (ms->value[0] == '0')
-	//     zlog_error(cli, "add error ");
-	// else
 	printf("请求已发送,等待同意后在好友列表查看\n");
-
 	if (ms)
 		free(ms);
 }
@@ -232,27 +205,17 @@ void cli_add_friend(void)
 void show_apply_friends(void)
 {
 	char p[BUFLEN] = { 0 };
-	memset(p, 0, BUFLEN);
 	sprintf(p,
 		"select requests.from,user.user_name from requests,user  where "
 		"requests.to= %d and  requests.how=%d  and   "
 		" user.user_id=requests.from",
 		userid, ADD_FRIEND);
-	info *ms = (info *)malloc(sizeof(info));
-	{
-		strcpy(ms->value, p);
-		ms->how = SHOW_APPLY;
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, SHOW_APPLY); // base_GET_MANY_VALUE(ms, 2)
-	if (ms == NULL) {
+	info *newms = cli_creatinfo(userid, 0, sql, SHOW_APPLY, p);
+	if (newms == NULL) {
 		zlog_error(cli, "recv none");
 		return;
 	}
-	char *buf = ms->value;
-	// printf("%s\n", buf);
+	char *buf = newms->value;
 	int num = 0;
 	sscanf(buf, "%d", &num);
 	buf = strchr(buf, '\n'); // name
@@ -265,8 +228,8 @@ void show_apply_friends(void)
 	}
 	printf("----------sum:%d--------\n", num);
 	show_line += num + 1;
-	if (ms)
-		free(ms);
+	if (newms)
+		free(newms);
 	return;
 }
 
@@ -277,7 +240,8 @@ void cli_agree_friend(int is)
 	scanf("%d", &id);
 	char p[BUFLEN] = { 0 };
 	memset(p, 0, BUFLEN);
-	info *ms = (info *)malloc(sizeof(info));
+	info *ms = NULL;
+	// info *ms = (info *)malloc(sizeof(info));
 	if (is == 1) //同意
 	{
 		sprintf(p,
@@ -285,16 +249,7 @@ void cli_agree_friend(int is)
 			"requests.to= %d and  requests.how=%d and "
 			"requests.from= %d",
 			userid, ADD_FRIEND, id);
-
-		{
-			strcpy(ms->value, p);
-			ms->type = sql;
-			ms->from = userid;
-			ms->to = 0;
-		}
-		ms = cli_send_recv(
-			ms, AGREE_APPLICATION); // base_GET_MANY_VALUE(ms,
-						// 2)
+		ms = cli_creatinfo(userid, 0, sql, AGREE_APPLICATION, p);
 		if (ms == NULL) {
 			zlog_error(cli, "recv none");
 			return;
@@ -308,13 +263,8 @@ void cli_agree_friend(int is)
 		"requests.to= %d and  requests.how=%d and "
 		"requests.from= %d",
 		userid, ADD_FRIEND, id);
-	{
-		strcpy(ms->value, p);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, HUP_NO); // base_GET_MANY_VALUE(ms, 2)
+	ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
+	// base_GET_MANY_VALUE(ms,2)
 	if (ms == NULL) {
 		zlog_error(cli, "recv none");
 		return;

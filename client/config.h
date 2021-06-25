@@ -1,5 +1,5 @@
-#ifndef PROJECT_DEFINE_
-#define PROJECT_DEFINE_
+#ifndef PROJECT_DEFINE
+#define PROJECT_DEFINE
 
 #define PROJECT_PATH "/home/ajian/work/chatroom/"
 #define PROJECT_LOGPATH "/home/ajian/work/chatroom/log/"
