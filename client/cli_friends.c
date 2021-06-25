@@ -4,7 +4,7 @@ extern zlog_category_t *cli;
 extern int userid;
 extern char username[30];
 extern int show_line;
-void cli_show_friends(void)
+void cli_show_friends(void) // TODO:ready to perf
 {
 	char p[BUFLEN] = { 0 };
 	int status; //在线
