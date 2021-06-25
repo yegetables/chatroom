@@ -24,7 +24,8 @@ bool do_sql(events *ev)
 	case SHOW_APPLY:
 	case FR_LIST:
 	case SHOW_MESSAGES:
-	case GET_MANY_VALUE: {
+	case GET_MANY_VALUE:
+	case GR_LIST: {
 		if (!base_sql_query(ms))
 			return false;
 		if (base_GET_MANY_VALUE(ms, aasd) < 0)
@@ -268,7 +269,6 @@ int base_GET_MANY_VALUE(info *ms, int fetch)
 	return number;
 }
 
-
 bool event_set_online(events *ev)
 { // get name(设置status=1)
 	info *ms = &ev->js;
@@ -300,7 +300,3 @@ bool event_set_online(events *ev)
 
 	return true;
 }
-
-
-
-

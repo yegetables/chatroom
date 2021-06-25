@@ -7,7 +7,44 @@ extern int show_line;
 
 void cli_show_groups(void)
 {
-	;
+	char p[BUFLEN] = { 0 };
+	int number = 0;
+	sprintf(p,
+		"select group_id,group_name from "
+		" groups,relationship where "
+		" relationship.id_1=%d and "
+		" relationship.id_2=group_id  ",
+		userid);
+	info *ms = cli_creatinfo(userid, 0, sql, GR_LIST, p);
+	if (ms == NULL) {
+		zlog_error(cli, "recv error");
+		return;
+	}
+	printf("---------群组列表-----------\n");
+	printf("yourname:%s  yourid:%d\n", username, userid);
+	show_line += 2;
+	char *buf = ms->value;
+	// show //%d\n%d %s\n%d %s\n
+	int num;
+	sscanf(buf, "%d", &num);
+	buf = strchr(buf, '\n');
+
+	for (int i = 0; i < num && ++buf != NULL; i++) //本次个数
+	{
+		memset(p, 0, BUFLEN); // name
+		int id;
+		sscanf(buf, "%d %s", &id, p);
+		number++;
+		buf = strchr(buf, '\n');
+		printf("%2d-->%15s (%d)\n", number, p, id);
+	}
+	printf("sum:%d groups\n", number); //在线未屏蔽人数
+	printf("------------------------\n");
+	show_line += 2 + number;
+	PAUSE;
+	if (ms)
+		free(ms);
+	return;
 }
 
 int cli_create_groups(int uid)
@@ -60,4 +97,52 @@ bool cli_del_groups(int userid)
 		free(ms);
 	PAUSE;
 	return true;
+}
+
+void cli_show_groups_members(void)
+{
+	int groupid = -1;
+	printf("输入已加入的群组id查看群成员\n");
+	scanf("%d", &groupid);
+	show_line += 2;
+
+	char p[BUFLEN] = { 0 };
+	int number = 0;
+	sprintf(p,
+		"select user.user_id,user.user_name from "
+		" groups,relationship,user where "
+		// " relationship.id_1=%d and "
+		// " relationship.id_2=groups.group_id and  "
+		" relationship.id_1=user.user_id and "
+		" relationship.id_2=%d ",
+		groupid);
+	info *ms = cli_creatinfo(userid, 0, sql, GR_LIST, p);
+	if (ms == NULL) {
+		zlog_error(cli, "recv error");
+		return;
+	}
+	printf("---------群组成员-----------\n");
+	// printf("yourname:%s  yourid:%d\n", username, userid);
+	show_line += 1;
+	char *buf = ms->value;
+	// show //%d\n%d %s\n%d %s\n
+	int num;
+	sscanf(buf, "%d", &num);
+	buf = strchr(buf, '\n');
+
+	for (int i = 0; i < num && ++buf != NULL; i++) {
+		memset(p, 0, BUFLEN);
+		int id;
+		sscanf(buf, "%d %s", &id, p);
+		number++;
+		buf = strchr(buf, '\n');
+		printf("%2d-->%15s (%d)\n", number, p, id);
+	}
+	printf("sum:%d members\n", number);
+	printf("------------------------\n");
+	show_line += 2 + number;
+	PAUSE;
+	if (ms)
+		free(ms);
+	return;
 }

@@ -113,14 +113,15 @@ void show_management_groups_menu(void)
 		printf("----群组管理----\n");
 		printf("1.创建群组\n");
 		printf("2.解散群族\n");
-		printf("3.加入群组\n");
+		printf("3.申请加入群组\n");
 		printf("4.退出群组\n");
 		printf("5.屏蔽群组\n");
 		printf("6.取消屏蔽群组\n");
 		printf("7.处理入群申请\n");
+		printf("8.查看群成员\n");
 		printf("0.返回上一层\n");
 		scanf("%d", &c);
-		show_line += 10;
+		show_line += 11;
 		switch (c) {
 		case 0: //返回上一层
 			return;
@@ -137,6 +138,15 @@ void show_management_groups_menu(void)
 		case 5:
 			break;
 		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			cli_show_groups_members();
+			break;
+		case 9:
+			break;
+		case 10:
 			break;
 		default:
 			break;

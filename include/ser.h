@@ -14,7 +14,7 @@
 //群员
 #define PEOPLE 1
 //未加入
-#define NO_PEORPLE0
+#define NO_PEOPLE 0
 //屏蔽
 #define SHIELD 8
 //不屏蔽
