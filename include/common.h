@@ -28,6 +28,8 @@
 #define GET_MESSAGE_FROM 14
 // 列出好友列表
 #define FR_LIST 6
+//列出群组聊表
+#define GR_LIST 20
 //列出申请名单
 #define SHOW_APPLY 9
 //列出未读消息

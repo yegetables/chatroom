@@ -53,9 +53,10 @@ void cli_show_friends(void) // TODO:ready to perf
 		int num;
 		sscanf(buf, "%d", &num);
 		buf = strchr(buf, '\n');
-		memset(p, 0, BUFLEN); // name
+
 		for (int i = 0; i < num && ++buf != NULL; i++) //本次个数
 		{
+			memset(p, 0, BUFLEN); // name
 			int id;
 			sscanf(buf, "%d %s", &id, p);
 			number++;
