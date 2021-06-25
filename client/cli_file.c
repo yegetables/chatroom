@@ -20,20 +20,15 @@ resdd:;
 	// char realpath[PATH_MAX] = {0};
 	// char p[BUFLEN] = {0};
 	// memset(p, 0, BUFLEN);
-	ms = (info *)malloc(sizeof(info));
-	{ //选择接受的文件
-		sprintf(ms->value,
-			"select requests.how,requests.value  from requests  where "
-			"requests.to= %d and requests.from=%d and requests.type=%d"
-			" and requests.value like \'%%%s\'",
-			userid, toid, file, fname); //模糊搜索
-		// zlog_warn(cli, "p=%s", p);
-		// strcpy(ms->value, p);
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, AGREE_RECV_FILE); // base_GET_MANY_VALUE(ms, 2)
+	char p[BUFLEN] = { 0 };
+	sprintf(p,
+		"select requests.how,requests.value  from requests  where "
+		"requests.to= %d and requests.from=%d and requests.type=%d"
+		" and requests.value like \'%%%s\'",
+		userid, toid, file, fname); //模糊搜索
+	// base_GET_MANY_VALUE(ms, 2)
+
+	ms = cli_creatinfo(userid, 0, sql, AGREE_RECV_FILE, p);
 	if (ms == NULL) {
 		zlog_error(cli, "recv none");
 		return;
@@ -44,6 +39,7 @@ resdd:;
 		printf("结果太多或不存在,重新搜索\n");
 		goto resdd;
 	}
+
 	//唯一结果
 	long f_size;
 	b = strchr(ms->value, '\n');
@@ -71,20 +67,17 @@ resdd:;
 	// fname 客户接受路径
 
 	//设置已读
-	{
-		sprintf(ms->value,
-			"update requests,relationship set requests.if_read=1 "
-			"where "
-			"requests.to= %d   and requests.value =\'%s\' and  "
-			"requests.type=%d and "
-			"requests.from= %d",
-			userid, relname, file, toid); //设为已读
+	memset(p, 0, sizeof(p));
+	sprintf(p,
+		"update requests,relationship set requests.if_read=1 "
+		"where "
+		"requests.to= %d   and requests.value =\'%s\' and  "
+		"requests.type=%d and "
+		"requests.from= %d",
+		userid, relname, file, toid); //设为已读
+	// base_GET_MANY_VALUE(ms, 2)
+	ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
 
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, HUP_NO); // base_GET_MANY_VALUE(ms, 2)
 	if (ms == NULL) {
 		zlog_error(cli, "recv none");
 		return;
@@ -102,29 +95,24 @@ resdd:;
 	return;
 }
 
-
 void show_apply_files(int toid)
 {
 	char p[BUFLEN] = { 0 };
 	memset(p, 0, BUFLEN);
 
-	info *ms = (info *)malloc(sizeof(info));
-	{
-		sprintf(ms->value,
-			"select requests.value   from requests,relationship  "
-			"where requests.to= "
-			"\'%d\' and "
-			"requests.type=\'%d\' and requests.from=\'%d\' and "
-			"requests.from=relationship.id_2 and "
-			"requests.to=relationship.id_1  and relationship.if_shield=0 "
-			"and requests.if_read=0 ;",
-			userid, file, toid); //未屏蔽的文件
+	info *ms = NULL;
+	sprintf(p,
+		"select requests.value   from requests,relationship  "
+		"where requests.to= "
+		"\'%d\' and "
+		"requests.type=\'%d\' and requests.from=\'%d\' and "
+		"requests.from=relationship.id_2 and "
+		"requests.to=relationship.id_1  and relationship.if_shield=0 "
+		"and requests.if_read=0 ;",
+		userid, file, toid); //未屏蔽的文件
 
-		ms->type = sql;
-		ms->from = userid;
-		ms->to = 0;
-	}
-	ms = cli_send_recv(ms, GET_MESSAGE_FROM); // base_GET_MANY_VALUE(ms, 1)
+	ms = cli_creatinfo(userid, 0, sql, GET_MESSAGE_FROM, p);
+	// base_GET_MANY_VALUE(ms, 1)
 	if (ms == NULL) {
 		zlog_error(cli, "recv none");
 		return;
@@ -147,7 +135,6 @@ void show_apply_files(int toid)
 		free(ms);
 	return;
 }
-
 
 void send_file_menu(int toid)
 {
@@ -173,19 +160,18 @@ void send_file_menu(int toid)
 	printf("waiting transmission\n");
 
 	//发送文件通知
-	info *ms = (info *)malloc(sizeof(info));
-	{
-		ms->from = userid;
-		ms->to = 0;
-		ms->type = sql;
-		sprintf(ms->value, "%s %ld %d", filename, f_size, toid);
-		zlog_debug(cli, "sendfile ready value: %s", ms->value);
-	}
+	info *ms = NULL;
+	char p[BUFLEN] = { 0 };
+	sprintf(p, "%s %ld %d", filename, f_size, toid);
+	zlog_debug(cli, "sendfile ready value: %s", ms->value);
 	//发送文件通知
-	ms = cli_send_recv(ms, SEND_FILE_REDY);
+	ms = cli_creatinfo(userid, 0, sql, SEND_FILE_REDY, p);
+
 	if (ms == NULL || atoi(ms->value) == 0) {
 		zlog_error(cli, "path:%s can't ready file ", path);
 		printf("服务器未准备好接收文件\n");
+		if (ms)
+			free(ms);
 		return;
 	}
 
@@ -212,4 +198,3 @@ void send_file_menu(int toid)
 	zlog_debug(cli, "recv errror");
 	return; // no close
 }
-

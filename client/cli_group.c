@@ -15,8 +15,9 @@ void cli_show_groups(void)
 	printf("---------好友列表-----------\n");
 	printf("yourname:%s  yourid:%d\n", username, userid);
 	show_line += 2;
-	info *ms = (info *)malloc(sizeof(info));
+	info *ms = NULL;
 	for (j = 0; j < 4; j++) {
+		memset(p, 0, BUFLEN);
 		//更改状态
 		{ // 0->在线未屏蔽 10
 			// 1->离线未屏蔽 00
@@ -35,20 +36,19 @@ void cli_show_groups(void)
 				status = 0;
 				shield = 1;
 			}
-			sprintf(ms->value,
+			sprintf(p,
 				"select user.user_id,user.user_name from "
 				"relationship,user where "
 				"relationship.id_1= '%d' and "
 				"user.user_id=relationship.id_2 and "
 				"user.user_status= '%d' and relationship.if_shield= '%d' ;",
 				userid, status, shield);
-			ms->type = sql;
-			ms->from = userid;
-			ms->to = 0;
+
+			ms = cli_creatinfo(userid, 0, sql, FR_LIST, p);
+
+			if (ms == NULL)
+				break;
 		}
-		ms = cli_send_recv(ms, FR_LIST); // base_GET_MANY_VALUE(ms, 2)
-		if (ms == NULL)
-			break;
 		char *buf = ms->value;
 		// show //%d\n%d %s\n%d %s\n
 		int num;
@@ -75,28 +75,27 @@ void cli_show_groups(void)
 		}
 	}
 
-	{
-		if (j != 4) {
-			zlog_error(cli, "can't find all j:%d", j);
-			if (ms)
-				free(ms);
-			printf("任意键退出\n");
-			getchar();
-			getchar();
-			show_line += 2;
-			return;
-		}
-		printf("sum:%d friends,%d online\n", number,
-		       online); //在线未屏蔽人数
-		printf("------------------------\n");
+	if (j != 4) {
+		zlog_error(cli, "can't find all j:%d", j);
 		if (ms)
 			free(ms);
 		printf("任意键退出\n");
 		getchar();
 		getchar();
-		show_line += 4 + number;
+		show_line += 2;
 		return;
 	}
+
+	printf("sum:%d friends,%d online\n", number,
+	       online); //在线未屏蔽人数
+	printf("------------------------\n");
+	if (ms)
+		free(ms);
+	printf("任意键退出\n");
+	getchar();
+	getchar();
+	show_line += 4 + number;
+	return;
 }
 
 int cli_create_group(int uid)

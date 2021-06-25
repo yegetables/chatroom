@@ -18,8 +18,8 @@ void cli_show_friends(void)
 	info *ms = NULL;
 	for (j = 0; j < 4; j++) {
 		memset(p, 0, BUFLEN);
-		//更改状态
-		{ // 0->在线未屏蔽 10
+		{ //更改状态
+			// 0->在线未屏蔽 10
 			// 1->离线未屏蔽 00
 			// 2->在线屏蔽 11
 			// 3->离线屏蔽 01
@@ -45,7 +45,6 @@ void cli_show_friends(void)
 				userid, status, shield);
 
 			ms = cli_creatinfo(userid, 0, sql, FR_LIST, p);
-
 			if (ms == NULL)
 				break;
 		}
@@ -241,7 +240,7 @@ void cli_agree_friend(int is)
 	char p[BUFLEN] = { 0 };
 	memset(p, 0, BUFLEN);
 	info *ms = NULL;
-	// info *ms = (info *)malloc(sizeof(info));
+
 	if (is == 1) //同意
 	{
 		sprintf(p,
