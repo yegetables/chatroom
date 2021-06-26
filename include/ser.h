@@ -1,25 +1,5 @@
 #include "common.h"
 
-// q->u
-//禁言
-#define NO_TALK 1
-//不禁言
-#define TALK 0
-
-// u->q
-//群主
-#define OWNER 7
-//管理员
-#define MANER 3
-//群员
-#define PEOPLE 1
-//未加入
-#define NO_PEOPLE 0
-//屏蔽
-#define SHIELD 8
-//不屏蔽
-#define NO_SHIELD 0
-
 typedef struct {
 	int from_id;
 	long f_size;
@@ -245,6 +225,19 @@ bool event_DEL_GROUP(info *ms);
 
 bool event_CREATE_GROUP(info *ms);
 
-void set_relationship(int id1, int id2, int is);
+int set_relationship(int id1, int id2, int is);
 
 void del_relationship(int *id1, int *id2);
+
+bool event_set_POWER_GROUP(info *ms);
+
+bool event_exit_GROUP(info *ms);
+
+int get_authority(int userid, int groupid);
+
+bool event_ADD_GROUP_APPLY(info *ms);
+
+bool event_ADD_GROUP(info *ms);
+
+bool event_show_group_apply(info *ms);
+

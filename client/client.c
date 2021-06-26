@@ -228,7 +228,7 @@ int main(int argc, char **argv)
 	userid = cli_setonline(username);
 	if (userid > 0) {
 		// system("clear");
-		alarm(10);
+		// alarm(10);
 		show_main_menu();
 	} else
 		zlog_error(cli, "userid %d  error", userid);

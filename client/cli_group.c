@@ -15,7 +15,7 @@ void cli_show_groups(void)
 		" relationship.id_1=%d and "
 		" relationship.id_2=group_id  ",
 		userid);
-	info *ms = cli_creatinfo(userid, 0, sql, GR_LIST, p);
+	info *ms = cli_creatinfo(userid, 0, sql, GET_MANY_VALUE, p);
 	if (ms == NULL) {
 		zlog_error(cli, "recv error");
 		return;
@@ -79,15 +79,18 @@ bool cli_del_groups(int userid)
 	scanf("%d", &groupid);
 	char p[BUFLEN] = { 0 };
 
-	sprintf(p, "select * from groups where  group_id=%d  and master_id=%d;",
+	sprintf(p,
+		"select * from groups where  group_id=%d  and "
+		"master_id=%d;",
 		groupid, userid);
-	info *ms = cli_creatinfo(userid, 0, sql, DEL_GROUP, p);
+	info *ms = cli_creatinfo(userid, groupid, sql, DEL_GROUP, p);
 	if (ms == NULL) {
 		zlog_error(cli, "recv none ");
 		return false;
 	}
 	if (atoi(ms->value) != 1) {
-		printf("未找到群主为%d,群号为%d的群\n", userid, groupid);
+		printf("未找到群主为%d,群号为%d的群或者您不是群主\n", userid,
+		       groupid);
 
 	} else {
 		printf("群组id为%d的群已解散\n", groupid);
@@ -116,11 +119,19 @@ void cli_show_groups_members(void)
 		" relationship.id_1=user.user_id and "
 		" relationship.id_2=%d ",
 		groupid);
-	info *ms = cli_creatinfo(userid, 0, sql, GR_LIST, p);
+	info *ms = cli_creatinfo(userid, groupid, sql, GR_LIST, p);
 	if (ms == NULL) {
 		zlog_error(cli, "recv error");
 		return;
 	}
+	if (atoi(ms->value) == -1) {
+		printf("您没有权限");
+		PAUSE;
+		if (ms)
+			free(ms);
+		return;
+	}
+
 	printf("---------群组成员-----------\n");
 	// printf("yourname:%s  yourid:%d\n", username, userid);
 	show_line += 1;
@@ -142,6 +153,127 @@ void cli_show_groups_members(void)
 	printf("------------------------\n");
 	show_line += 2 + number;
 	PAUSE;
+	if (ms)
+		free(ms);
+	return;
+}
+
+void cli_add_group(int toid, int Authority)
+{
+	int groupid;
+	printf("输入群组id\n");
+	scanf("%d", &groupid);
+	show_line += 2;
+	char p[BUFLEN] = { 0 };
+	sprintf(p, "%d %d", Authority, toid);
+	info *ms;
+	if (toid == userid) //申请加入n->p
+		ms = cli_creatinfo(userid, groupid, sql, ADD_GROUP_APPLY, p);
+	else //设置别人升权降权
+		ms = cli_creatinfo(userid, groupid, sql, set_POWER_GROUP, p);
+	if (atoi(ms->value) != 1) {
+		printf("请求出错  ");
+	} else
+		printf("请求已发送");
+	PAUSE;
+}
+void cli_exit_group(int toid)
+{
+	int groupid;
+	printf("输入群组id\n");
+	scanf("%d", &groupid);
+	show_line += 2;
+	char p[BUFLEN] = { 0 };
+	sprintf(p, "%d", toid);
+	info *ms = cli_creatinfo(userid, groupid, sql, EXIT_GROUP, p);
+	// u->g  toid,exit
+
+	if (atoi(ms->value) != -1)
+		printf("已退出群%d", groupid);
+	else
+		printf("%d退群出错", toid);
+	PAUSE;
+}
+
+void cli_apply_application(int is, int groupid)
+{
+	int id = 0;
+	printf("输入对方id\n");
+	scanf("%d", &id);
+	char p[BUFLEN] = { 0 };
+	memset(p, 0, BUFLEN);
+	info *ms = NULL;
+
+	if (is == 1) //同意
+	{
+		sprintf(p, "%d %d", id, groupid);
+		ms = cli_creatinfo(userid, 0, sql, ADD_GROUP, p);
+		if (ms == NULL) {
+			zlog_error(cli, "recv none");
+			return;
+		}
+		if (ms)
+			free(ms);
+	}
+
+	memset(p, 0, BUFLEN);
+	//删除
+	sprintf(p,
+		"delete  from requests   where "
+		"requests.to=%d  and  requests.how=%d and "
+		"requests.from= %d",
+		groupid, ADD_GROUP_APPLY, id);
+	ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
+	// base_GET_MANY_VALUE(ms,2)
+	if (ms == NULL) {
+		zlog_error(cli, "recv none");
+		return;
+	}
+	if (is == 1) {
+		zlog_debug(cli, "agree and del from %d to %d ", id, userid);
+		printf("已同意%d的申请\n", id);
+	} else {
+		zlog_debug(cli, " del from %d to %d ", id, userid);
+		printf("已拒绝%d的申请\n", id);
+	}
+	show_line += 3;
+	PAUSE;
+	if (ms)
+		free(ms);
+	return;
+}
+
+void cli_show_group_applications(int groupid)
+{
+	char p[BUFLEN] = { 0 };
+	sprintf(p,
+		" select user.user_id,user.user_name from "
+		" user,requests,groups where  requests.to=%d "
+		" and requests.how=%d and requests.from=user.user_id ;",
+		groupid, ADD_GROUP_APPLY);
+	info *ms = cli_creatinfo(userid, groupid, sql, SHOW_GROUP_APPLY, p);
+	if (ms == NULL)
+		return;
+	char *buf = ms->value;
+	int num = 0;
+	sscanf(buf, "%d", &num);
+	// printf("num:%d\n", num);
+	if (num == -1) {
+		printf("无权限\n");
+		if (ms)
+			free(ms);
+		return;
+	}
+	buf = strchr(buf, '\n'); // name
+	for (int i = 1; i <= num && ++buf != NULL; i++) //本次个数
+	{
+		int id;
+		sscanf(buf, "%d %s", &id, p);
+		buf = strchr(buf, '\n');
+		printf("%2d-->%15s (%d)\n", i, p, id);
+	}
+	printf("----------sum:%d--------\n", num);
+	show_line += num + 1;
 	if (ms)
 		free(ms);
 	return;

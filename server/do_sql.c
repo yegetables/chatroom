@@ -19,17 +19,54 @@ bool do_sql(events *ev)
 		ms->from = 0;
 		break;
 	}
-	case GET_MESSAGE_FROM:
+	case GET_MESSAGE_FROM: {
 		aasd = 1;
-	case SHOW_APPLY:
-	case FR_LIST:
-	case SHOW_MESSAGES:
-	case GET_MANY_VALUE:
-	case GR_LIST: {
 		if (!base_sql_query(ms))
 			return false;
 		if (base_GET_MANY_VALUE(ms, aasd) < 0)
 			return false;
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	case SHOW_GROUP_MESSAGES: {
+		aasd = 3;
+		if (!base_sql_query(ms))
+			return false;
+		if (base_GET_MANY_VALUE(ms, aasd) < 0)
+			return false;
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	case SHOW_APPLY:
+	case FR_LIST:
+	case SHOW_MESSAGES:
+	case GET_MANY_VALUE: {
+		aasd = 2;
+		if (!base_sql_query(ms))
+			return false;
+		if (base_GET_MANY_VALUE(ms, aasd) < 0)
+			return false;
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	case GR_LIST: {
+		if (get_authority(ms->from, ms->to) > NO_PEOPLE) {
+			if (!base_sql_query(ms))
+				return false;
+			if (base_GET_MANY_VALUE(ms, aasd) < 0)
+				return false;
+		} else {
+			strcpy(ms->value, "-1");
+		}
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	case SHOW_GROUP_APPLY: {
+		event_show_group_apply(ms);
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
@@ -67,10 +104,13 @@ bool do_sql(events *ev)
 	}
 	// 优化其他多次查询,一次返回自增主键
 	case DEL_GROUP: {
-		if (!base_sql_query(ms))
-			return false;
-		if (!event_DEL_GROUP(ms))
-			return false;
+		// if (!base_sql_query(ms))
+		// 	return false;
+		if (!event_DEL_GROUP(ms)) {
+			strcpy(ms->value, "-1");
+		} else {
+			strcpy(ms->value, "1");
+		}
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
@@ -92,6 +132,32 @@ bool do_sql(events *ev)
 			return false;
 		if (!case_IF_DONE(ms))
 			return false;
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	case ADD_GROUP: {
+		event_ADD_GROUP(ms);
+		strcpy(ms->value, "1");
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+
+	case ADD_GROUP_APPLY: {
+		event_ADD_GROUP_APPLY(ms);
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	case set_POWER_GROUP: {
+		event_set_POWER_GROUP(ms);
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	case EXIT_GROUP: {
+		event_exit_GROUP(ms);
 		ms->to = ms->from;
 		ms->from = 0;
 		break;
@@ -164,7 +230,8 @@ bool base_sql_query(info *ms)
 	returnnumber = mysql_query(sql_l, buf);
 	if (returnnumber) //出错
 	{
-		zlog_error(ser, "执行时出现异常: %s", mysql_error(sql_l));
+		zlog_error(ser, "执行%s时出现异常: %s", ms->value,
+			   mysql_error(sql_l));
 		return false;
 	} else
 		return true;
