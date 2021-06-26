@@ -257,9 +257,15 @@ bool cli_del_groups(int userid);
  */
 info *cli_creatinfo(int from, int to, value_type type, int how, char *value);
 
-
-
 void cli_show_groups_members(void);
 
+void cli_add_group(int userid, int Authority);
+void cli_exit_group(int userid);
 
+void show_groups_manage(void);
 
+void cli_show_group_applications(int groupid);
+
+void show_group_applicationss_menu(void);
+
+void cli_apply_application(int is, int groupid);

@@ -219,12 +219,12 @@ void show_apply_friends(void)
 		"requests.to= %d and  requests.how=%d  and   "
 		" user.user_id=requests.from",
 		userid, ADD_FRIEND);
-	info *newms = cli_creatinfo(userid, 0, sql, SHOW_APPLY, p);
-	if (newms == NULL) {
+	info *ms = cli_creatinfo(userid, 0, sql, SHOW_APPLY, p);
+	if (ms == NULL) {
 		zlog_error(cli, "recv none");
 		return;
 	}
-	char *buf = newms->value;
+	char *buf = ms->value;
 	int num = 0;
 	sscanf(buf, "%d", &num);
 	buf = strchr(buf, '\n'); // name
@@ -238,8 +238,8 @@ void show_apply_friends(void)
 	printf("----------sum:%d--------\n", num);
 	show_line += num + 1;
 	PAUSE;
-	if (newms)
-		free(newms);
+	if (ms)
+		free(ms);
 	return;
 }
 
@@ -264,6 +264,8 @@ void cli_agree_friend(int is)
 			zlog_error(cli, "recv none");
 			return;
 		}
+		if (ms)
+			free(ms);
 	}
 
 	memset(p, 0, BUFLEN);

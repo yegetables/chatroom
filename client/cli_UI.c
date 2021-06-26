@@ -107,7 +107,7 @@ void show_management_friends_menu(void)
 
 void show_management_groups_menu(void)
 {
-	int c;
+	int c;int toid;
 	while (1) {
 		re_show();
 		printf("----群组管理----\n");
@@ -119,6 +119,8 @@ void show_management_groups_menu(void)
 		printf("6.取消屏蔽群组\n");
 		printf("7.处理入群申请\n");
 		printf("8.查看群成员\n");
+		printf("9.设置群管理\n");
+		printf("10.踢人\n");
 		printf("0.返回上一层\n");
 		scanf("%d", &c);
 		show_line += 11;
@@ -132,21 +134,34 @@ void show_management_groups_menu(void)
 			cli_del_groups(userid);
 			break;
 		case 3:
+			cli_add_group(userid, PEOPLE);
 			break;
 		case 4:
+			cli_exit_group(userid);
 			break;
 		case 5:
 			break;
 		case 6:
 			break;
 		case 7:
+			show_group_applicationss_menu();
+
 			break;
 		case 8:
 			cli_show_groups_members();
 			break;
 		case 9:
+			
+			printf("输入成员id\n");
+			scanf("%d", &toid);
+			show_line += 2;
+			cli_add_group(toid, MANER);
 			break;
 		case 10:
+			printf("输入对方id\n");
+			scanf("%d", &toid);
+			show_line += 2;
+			cli_exit_group(toid);
 			break;
 		default:
 			break;
@@ -254,5 +269,38 @@ void show_secret_chat_menu(void)
 		default:
 			break;
 		}
+	}
+}
+
+void show_group_applicationss_menu(void)
+{
+	int c;
+	int groupid;
+	printf("输入群组id\n");
+	scanf("%d", &groupid);
+	show_line += 2;
+	while (1) {
+		re_show();
+		printf("-----群组申请----\n");
+		//列出申请列表
+		cli_show_group_applications(groupid);
+		printf("1.同意申请\n");
+		printf("2.拒绝申请\n");
+		printf("0.返回上一层\n");
+		scanf("%d", &c);
+		show_line += 5;
+		switch (c) {
+		case 0: //返回上一层
+			return;
+		case 1: //同意好友申请
+			cli_apply_application(1,groupid);
+			break;
+		case 2: //删除好友申请
+			cli_apply_application(2,groupid);
+			break;
+		default:
+			break;
+		}
+		return;
 	}
 }
