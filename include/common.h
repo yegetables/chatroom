@@ -34,6 +34,8 @@
 #define SHOW_APPLY 9
 //列出未读消息
 #define SHOW_MESSAGES 13
+//列出群聊未读
+#define SHOW_GROUP_MESSAGES 26
 //获取几行几列
 #define GET_MANY_VALUE 10
 
@@ -44,7 +46,7 @@
 // 客户同意文件接收,服务器可发
 #define AGREE_RECV_FILE 17
 //查看群组申请
-#define SHOW_GROUP_APPLY 25 	
+#define SHOW_GROUP_APPLY 25
 //添加好友
 #define ADD_FRIEND 7
 //删除群组
