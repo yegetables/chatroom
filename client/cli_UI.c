@@ -53,6 +53,9 @@ void show_main_menu(void)
 		case 5:
 			show_management_groups_menu();
 			break;
+		case 6:
+			show_public_chat_menu();
+			break;
 		case 0:
 			zlog_fini();
 			close(cfd);
@@ -107,7 +110,8 @@ void show_management_friends_menu(void)
 
 void show_management_groups_menu(void)
 {
-	int c;int toid;
+	int c;
+	int toid;
 	while (1) {
 		re_show();
 		printf("----群组管理----\n");
@@ -151,7 +155,7 @@ void show_management_groups_menu(void)
 			cli_show_groups_members();
 			break;
 		case 9:
-			
+
 			printf("输入成员id\n");
 			scanf("%d", &toid);
 			show_line += 2;
@@ -255,7 +259,7 @@ void show_secret_chat_menu(void)
 		case 0: // 返回上一层
 			return;
 		case 1: // 私聊
-			message_menu(toid);
+			secret_message_menu(toid);
 			break;
 		case 2: // 发文件
 			send_file_menu(toid);
@@ -272,6 +276,39 @@ void show_secret_chat_menu(void)
 	}
 }
 
+void show_public_chat_menu(void)
+{
+	int toid;
+
+	printf("输入群组id\n");
+	printf("0.返回上一层\n");
+	scanf("%d", &toid);
+	show_line += 3;
+	if (toid == 0)
+		return;
+	int c;
+	while (1) {
+		re_show();
+		printf("-----私聊选项----\n");
+		printf("1.发送消息\n");
+		printf("2.查看消息记录\n");
+		printf("0.返回上一层\n");
+		scanf("%d", &c);
+		show_line += 5;
+		switch (c) {
+		case 0: // 返回上一层
+			return;
+		case 1:
+			public_message_menu(toid);
+			break;
+		case 2:
+			show_public_message(toid);
+			break;
+		default:
+			break;
+		}
+	}
+}
 void show_group_applicationss_menu(void)
 {
 	int c;
@@ -293,10 +330,10 @@ void show_group_applicationss_menu(void)
 		case 0: //返回上一层
 			return;
 		case 1: //同意好友申请
-			cli_apply_application(1,groupid);
+			cli_apply_application(1, groupid);
 			break;
 		case 2: //删除好友申请
-			cli_apply_application(2,groupid);
+			cli_apply_application(2, groupid);
 			break;
 		default:
 			break;

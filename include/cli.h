@@ -163,6 +163,8 @@ bool IsValidEmail(char *s);
  * @brief 私聊选项界面(查看历史,发文件,私聊)
  */
 void show_secret_chat_menu(void);
+void show_public_chat_menu(void);
+
 
 /**
  * @brief 向toid发一条私聊信息
@@ -171,24 +173,29 @@ void show_secret_chat_menu(void);
  * @return 0返回非0继续聊天
  */
 int send_secret_message(int toid);
+// int send_public_message(int toid);
 
 /**
  * @brief 接收toid私聊消息(所有未读)
  * @param toid 对方id
  */
 void recv_secret_message(int toid);
+void recv_public_message(int toid);
 
 /**
  * @brief toid私聊消息历史
  * @param toid 对方id
  */
 void show_secret_message(int toid);
+void show_public_message(int toid);
 
 /**
  * @brief 定时刷新recv未读,随时send
  * @param toid
  */
-void message_menu(int toid);
+void secret_message_menu(int toid);
+
+void public_message_menu(int toid);
 
 /**
  * @brief 包括发送文件请求和发送文件到服务器
