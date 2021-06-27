@@ -19,12 +19,31 @@ bool do_sql(events *ev)
 		ms->from = 0;
 		break;
 	}
-	case GET_MESSAGE_FROM:
+	case GET_MESSAGE_FROM: {
 		aasd = 1;
+		if (!base_sql_query(ms))
+			return false;
+		if (base_GET_MANY_VALUE(ms, aasd) < 0)
+			return false;
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
+	case SHOW_GROUP_MESSAGES: {
+		aasd = 3;
+		if (!base_sql_query(ms))
+			return false;
+		if (base_GET_MANY_VALUE(ms, aasd) < 0)
+			return false;
+		ms->to = ms->from;
+		ms->from = 0;
+		break;
+	}
 	case SHOW_APPLY:
 	case FR_LIST:
 	case SHOW_MESSAGES:
 	case GET_MANY_VALUE: {
+		aasd = 2;
 		if (!base_sql_query(ms))
 			return false;
 		if (base_GET_MANY_VALUE(ms, aasd) < 0)
