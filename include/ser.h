@@ -211,3 +211,33 @@ bool ser_add_friend(events *ev);
  * @param args
  */
 void OUT_sendfile(int cfd, int event, void *args);
+
+/**
+ * @brief 准备处理文件接收
+ *
+ * @param ms
+ * @return true
+ * @return false
+ */
+bool event_AGREE_RECV_FILE(info *ms);
+
+bool event_DEL_GROUP(info *ms);
+
+bool event_CREATE_GROUP(info *ms);
+
+int set_relationship(int id1, int id2, int is);
+
+void del_relationship(int *id1, int *id2);
+
+bool event_set_POWER_GROUP(info *ms);
+
+bool event_exit_GROUP(info *ms);
+
+int get_authority(int userid, int groupid);
+
+bool event_ADD_GROUP_APPLY(info *ms);
+
+bool event_ADD_GROUP(info *ms);
+
+bool event_show_group_apply(info *ms);
+

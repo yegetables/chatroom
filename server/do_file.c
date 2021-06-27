@@ -6,6 +6,7 @@ extern char fd_name[MAXCLIENT][30];
 extern int fd_id[MAXCLIENT];
 file_ready f_r[MAXCLIENT];
 file_ready f_s[MAXCLIENT];
+
 long int event_recv_file_ready(events *ev)
 {
 	info *ms = &ev->js;
@@ -116,3 +117,24 @@ void OUT_sendfile(int cfd, int event, void *args)
 	ev->call_back = client_event;
 	epoll_add(EPOLLIN, ev);
 }
+
+
+bool event_AGREE_RECV_FILE(info *ms)
+{
+	//没找到要接收的文件,或者找到文件太多
+	if (atoi(ms->value) != 1) {
+		strcpy(ms->value, "0");
+		//使用justwrite-cli_event普通传输
+		ms->how = MANY_RESULT;
+		ms->to = ms->from;
+		ms->from = 0;
+	} else //唯一
+	{
+		ms->to = ms->from;
+		ms->from = 0;
+		//改为准备文件发送状态
+	}
+}
+
+
+

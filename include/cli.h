@@ -163,6 +163,8 @@ bool IsValidEmail(char *s);
  * @brief 私聊选项界面(查看历史,发文件,私聊)
  */
 void show_secret_chat_menu(void);
+void show_public_chat_menu(void);
+
 
 /**
  * @brief 向toid发一条私聊信息
@@ -171,24 +173,29 @@ void show_secret_chat_menu(void);
  * @return 0返回非0继续聊天
  */
 int send_secret_message(int toid);
+// int send_public_message(int toid);
 
 /**
  * @brief 接收toid私聊消息(所有未读)
  * @param toid 对方id
  */
 void recv_secret_message(int toid);
+void recv_public_message(int toid);
 
 /**
  * @brief toid私聊消息历史
  * @param toid 对方id
  */
 void show_secret_message(int toid);
+void show_public_message(int toid);
 
 /**
  * @brief 定时刷新recv未读,随时send
  * @param toid
  */
-void message_menu(int toid);
+void secret_message_menu(int toid);
+
+void public_message_menu(int toid);
 
 /**
  * @brief 包括发送文件请求和发送文件到服务器
@@ -224,4 +231,48 @@ void show_management_groups_menu(void);
  */
 void re_show(void);
 
+/**
+ * @brief 光标移动,定行清除
+ *
+ * @param nums 从本行向下数nums行
+ */
 void move_clln(int nums);
+
+/**
+ * @brief 创建新群组
+ *
+ * @param uid userid
+ * @return int gruopid
+ */
+int cli_create_groups(int uid);
+
+/**
+ * @brief 删除群组根据id
+ * @return true
+ * @return false
+ */
+bool cli_del_groups(int userid);
+/**
+ * @brief 创建info请求并发送
+ * 记得free
+ * @param from
+ * @param to
+ * @param type
+ * @param how
+ * @param value
+ * @return info* 返回的info,要求free
+ */
+info *cli_creatinfo(int from, int to, value_type type, int how, char *value);
+
+void cli_show_groups_members(void);
+
+void cli_add_group(int userid, int Authority);
+void cli_exit_group(int userid);
+
+void show_groups_manage(void);
+
+void cli_show_group_applications(int groupid);
+
+void show_group_applicationss_menu(void);
+
+void cli_apply_application(int is, int groupid);

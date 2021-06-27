@@ -28,10 +28,14 @@
 #define GET_MESSAGE_FROM 14
 // 列出好友列表
 #define FR_LIST 6
+// 列出群组聊表
+#define GR_LIST 20
 //列出申请名单
 #define SHOW_APPLY 9
 //列出未读消息
 #define SHOW_MESSAGES 13
+//列出群聊未读
+#define SHOW_GROUP_MESSAGES 26
 //获取几行几列
 #define GET_MANY_VALUE 10
 
@@ -41,8 +45,23 @@
 #define AGREE_APPLICATION 11
 // 客户同意文件接收,服务器可发
 #define AGREE_RECV_FILE 17
+//查看群组申请
+#define SHOW_GROUP_APPLY 25
 //添加好友
 #define ADD_FRIEND 7
+//删除群组
+#define DEL_GROUP 19
+//更改权限
+#define set_POWER_GROUP 23
+//创建群组
+#define CREATE_GROUP 18
+//退出群组
+#define EXIT_GROUP 22
+//申请加群
+#define ADD_GROUP_APPLY 21
+//同意加群
+#define ADD_GROUP 24
+
 //转发消息
 #define MESSAGES 8
 //即将发送文件
@@ -51,6 +70,26 @@
 #define SEND_FILE 16
 // MARK:删除匹配信息
 #define DEL_SELECT 12
+
+// q->u
+//禁言
+#define NO_TALK 1
+//不禁言
+#define TALK 0
+
+// u->q
+//群主
+#define OWNER 7
+//管理员
+#define MANER 3
+//群员
+#define PEOPLE 1
+//未加入
+#define NO_PEOPLE 0
+//屏蔽
+#define SHIELD 8
+//不屏蔽
+#define NO_SHIELD 0
 
 typedef enum {
 	msg = 1, // msg 文本消息(包括数值)

@@ -42,7 +42,6 @@
 #define move_cll printf("\r\033[K"); //清行
 #define move_cls printf("\033[2J"); //清屏
 
-
 #define DEBUGPRINT(FORMAT, ...)                                               \
 	{                                                                     \
 		char *t = strrchr(__FILE__, '/');                             \
@@ -61,4 +60,13 @@
 			__FUNCTION__, __LINE__, ##__VA_ARGS__,   \
 			strerror(errno));                        \
 		exit(-1);                                        \
+	}
+
+#define PAUSE                            \
+	{                                \
+		printf("   任意键返回"); \
+		fflush(stdout);          \
+		getchar();               \
+		getchar();               \
+		show_line++;             \
 	}

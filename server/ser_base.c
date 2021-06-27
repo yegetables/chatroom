@@ -260,7 +260,7 @@ int creat_daemon(void)
 
 void lfdaccept(int a, int b, void *args)
 {
-	events *lfdevent = args;
+	events *lfdevent = (events *)args;
 	int lfd = lfdevent->fd;
 	struct sockaddr_in clientaddr;
 	socklen_t clientaddrlen = sizeof(struct sockaddr_in);
