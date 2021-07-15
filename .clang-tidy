@@ -1,2 +1,2 @@
-Checks:          'google-*,readability-*'
+Checks:          '-*,google-*'
 FormatStyle:     Google
