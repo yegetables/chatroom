@@ -8,10 +8,18 @@ fi
 clang-tidy --version
 
 SRC=$(git ls-tree --full-tree -r HEAD | grep -e "\.\(c\|h\|hpp\|cpp\)\$" | cut -f 2)
+echo $SRC >list_reporters
+cp ./build/compile_commands.json ./compile_commands.json
 
-clang-tidy $SRC -- >clang-tidy-report.txt
-
-clang-format $SRC >clang-format-report.txt
+while read line; do
+    clang-tidy $SRC >>clang-tidy-report.txt
+    # echo $line
+done <list_reporters
+while read line; do
+    # clang-tidy $SRC >clang-tidy-report.txt
+    # echo $line
+    clang-format $SRC >>clang-format-report.txt
+done <list_reporters
 
 # cppcheck --enable=all --std=c++11 --language=c++ --output-file=cppcheck-report.txt *
 
@@ -47,6 +55,6 @@ if [ ${#PAYLOAD_CPPCHECK} -ne 0]; then
     OUTPUT+="$PAYLOAD_CPPCHECK"
     OUTPUT+=$'\n```\n'
 fi
-PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
+# PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
 
-curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL"
+# curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL"
