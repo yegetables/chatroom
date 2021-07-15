@@ -46,8 +46,7 @@ int main(int argc, char **argv)
              * 如果不希望getopt()打印出错信息，则只要将全域变量opterr设为0即可。
              */
 
-            if (opt == 'h')
-                help();
+            if (opt == 'h') help();
 
             ///  @todo help手册
             printf("******************************\n");
@@ -112,8 +111,7 @@ int main(int argc, char **argv)
             {
                 username[strlen(username) - 2] = '\0';
             }
-            if (username[strlen(username) - 1] == '\n')
-                username[strlen(username) - 1] = '\0';
+            if (username[strlen(username) - 1] == '\n') username[strlen(username) - 1] = '\0';
         }
         show_line += 4;
         /// login
@@ -132,8 +130,7 @@ int main(int argc, char **argv)
                 {
                     passwd[strlen(passwd) - 2] = '\0';
                 }
-                if (passwd[strlen(passwd) - 1] == '\n')
-                    passwd[strlen(passwd) - 1] = '\0';
+                if (passwd[strlen(passwd) - 1] == '\n') passwd[strlen(passwd) - 1] = '\0';
             }
 
             if (strncmp(passwd, "#forget#", 8) == 0 && IsValidEmail(&passwd[17]))
@@ -164,9 +161,10 @@ int main(int argc, char **argv)
                 errornumber++;
                 if (errornumber == 3)
                 {
-                    printf("密码错误次数太多，暂时锁定帐号%s,"
-                           "一分钟以后重新登陆\n",
-                           username);
+                    printf(
+                        "密码错误次数太多，暂时锁定帐号%s,"
+                        "一分钟以后重新登陆\n",
+                        username);
                     show_line++;
                     zlog_warn(cli, "login %s passwd error passwd error 3 times ", username);
                     exit(0);
@@ -180,7 +178,7 @@ int main(int argc, char **argv)
                 }
             }
         }
-        else ///  注册
+        else  ///  注册
         {
             zlog_info(cli, "register user: %s", username);
             printf("-----------------注册:\n");
@@ -194,8 +192,7 @@ int main(int argc, char **argv)
                 {
                     passwd[strlen(passwd) - 2] = '\0';
                 }
-                if (passwd[strlen(passwd) - 1] == '\n')
-                    passwd[strlen(passwd) - 1] = '\0';
+                if (passwd[strlen(passwd) - 1] == '\n') passwd[strlen(passwd) - 1] = '\0';
             }
             printf("输入验证邮箱:\n");
             printf("邮箱不超过48位\n");
@@ -206,9 +203,8 @@ int main(int argc, char **argv)
                 {
                     email[strlen(email) - 2] = '\0';
                 }
-                if (email[strlen(email) - 1] == '\n')
-                    email[strlen(email) - 1] = '\0';
-            } /// mysql add register
+                if (email[strlen(email) - 1] == '\n') email[strlen(email) - 1] = '\0';
+            }  /// mysql add register
             errornumber = 0;
             while (false == cli_register(username, passwd, email) && errornumber++ < 3)
             {
@@ -217,11 +213,13 @@ int main(int argc, char **argv)
 
             if (errornumber >= 3)
             {
-                zlog_warn(cli, "register failed 用户名:%s 密码:%s 邮箱:%s", username, passwd, email);
+                zlog_warn(cli, "register failed 用户名:%s 密码:%s 邮箱:%s", username, passwd,
+                          email);
                 exit(1);
             }
             printf("-----------------注册成功\n");
-            printf("您的用户名:%s\n您的密码:%s\n您的邮箱:%s\n请妥善保管\n", username, passwd, email);
+            printf("您的用户名:%s\n您的密码:%s\n您的邮箱:%s\n请妥善保管\n", username, passwd,
+                   email);
             zlog_info(cli, "注册成功:用户名:%s 密码:%s 邮箱:%s", username, passwd, email);
             show_line += 2;
         }
@@ -249,16 +247,16 @@ void signalcatch(int signal)
     // 退出信号
     switch (signal)
     {
-    case SIGINT:
-    case SIGQUIT:
-        zlog_debug(cli, "catch signal %s exit", show_signal(signal));
-        zlog_fini();
-        close(cfd);
-        exit(1);
-    case SIGALRM:
-        update_notices(who_send_msg, who_send_file);
-        alarm(10);
-        return;
-        // 异常退出
+        case SIGINT:
+        case SIGQUIT:
+            zlog_debug(cli, "catch signal %s exit", show_signal(signal));
+            zlog_fini();
+            close(cfd);
+            exit(1);
+        case SIGALRM:
+            update_notices(who_send_msg, who_send_file);
+            alarm(10);
+            return;
+            // 异常退出
     }
 }

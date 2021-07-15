@@ -12,8 +12,7 @@ int send_secret_message(int toid)
     printf("\nto:%d:", toid);
     scanf("%s", p);
     show_line += 2;
-    if (strcmp(p, "#return#") == 0)
-        return 0; //返回上一层
+    if (strcmp(p, "#return#") == 0) return 0;  //返回上一层
     sprintf(pp,
             "INSERT  INTO requests "
             "(requests.from,requests.to,requests.type,requests.how,requests."
@@ -21,11 +20,9 @@ int send_secret_message(int toid)
             "VALUES (%d,%d,%d,%d,\'%s\',%d);",
             userid, toid, msg, MESSAGES, p, 0);
     ms = cli_creatinfo(userid, 0, sql, HUP_NO, pp);
-    if (ms == NULL)
-        return 0;
-    if (ms)
-        free(ms);
-    return 1; //继续聊天
+    if (ms == NULL) return 0;
+    if (ms) free(ms);
+    return 1;  //继续聊天
 }
 
 void recv_secret_message(int toid)
@@ -38,10 +35,9 @@ void recv_secret_message(int toid)
             "requests.from=relationship.id_2 and "
             "requests.to=relationship.id_1  and relationship.if_shield=0 and "
             "requests.if_read=0;",
-            userid, MESSAGES, toid); //未屏蔽,未读的消息
+            userid, MESSAGES, toid);  //未屏蔽,未读的消息
     ms = cli_creatinfo(userid, 0, sql, SHOW_MESSAGES, p);
-    if (ms == NULL)
-        return;
+    if (ms == NULL) return;
     if (atoi(ms->value) != 0)
     {
         char *buf = strchr(ms->value, '\n');
@@ -56,12 +52,10 @@ void recv_secret_message(int toid)
             "requests.from=relationship.id_2 and "
             "requests.to=relationship.id_1  and relationship.if_shield=0 and "
             "requests.if_read=0;",
-            userid, MESSAGES, toid); //设为已读
+            userid, MESSAGES, toid);  //设为已读
     ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
-    if (ms == NULL)
-        return;
-    if (ms)
-        free(ms);
+    if (ms == NULL) return;
+    if (ms) free(ms);
 }
 
 void show_secret_message(int toid)
@@ -73,10 +67,9 @@ void show_secret_message(int toid)
             "where requests.to= %d and requests.how=%d and requests.from=%d and "
             "requests.from=relationship.id_2 and "
             "requests.to=relationship.id_1  ;",
-            userid, MESSAGES, toid); //未屏蔽,未读的消息
+            userid, MESSAGES, toid);  //未屏蔽,未读的消息
     ms = cli_creatinfo(userid, 0, sql, SHOW_MESSAGES, p);
-    if (ms == NULL)
-        return;
+    if (ms == NULL) return;
     int number = atoi(ms->value);
     printf("have %d messages:\n", number);
     show_line++;
@@ -84,12 +77,11 @@ void show_secret_message(int toid)
     {
         char *buf = strchr(ms->value, '\n');
         buf++;
-        printf("\nfrom %d :%s", toid, buf); // BUG:showline
+        printf("\nfrom %d :%s", toid, buf);  // BUG:showline
         show_line++;
     }
     PAUSE;
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
 }
 
 void secret_message_menu(int toid)
@@ -115,16 +107,15 @@ void recv_public_message(int toid)
             "requests.from=relationship.id_2 and "
             "requests.to=relationship.id_1  and relationship.if_shield=0 and "
             "requests.if_read=0;",
-            toid, MESSAGES); //未屏蔽,未读的消息
+            toid, MESSAGES);  //未屏蔽,未读的消息
 
     ms = cli_creatinfo(userid, 0, sql, SHOW_GROUP_MESSAGES, p);
-    if (ms == NULL)
-        return;
+    if (ms == NULL) return;
     if (atoi(ms->value) != 0)
     {
         char *buf = strchr(ms->value, '\n');
         buf++;
-        printf("\nto %d:%s", toid, buf); // BUG:showline
+        printf("\nto %d:%s", toid, buf);  // BUG:showline
         show_line++;
     }
     // TODO(ajian): 群聊消息设置已读
@@ -140,10 +131,8 @@ void recv_public_message(int toid)
     // 	"requests.to=relationship.id_1  and relationship.if_shield=0 and
     // " 	"requests.if_read=0;", 	toid, MESSAGES); //设为已读 ms =
     // cli_creatinfo(userid, 0, sql, HUP_NO, p);
-    if (ms == NULL)
-        return;
-    if (ms)
-        free(ms);
+    if (ms == NULL) return;
+    if (ms) free(ms);
 }
 
 void show_public_message(int toid)
@@ -155,10 +144,9 @@ void show_public_message(int toid)
             "where requests.to= %d and requests.how=%d  and "
             "requests.from=relationship.id_2 and "
             "requests.to=relationship.id_1  ;",
-            toid, MESSAGES); //未屏蔽,未读的消息
+            toid, MESSAGES);  //未屏蔽,未读的消息
     ms = cli_creatinfo(userid, 0, sql, SHOW_GROUP_MESSAGES, p);
-    if (ms == NULL)
-        return;
+    if (ms == NULL) return;
     int number = atoi(ms->value);
     printf("have %d messages:\n", number);
     show_line++;
@@ -167,12 +155,11 @@ void show_public_message(int toid)
         char *buf = strchr(ms->value, '\n');
         buf++;
 
-        printf("\nto %d:%s", toid, buf); // BUG:showline
+        printf("\nto %d:%s", toid, buf);  // BUG:showline
         show_line++;
     }
     PAUSE;
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
 }
 
 void public_message_menu(int toid)
@@ -182,8 +169,8 @@ void public_message_menu(int toid)
     show_line++;
     while (returnnumber)
     {
-        recv_public_message(toid);                //
-        returnnumber = send_secret_message(toid); // ok
+        recv_public_message(toid);                 //
+        returnnumber = send_secret_message(toid);  // ok
     }
     return;
 }

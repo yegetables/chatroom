@@ -11,8 +11,7 @@ extern int userid;
 
 char *id_to_name(int id, char *name)
 {
-    if (name == NULL)
-        return NULL;
+    if (name == NULL) return NULL;
 #ifdef PROJECT_SERVER
     char p[BUFLEN] = {0};
     sprintf(p, "select user_name from user where user_id =\'%d\';", id);
@@ -44,8 +43,7 @@ char *id_to_name(int id, char *name)
         return NULL;
     }
     strcpy(name, ms->value);
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
 #endif
     return name;
 }
@@ -53,8 +51,7 @@ char *id_to_name(int id, char *name)
 int name_to_id(char *name)
 {
     int a = -1;
-    if (name == NULL)
-        return a;
+    if (name == NULL) return a;
 #ifdef PROJECT_SERVER
     char p[BUFLEN] = {0};
     sprintf(p, "select user_id from user where user_name =\'%s\';", name);
@@ -86,8 +83,7 @@ int name_to_id(char *name)
         return -1;
     }
     a = atoi(ms->value);
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
 
 #endif
     return a;

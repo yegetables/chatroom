@@ -19,7 +19,7 @@ void justwrite(int cfd, int event, void *args)
         what_to = returnnumber;
     }
     else
-    { //未登录,使用ev->fd
+    {  //未登录,使用ev->fd
         what_to = ev->fd;
     }
 
@@ -58,11 +58,9 @@ int id_to_fd(int id)
         int i = 0;
         for (; i < MAXCLIENT; i++)
         {
-            if (fd_id[i] == id)
-                return i;
+            if (fd_id[i] == id) return i;
         }
-        if (i == MAXCLIENT)
-            return -1; //未登录
+        if (i == MAXCLIENT) return -1;  //未登录
     }
     return -1;
 }
