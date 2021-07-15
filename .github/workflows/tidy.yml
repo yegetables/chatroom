@@ -11,7 +11,7 @@ jobs:
       - name: build chatroom
         uses: actions/checkout@master
       - name: clangd init  
-        run: sudo apt-get update && sudo apt-get -qq -y install curl clang-tidy cmake jq clang cppcheck clang-format && sudo chmod +x ./.github/*.sh 
+        run: sudo apt-get update >/dev/null && sudo apt-get -qq -y install curl clang-tidy cmake jq clang cppcheck clang-format >/dev/null && sudo chmod +x ./.github/*.sh 
         shell: bash
       
       - name: c-linter
