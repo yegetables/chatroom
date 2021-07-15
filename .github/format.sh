@@ -6,7 +6,7 @@ echo "## Initializing git repo..."
 # sudo rm -rf * .*
 # git init
 echo "### Adding git remote..."
-git remote add origin https://x-access-token:$GITHUB_TOKEN@github.com/$REPO_FULLNAME.git
+# git remote add origin https://x-access-token:$GITHUB_TOKEN@github.com/$REPO_FULLNAME.git
 echo "### Getting branch"
 BRANCH=${GITHUB_REF#*refs/heads/}
 echo "### git fetch $BRANCH ..."
