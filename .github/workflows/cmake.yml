@@ -3,6 +3,9 @@ name: CMake
 on:
   pull_request:
     branches: [ chatroom , dev]
+  push:
+    branches: [ chatroom , dev]
+    
 
 jobs:
   build_make:
