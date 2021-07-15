@@ -14,8 +14,7 @@ void move_clln(int nums)
 
 void re_show(void)
 {
-    if (show_line < 0)
-        show_line = 0;
+    if (show_line < 0) show_line = 0;
     if (show_line == 0)
     {
         information_bar();
@@ -30,8 +29,8 @@ void re_show(void)
     // move_save;
     //大于3
 
-    move_up(show_line);   //移动到开头
-    move_clln(show_line); //清空
+    move_up(show_line);    //移动到开头
+    move_clln(show_line);  //清空
     information_bar();
     show_line = 3;
     // printf("%d   %d      %d\n", ++show_line);
