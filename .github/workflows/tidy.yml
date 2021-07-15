@@ -20,4 +20,10 @@ jobs:
       
       - name: format
         run: ./.github/format.sh
-        
+  format-fix:
+    runs-on: ubuntu-latest
+    env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Clang Code Formatter
+        uses: ajian2002/clang-format-action@master
