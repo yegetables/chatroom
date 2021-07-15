@@ -1,15 +1,15 @@
 #include "config.h"
 #ifdef PROJECT_SERVER
 #include PROJECT_SERVERHEAD
-extern zlog_category_t* ser;
+extern zlog_category_t *ser;
 #else
 #include PROJECT_CLIENTHEAD
-extern zlog_category_t* cli;
+extern zlog_category_t *cli;
 #endif
 
-bool recv_info(int cfd, info* ms)
+bool recv_info(int cfd, info *ms)
 {
-    zlog_category_t* tmp = NULL;
+    zlog_category_t *tmp = NULL;
 #ifdef PROJECT_SERVER
     tmp = ser;
 #else
@@ -24,14 +24,15 @@ bool recv_info(int cfd, info* ms)
 rerecv:;
     if ((returnnumber = recv(cfd, ms, sizeof(info), 0)) != sizeof(info))
     {
-        if (returnnumber == 0) return false;
+        if (returnnumber == 0)
+            return false;
 
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
             // 服务端不能卡死,客户端close之后服务端收到EAGAIN,三次失败直接close
             // 客户端适时等待能提高准确率,永远重试
 #ifdef PROJECT_CLIENT
-            sleep(1);  // magic number
+            sleep(1); // magic number
             goto rerecv;
 #endif
         }
@@ -51,9 +52,9 @@ rerecv:;
     return true;
 }
 
-bool send_info(int cfd, info* ms)
+bool send_info(int cfd, info *ms)
 {
-    zlog_category_t* tmp = NULL;
+    zlog_category_t *tmp = NULL;
 #ifdef PROJECT_SERVER
     tmp = ser;
 #else
@@ -67,12 +68,13 @@ bool send_info(int cfd, info* ms)
 resend:;
     if (sizeof(info) != (returnnumber = send(cfd, ms, sizeof(info), 0)))
     {
-        if (returnnumber == 0) return false;
+        if (returnnumber == 0)
+            return false;
         zlog_warn(tmp, "send failed %s", show_errno());
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
 #ifdef PROJECT_CLIENT
-            sleep(1);  // magic number
+            sleep(1); // magic number
             goto resend;
 #endif
         }
@@ -91,9 +93,9 @@ resend:;
     return true;
 }
 
-bool recv_file(int cfd, char* path, long int f_size)
+bool recv_file(int cfd, char *path, long int f_size)
 {
-    zlog_category_t* tmp = NULL;
+    zlog_category_t *tmp = NULL;
 #ifdef PROJECT_SERVER
     tmp = ser;
 #else
@@ -124,7 +126,7 @@ bool recv_file(int cfd, char* path, long int f_size)
     }
     ftruncate(fd, f_size);
 
-    char* buf = (char*)mmap(NULL, f_size, PROT_WRITE, MAP_SHARED, fd, 0);
+    char *buf = (char *)mmap(NULL, f_size, PROT_WRITE, MAP_SHARED, fd, 0);
     if (buf == NULL)
     {
         zlog_error(tmp, "mmap error %s", show_errno());
@@ -136,7 +138,8 @@ resend:;
     // offset, 0)))
     if (f_size != (returnnumber = recv(cfd, buf, f_size, 0)))
     {
-        if (returnnumber == 0) return false;
+        if (returnnumber == 0)
+            return false;
         if (returnnumber < 0)
         {
             zlog_warn(tmp, "recv file failed %s", show_errno());
@@ -144,7 +147,7 @@ resend:;
             if (errno == EWOULDBLOCK || errno == EAGAIN)
             {
 #ifdef PROJECT_CLIENT
-                sleep(1);  // magic number
+                sleep(1); // magic number
                 goto resend;
 #endif
             }
@@ -175,9 +178,9 @@ resend:;
     return true;
 }
 
-bool send_file(int cfd, char* path, long int f_size)
+bool send_file(int cfd, char *path, long int f_size)
 {
-    zlog_category_t* tmp = NULL;
+    zlog_category_t *tmp = NULL;
 #ifdef PROJECT_SERVER
     tmp = ser;
 #else
@@ -222,7 +225,7 @@ resend:;
             if (errno == EWOULDBLOCK || errno == EAGAIN)
             {
 #ifdef PROJECT_CLIENT
-                sleep(1);  // magic number
+                sleep(1); // magic number
                 goto resend;
 #endif
             }

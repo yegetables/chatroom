@@ -5,9 +5,9 @@
 #include PROJECT_CLIENTHEAD
 #endif
 
-char* showinfo(info* ms)
+char *showinfo(info *ms)
 {
-    static char* how[20];
+    static char *how[20];
     {
         how[0] = "[HUP_NO]";
         how[1] = "[IF_HAS]";
@@ -36,7 +36,7 @@ char* showinfo(info* ms)
         // strcpy(how[3], "[WHAT_FIRST_VALUE]");
         // strcpy(how[4], "[SET_ONLINE]");
     }
-    static char* type[10];
+    static char *type[10];
     {
         type[1] = "[msg]";
         type[2] = "[file]";
@@ -49,7 +49,7 @@ char* showinfo(info* ms)
         // strcpy(type[1], "[file]");
         // strcpy(type[2], "[sql]");
     }
-    char* logbuf = (char*)calloc(BUFLEN, sizeof(char));
+    char *logbuf = (char *)calloc(BUFLEN, sizeof(char));
 
     sprintf(&logbuf[strlen(logbuf)],
             "----------info---------\n"

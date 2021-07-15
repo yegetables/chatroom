@@ -4,12 +4,12 @@ extern zlog_category_t *cli;
 extern int userid;
 extern char username[30];
 extern int show_line;
-void cli_show_friends(void)  // TODO(ajian): ready to perf
+void cli_show_friends(void) // TODO(ajian): ready to perf
 {
     char p[BUFLEN] = {0};
-    int status;      //在线
-    int shield;      // 屏蔽
-    int number = 0;  //好友数量
+    int status;     //在线
+    int shield;     // 屏蔽
+    int number = 0; //好友数量
     int online = 0;
     int j;
     printf("---------好友列表-----------\n");
@@ -19,7 +19,7 @@ void cli_show_friends(void)  // TODO(ajian): ready to perf
     for (j = 0; j < 4; j++)
     {
         memset(p, 0, BUFLEN);
-        {  //更改状态
+        { //更改状态
             // 0->在线未屏蔽 10
             // 1->离线未屏蔽 00
             // 2->在线屏蔽 11
@@ -53,7 +53,8 @@ void cli_show_friends(void)  // TODO(ajian): ready to perf
                     userid, status, shield);
 
             ms = cli_creatinfo(userid, 0, sql, FR_LIST, p);
-            if (ms == NULL) break;
+            if (ms == NULL)
+                break;
         }
         char *buf = ms->value;
         // show //%d\n%d %s\n%d %s\n
@@ -61,30 +62,31 @@ void cli_show_friends(void)  // TODO(ajian): ready to perf
         sscanf(buf, "%d", &num);
         buf = strchr(buf, '\n');
 
-        for (int i = 0; i < num && ++buf != NULL; i++)  //本次个数
+        for (int i = 0; i < num && ++buf != NULL; i++) //本次个数
         {
-            memset(p, 0, BUFLEN);  // name
+            memset(p, 0, BUFLEN); // name
             int id;
             sscanf(buf, "%d %s", &id, p);
             number++;
-            if (j == 0) online++;
+            if (j == 0)
+                online++;
             buf = strchr(buf, '\n');
             printf("%2d-->%15s (%d)", number, p, id);
             if (j == 0)
             {
-                printf("----(online)       \n");  //在线 未屏蔽
+                printf("----(online)       \n"); //在线 未屏蔽
             }
             else if (j == 1)
             {
-                printf("                   \n");  //离线 未屏蔽
+                printf("                   \n"); //离线 未屏蔽
             }
             else if (j == 2)
             {
-                printf("----(online|shield)\n");  //在线 屏蔽
+                printf("----(online|shield)\n"); //在线 屏蔽
             }
             else
             {
-                printf("----       (shield)\n");  //离线 屏蔽
+                printf("----       (shield)\n"); //离线 屏蔽
             }
         }
     }
@@ -92,7 +94,8 @@ void cli_show_friends(void)  // TODO(ajian): ready to perf
     if (j != 4)
     {
         zlog_error(cli, "can't find all j:%d", j);
-        if (ms) free(ms);
+        if (ms)
+            free(ms);
         // printf("任意键退出\n");
         // getchar();
         // getchar();
@@ -102,9 +105,10 @@ void cli_show_friends(void)  // TODO(ajian): ready to perf
     }
 
     printf("sum:%d friends,%d online\n", number,
-           online);  //在线未屏蔽人数
+           online); //在线未屏蔽人数
     printf("------------------------\n");
-    if (ms) free(ms);
+    if (ms)
+        free(ms);
     // printf("任意键退出\n");
     // getchar();
     // getchar();
@@ -136,7 +140,8 @@ void cli_del_friend(void)
     else
     {
         zlog_debug(cli, "%d del %d success", userid, toid);
-        if (ms) free(ms);
+        if (ms)
+            free(ms);
     }
     printf("删除%d成功\n", toid);
     PAUSE;
@@ -169,7 +174,8 @@ void cli_shield_friend(int is)
     PAUSE;
     show_line += 3;
 
-    if (ms) free(ms);
+    if (ms)
+        free(ms);
 }
 
 void cli_search_user(void)
@@ -223,7 +229,7 @@ void cli_add_friend(void)
             "INSERT INTO requests "
             "(requests.from,requests.to,requests.type,requests.how,"
             "requests.value,requests.if_read) VALUES (%d,%d,%d,%d,\'%s\',0);",
-            userid, toid, sql, ADD_FRIEND, pp);  //将来取走时候不回复
+            userid, toid, sql, ADD_FRIEND, pp); //将来取走时候不回复
     ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
     if (ms == NULL)
     {
@@ -233,7 +239,8 @@ void cli_add_friend(void)
     printf("请求已发送,等待同意后在好友列表查看");
     PAUSE;
     show_line += 2;
-    if (ms) free(ms);
+    if (ms)
+        free(ms);
 }
 
 void show_apply_friends(void)
@@ -253,8 +260,8 @@ void show_apply_friends(void)
     char *buf = ms->value;
     int num = 0;
     sscanf(buf, "%d", &num);
-    buf = strchr(buf, '\n');                         // name
-    for (int i = 1; i <= num && ++buf != NULL; i++)  //本次个数
+    buf = strchr(buf, '\n');                        // name
+    for (int i = 1; i <= num && ++buf != NULL; i++) //本次个数
     {
         int id;
         sscanf(buf, "%d %s", &id, p);
@@ -264,7 +271,8 @@ void show_apply_friends(void)
     printf("----------sum:%d--------\n", num);
     show_line += num + 1;
     PAUSE;
-    if (ms) free(ms);
+    if (ms)
+        free(ms);
     return;
 }
 
@@ -277,7 +285,7 @@ void cli_agree_friend(int is)
     memset(p, 0, BUFLEN);
     info *ms = NULL;
 
-    if (is == 1)  //同意
+    if (is == 1) //同意
     {
         sprintf(p,
                 "select requests.value  from requests  where "
@@ -290,7 +298,8 @@ void cli_agree_friend(int is)
             zlog_error(cli, "recv none");
             return;
         }
-        if (ms) free(ms);
+        if (ms)
+            free(ms);
     }
 
     memset(p, 0, BUFLEN);
@@ -319,6 +328,7 @@ void cli_agree_friend(int is)
     }
     show_line += 3;
     PAUSE;
-    if (ms) free(ms);
+    if (ms)
+        free(ms);
     return;
 }

@@ -1,8 +1,8 @@
 #include "config.h"
 #include PROJECT_SERVERHEAD
 
-int port = 500;  // var 服务器端口
-int epfd;        // 全局epfd
+int port = 500; // var 服务器端口
+int epfd;       // 全局epfd
 events g_events[MAXCLIENT + 1];
 zlog_category_t *ser = NULL;
 MYSQL *sql_l = NULL;
@@ -29,7 +29,8 @@ int main(int argc, char **argv)
              * 如果不希望getopt()打印出错信息，则只要将全域变量opterr设为0即可。
              */
 
-            if (opt == 'h') help();
+            if (opt == 'h')
+                help();
 
             ///  @todo help手册
             printf("******************************\n");
@@ -100,8 +101,7 @@ int main(int argc, char **argv)
                 free(p);
                 if (strlen(fd_name[thiss->fd]))
                 {
-                    zlog_info(ser, "**leave**   fd:%d id:%d name:%s", thiss->fd, fd_id[thiss->fd],
-                              fd_name[thiss->fd]);
+                    zlog_info(ser, "**leave**   fd:%d id:%d name:%s", thiss->fd, fd_id[thiss->fd], fd_name[thiss->fd]);
                     char *cmd = (char *)calloc(BUFLEN, sizeof(char));
                     sprintf(cmd,
                             "update user set user_status=\'0\' where "

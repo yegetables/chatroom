@@ -7,10 +7,10 @@ extern int cfd;
 
 void cli_recv_file(int toid, int is)
 {
-    char fname[PATH_MAX / 2] = {0};  //文件模糊名
+    char fname[PATH_MAX / 2] = {0}; //文件模糊名
     info *ms = NULL;
-    char sname[BUFLEN];        //本地保存文件路径
-    char relname[BUFLEN / 2];  //服务器真实文件名
+    char sname[BUFLEN];       //本地保存文件路径
+    char relname[BUFLEN / 2]; //服务器真实文件名
     char *b;
 resdd:;
     memset(fname, 0, PATH_MAX);
@@ -25,7 +25,7 @@ resdd:;
             "select requests.how,requests.value  from requests  where "
             "requests.to= %d and requests.from=%d and requests.type=%d"
             " and requests.value like \'%%%s\'",
-            userid, toid, file, fname);  //模糊搜索
+            userid, toid, file, fname); //模糊搜索
     // base_GET_MANY_VALUE(ms, 2)
 
     ms = cli_creatinfo(userid, 0, sql, AGREE_RECV_FILE, p);
@@ -36,7 +36,8 @@ resdd:;
     }
     if (1 != atoi(ms->value))
     {
-        if (ms) free(ms);
+        if (ms)
+            free(ms);
         printf("结果太多或不存在,重新搜索\n");
         goto resdd;
     }
@@ -47,7 +48,7 @@ resdd:;
     b++;
     sscanf(b, "%ld %s", &f_size, relname);
 
-    if (is == 1)  //同意
+    if (is == 1) //同意
     {
         memset(sname, 0, PATH_MAX);
         printf("输入保存到文件的绝对路径\n");
@@ -61,7 +62,8 @@ resdd:;
         if (!recv_file(cfd, sname, f_size))
         {
             zlog_error(cli, "recv file error: %s", sname);
-            if (ms) free(ms);
+            if (ms)
+                free(ms);
             return;
         }
     }
@@ -75,7 +77,7 @@ resdd:;
             "requests.to= %d   and requests.value =\'%s\' and  "
             "requests.type=%d and "
             "requests.from= %d",
-            userid, relname, file, toid);  //设为已读
+            userid, relname, file, toid); //设为已读
     // base_GET_MANY_VALUE(ms, 2)
     ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
 
@@ -94,7 +96,8 @@ resdd:;
         zlog_debug(cli, " del file from %d to %d ", toid, userid);
         printf("已拒绝文件%s\n", fname);
     }
-    if (ms) free(ms);
+    if (ms)
+        free(ms);
     return;
 }
 
@@ -112,7 +115,7 @@ void show_apply_files(int toid)
             "requests.from=relationship.id_2 and "
             "requests.to=relationship.id_1  and relationship.if_shield=0 "
             "and requests.if_read=0 ;",
-            userid, file, toid);  //未屏蔽的文件
+            userid, file, toid); //未屏蔽的文件
 
     ms = cli_creatinfo(userid, 0, sql, GET_MESSAGE_FROM, p);
     // base_GET_MANY_VALUE(ms, 1)
@@ -125,8 +128,8 @@ void show_apply_files(int toid)
     // printf("%s\n", buf);
     int num = 0;
     sscanf(buf, "%d", &num);
-    buf = strchr(buf, '\n');                         // name
-    for (int i = 1; i <= num && ++buf != NULL; i++)  //本次个数
+    buf = strchr(buf, '\n');                        // name
+    for (int i = 1; i <= num && ++buf != NULL; i++) //本次个数
     {
         memset(p, 0, sizeof(p));
         sscanf(buf, "%s", p);
@@ -135,7 +138,8 @@ void show_apply_files(int toid)
         // printf("%2d-->%15s \n", i, basename(p));
     }
     printf("----------sum:%d--------\n", num);
-    if (ms) free(ms);
+    if (ms)
+        free(ms);
     return;
 }
 
@@ -176,7 +180,8 @@ void send_file_menu(int toid)
     {
         zlog_error(cli, "path:%s can't ready file ", path);
         printf("服务器未准备好接收文件\n");
-        if (ms) free(ms);
+        if (ms)
+            free(ms);
         return;
     }
 
@@ -210,5 +215,5 @@ void send_file_menu(int toid)
         ms = NULL;
     }
     zlog_debug(cli, "recv errror");
-    return;  // no close
+    return; // no close
 }
