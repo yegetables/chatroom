@@ -1,4 +1,4 @@
-name: c-linter
+name: tidy and format
 
 on: [pull_request,push]
 jobs:
