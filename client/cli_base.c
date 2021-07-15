@@ -78,7 +78,6 @@ void update_notices(char *user_msg, char *user_files)
     }
 
     applications = atoi(ms->value);
-
     {
         {
             memset(p, 0, sizeof(p));
@@ -97,7 +96,7 @@ void update_notices(char *user_msg, char *user_files)
                 return;
             }
         }
-
+        messages = atoi(ms->value);
         char *b = strchr(ms->value, '\n');
         if (b == NULL)
         {
@@ -133,8 +132,6 @@ void update_notices(char *user_msg, char *user_files)
             }
         }
     }
-
-    messages = atoi(ms->value);
 
     {
         memset(p, 0, sizeof(p));

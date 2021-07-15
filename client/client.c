@@ -181,11 +181,12 @@ int main(int argc, char **argv)
         else  ///  注册
         {
             zlog_info(cli, "register user: %s", username);
+        reinput:;
+            show_line += 5;
             printf("-----------------注册:\n");
             printf("用户名:%s\n", username);
             printf("密码开头不能是#,不超过24位\n");
             printf("密码:");
-            show_line += 5;
             fgets(passwd, 25, stdin);
             {
                 if (passwd[strlen(passwd) - 2] == '\r' && passwd[strlen(passwd) - 1] == '\n')
@@ -194,6 +195,13 @@ int main(int argc, char **argv)
                 }
                 if (passwd[strlen(passwd) - 1] == '\n') passwd[strlen(passwd) - 1] = '\0';
             }
+            if (passwd[0] == '#' || strlen(passwd) > 24)
+            {
+                printf("重新输入密码\n");
+                show_line++;
+                goto reinput;
+            }
+
             printf("输入验证邮箱:\n");
             printf("邮箱不超过48位\n");
             show_line += 3;
@@ -230,7 +238,8 @@ int main(int argc, char **argv)
     if (userid > 0)
     {
         // system("clear");
-        // alarm(10);
+        update_notices(who_send_msg, who_send_file);
+        alarm(10);
         show_main_menu();
     }
     else

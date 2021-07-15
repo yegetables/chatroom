@@ -12,7 +12,7 @@ extern char who_send_msg[BUFLEN];
 extern char who_send_file[BUFLEN];
 void information_bar(void)
 {
-    update_notices(who_send_msg, who_send_file);
+    // update_notices(who_send_msg, who_send_file);
     //准备消息来源名单
     printf("----------%d:applications--------\n", applications);
     printf("------------%d:messages from (%s)----------\n", messages, who_send_msg);
