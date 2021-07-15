@@ -13,9 +13,11 @@ jobs:
       - name: clangd init  
         run: sudo apt-get update && sudo apt-get -qq -y install curl clang-tidy cmake jq clang cppcheck clang-format && sudo chmod +x ./.github/*.sh 
         shell: bash
+      
       - name: c-linter
         run: ./.github/c-linter.sh
         shell: bash
+      
       - name: format
         run: ./.github/format.sh
         
