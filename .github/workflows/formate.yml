@@ -9,3 +9,5 @@ jobs:
       uses: ivanludvig/clang-format-action@v1.4
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: clang-tidy check
+      uses: muxee/clang-tidy-action@0.0.1-rc1
