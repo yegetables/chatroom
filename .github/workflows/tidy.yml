@@ -1,12 +1,14 @@
 name: c-linter
 
-on: [pull_request]
+on: [pull_request,push]
 jobs:
   c-linter:
     name: c-linter
     runs-on: ubuntu-latest
+    env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: c-linter
         uses: ajian2002/cpp-linter-action@master
-    env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Clang Code Formatter
+        uses: ajian2002/clang-format-action@master

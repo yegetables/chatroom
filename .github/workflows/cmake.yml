@@ -1,8 +1,6 @@
 name: CMake
 
-on:
-  pull_request:
-    branches: [ chatroom , dev]
+on:  pull_request
     
 jobs:
   build_make:
