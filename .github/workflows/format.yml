@@ -1,6 +1,6 @@
-name: tidy 
+name:  format
 
-on: [pull_request]
+on: [push]
 jobs:
   c-linter:
     name: c-linter
@@ -13,6 +13,6 @@ jobs:
       - name: clangd init  
         run: sudo apt-get update >/dev/null && sudo apt-get -qq -y install curl clang-tidy cmake jq clang cppcheck clang-format >/dev/null && sudo chmod +x ./.github/*.sh 
         shell: bash
-      - name: c-linter
-        run: ./.github/c-linter.sh
+      - name: Clang Code Formatter
+        run: ./.github/format.sh
         shell: bash
