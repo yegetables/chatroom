@@ -1,12 +1,29 @@
-name: c-linter
+name: tidy and format
 
-on: [pull_request]
+on: [pull_request,push]
 jobs:
   c-linter:
     name: c-linter
     runs-on: ubuntu-latest
-    steps:
-      - name: c-linter
-        uses: ajian2002/cpp-linter-action@master
     env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: build chatroom
+        uses: actions/checkout@master
+      - name: clangd init  
+        run: sudo apt-get update >/dev/null && sudo apt-get -qq -y install curl clang-tidy cmake jq clang cppcheck clang-format >/dev/null && sudo chmod +x ./.github/*.sh 
+        shell: bash
+      
+      - name: c-linter
+        run: ./.github/c-linter.sh
+        shell: bash
+      
+      - name: format
+        run: ./.github/format.sh
+    name: format-fix
+    runs-on: ubuntu-latest
+    env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Clang Code Formatter
+        uses: ajian2002/clang-format-action@master
