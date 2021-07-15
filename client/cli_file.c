@@ -168,9 +168,9 @@ void send_file_menu(int toid)
     info *ms = NULL;
     char p[BUFLEN] = {0};
     sprintf(p, "%s %ld %d", filename, f_size, toid);
-    zlog_debug(cli, "sendfile ready value: %s", ms->value);
     //发送文件通知
     ms = cli_creatinfo(userid, 0, sql, SEND_FILE_REDY, p);
+    zlog_debug(cli, "sendfile ready value: %s", ms->value);
 
     if (ms == NULL || atoi(ms->value) == 0)
     {
