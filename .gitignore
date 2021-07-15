@@ -2,13 +2,13 @@ build/*
 log/*.log
 a.out
 Doxyfile.bak
-doxygen-qmi-style 
+doxygen-qmi-style
 **/html/**
 node_modules
 .cache
 .vscode
 checks.json
-*.sh
+# *.sh
 *.sql
 package.json
 .cz-config.js

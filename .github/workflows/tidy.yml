@@ -8,7 +8,14 @@ jobs:
     env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: build chatroom
+        uses: actions/checkout@master
+      - name: clangd init  
+        run:  apt-get update && apt-get -qq -y install curl clang-tidy cmake jq clang cppcheck clang-format && chmod +x ./.github/c-linter.sh && chmod +x ./.github/format.sh
+        shell: bash
       - name: c-linter
-        uses: ajian2002/cpp-linter-action@master
-      - name: Clang Code Formatter
-        uses: ajian2002/clang-format-action@master
+        run: ./.github/c-linter.sh
+        shell: bash
+      - name: format
+        run: ./.github/format.sh
+        
