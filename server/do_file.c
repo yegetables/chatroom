@@ -17,10 +17,12 @@ long int event_recv_file_ready(events *ev)
         zlog_error(ser, "/proc/sys/kernel/random/uuid can't open");
         return -1;
     }
-    char uid[40] = {0};  //获取uuid
+    char uid[40] = {0}; //获取uuid
     read(ufd, uid, 39);
-    if (uid[strlen(uid) - 1] == '\n' || uid[strlen(uid) - 1] == ' ') uid[strlen(uid) - 1] = 0;
-    if (strlen(uid) < 30) return -2;
+    if (uid[strlen(uid) - 1] == '\n' || uid[strlen(uid) - 1] == ' ')
+        uid[strlen(uid) - 1] = 0;
+    if (strlen(uid) < 30)
+        return -2;
     // zlog_info(ser, "uid:%s", uid);
     char filename[100] = {0};
     int toid;
@@ -34,7 +36,7 @@ long int event_recv_file_ready(events *ev)
             "(requests.from,requests.to,requests.type,requests.how,requests."
             "value,requests.if_read)values(%d,%d,%d,%ld, \'%s/%s/%s\',0)",
             ms->from, toid, file, f_size, getenv("HOME"), uid,
-            filename);  // uuid(36)+path
+            filename); // uuid(36)+path
     //加入全局结构,准备接收
     {
         int i;
@@ -71,7 +73,8 @@ void IN_recvfile(int cfd, int event, void *args)
     {
         for (i = 0; i < MAXCLIENT; i++)
         {
-            if (f_r[i].from_id == fd_id[ev->fd]) break;
+            if (f_r[i].from_id == fd_id[ev->fd])
+                break;
         }
         if (i == MAXCLIENT)
         {
@@ -92,7 +95,7 @@ void IN_recvfile(int cfd, int event, void *args)
         sprintf(ev->js.value, "%d %s[%ld] success save", 1, f_r[i].path, f_r[i].f_size);
     }
 
-    {  //设置回复消息
+    { //设置回复消息
         ev->js.from = 0;
         ev->js.to = fd_id[ev->fd];
         ev->js.how = IF_DONE;
@@ -140,7 +143,7 @@ bool event_AGREE_RECV_FILE(info *ms)
         ms->to = ms->from;
         ms->from = 0;
     }
-    else  //唯一
+    else //唯一
     {
         ms->to = ms->from;
         ms->from = 0;

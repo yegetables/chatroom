@@ -84,8 +84,8 @@ int epoll_init_lfd(void)
 
     /*不考虑多线程*/
     epoll_set(&g_events[MAXCLIENT], lfd, lfdaccept,
-              &g_events[MAXCLIENT]);           //设置回调
-    epoll_add(EPOLLIN, &g_events[MAXCLIENT]);  // ev->fd
+              &g_events[MAXCLIENT]);          //设置回调
+    epoll_add(EPOLLIN, &g_events[MAXCLIENT]); // ev->fd
 
     return lfd;
 }
@@ -116,14 +116,12 @@ void ser_setconfig(char *filename)
             cJSON *item = NULL;
             char *name = NULL;
             name = "server_port";
-            if (cJSON_HasObjectItem(configjson, name) &&
-                cJSON_IsNumber((item = cJSON_GetObjectItem(configjson, name))))
+            if (cJSON_HasObjectItem(configjson, name) && cJSON_IsNumber((item = cJSON_GetObjectItem(configjson, name))))
             {
                 port = item->valueint;
             }
             name = "database_port";
-            if (cJSON_HasObjectItem(configjson, name) &&
-                cJSON_IsNumber((item = cJSON_GetObjectItem(configjson, name))))
+            if (cJSON_HasObjectItem(configjson, name) && cJSON_IsNumber((item = cJSON_GetObjectItem(configjson, name))))
             {
                 database_port = item->valueint;
             }
@@ -201,9 +199,12 @@ char *showevents(events *ev)
                 }
             }
         }
-        if (ev->call_back == justwrite) sprintf(&logbuf[strlen(logbuf)], "[justwrite]");
-        if (ev->call_back == client_event) sprintf(&logbuf[strlen(logbuf)], "[client_event]");
-        if (ev->call_back == lfdaccept) sprintf(&logbuf[strlen(logbuf)], "[lfdaccept]");
+        if (ev->call_back == justwrite)
+            sprintf(&logbuf[strlen(logbuf)], "[justwrite]");
+        if (ev->call_back == client_event)
+            sprintf(&logbuf[strlen(logbuf)], "[client_event]");
+        if (ev->call_back == lfdaccept)
+            sprintf(&logbuf[strlen(logbuf)], "[lfdaccept]");
         if (ev->status)
         {
             sprintf(&logbuf[strlen(logbuf)], "[live]\n");
@@ -288,7 +289,7 @@ void lfdaccept(int a, int b, void *args)
     int lfd = lfdevent->fd;
     struct sockaddr_in clientaddr;
     socklen_t clientaddrlen = sizeof(struct sockaddr_in);
-    a = 1;  // 设置复用选项
+    a = 1; // 设置复用选项
     setsockopt(lfd, SOL_SOCKET, SO_REUSEADDR, &a, (socklen_t)sizeof(int));
     setsockopt(lfd, SOL_SOCKET, SO_REUSEPORT, &a, (socklen_t)sizeof(int));
 
@@ -298,7 +299,7 @@ reaccept:;
     int cfd = 0;
     {
         cfd = accept(lfd, (struct sockaddr *)&clientaddr,
-                     &clientaddrlen);  //非阻塞accept
+                     &clientaddrlen); //非阻塞accept
         if (cfd < 0)
         {
             if (errno == EWOULDBLOCK)
@@ -315,7 +316,8 @@ reaccept:;
 
         for (; i < MAXCLIENT; i++)
         {
-            if (g_events[i].status == 0) break;
+            if (g_events[i].status == 0)
+                break;
         }
         if (i == MAXCLIENT)
         {

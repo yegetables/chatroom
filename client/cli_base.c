@@ -1,12 +1,12 @@
 #include "config.h"
 #include PROJECT_CLIENTHEAD
-extern zlog_category_t* cli;
+extern zlog_category_t *cli;
 extern int cfd;
 extern int userid;
 extern int applications;
 extern int messages;
 extern int files;
-info* cli_send_recv(info* ms, int how)
+info *cli_send_recv(info *ms, int how)
 {
     if (ms == NULL)
     {
@@ -23,7 +23,7 @@ info* cli_send_recv(info* ms, int how)
             free(ms);
             ms = NULL;
         }
-        return ms;  // no close
+        return ms; // no close
     }
 
     if (how != HUP_NO)
@@ -31,7 +31,7 @@ info* cli_send_recv(info* ms, int how)
         // 接受并展示info
         if (recv_info(cfd, ms))
         {
-            char* tt = NULL;
+            char *tt = NULL;
             tt = showinfo(ms);
             zlog_debug(cli, tt);
             free(tt);
@@ -44,7 +44,7 @@ info* cli_send_recv(info* ms, int how)
                 free(ms);
                 ms = NULL;
             }
-            return ms;  // no close
+            return ms; // no close
         }
     }
     else
@@ -53,7 +53,7 @@ info* cli_send_recv(info* ms, int how)
     }
 }
 
-void update_notices(char* user_msg, char* user_files)
+void update_notices(char *user_msg, char *user_files)
 {
     applications = 0;
     messages = 0;
@@ -62,7 +62,7 @@ void update_notices(char* user_msg, char* user_files)
     char p[BUFLEN] = {0};
     memset(user_msg, 0, BUFLEN);
     memset(user_files, 0, BUFLEN);
-    info* ms = NULL;
+    info *ms = NULL;
     {
         memset(p, 0, BUFLEN);
         sprintf(p,
@@ -89,7 +89,7 @@ void update_notices(char* user_msg, char* user_files)
                     "requests.how=\'%d\' and requests.from=relationship.id_2 and "
                     "requests.to=relationship.id_1  and relationship.if_shield=0 "
                     "and requests.if_read=0 ;",
-                    userid, MESSAGES);  //未屏蔽的消息
+                    userid, MESSAGES); //未屏蔽的消息
             ms = cli_creatinfo(userid, 0, sql, GET_MESSAGE_FROM, p);
             if (ms == NULL)
             {
@@ -98,7 +98,7 @@ void update_notices(char* user_msg, char* user_files)
             }
         }
 
-        char* b = strchr(ms->value, '\n');
+        char *b = strchr(ms->value, '\n');
         if (b == NULL)
         {
             zlog_error(cli, "value:%s", ms->value);
@@ -144,7 +144,7 @@ void update_notices(char* user_msg, char* user_files)
                 " and requests.from=relationship.id_2 and "
                 "requests.to=relationship.id_1  and relationship.if_shield=0 "
                 "and requests.if_read=0 ;",
-                userid, file);  //未屏蔽的文件
+                userid, file); //未屏蔽的文件
         ms = cli_creatinfo(userid, 0, sql, GET_MESSAGE_FROM, p);
         if (ms == NULL)
         {
@@ -156,7 +156,7 @@ void update_notices(char* user_msg, char* user_files)
     files = atoi(ms->value);
 
     {
-        char* b = strchr(ms->value, '\n');
+        char *b = strchr(ms->value, '\n');
         if (b == NULL)
         {
             zlog_error(cli, "value:%s", ms->value);
@@ -198,9 +198,9 @@ void update_notices(char* user_msg, char* user_files)
     }
 }
 
-long int get_file_size(char* path)
+long int get_file_size(char *path)
 {
-    zlog_category_t* tmp = NULL;
+    zlog_category_t *tmp = NULL;
 
     tmp = cli;
     if (access(path, F_OK) || access(path, R_OK))
@@ -225,9 +225,9 @@ long int get_file_size(char* path)
     return statbuf.st_size;
 }
 
-info* cli_creatinfo(int from, int to, value_type type, int how, char* value)
+info *cli_creatinfo(int from, int to, value_type type, int how, char *value)
 {
-    info* ms = (info*)malloc(sizeof(info));
+    info *ms = (info *)malloc(sizeof(info));
     strcpy(ms->value, value);
     ms->how = how;
     ms->type = type;

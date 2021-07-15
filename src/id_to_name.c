@@ -1,22 +1,23 @@
 #include "config.h"
 #ifdef PROJECT_SERVER
 #include PROJECT_SERVERHEAD
-extern zlog_category_t* ser;
-extern MYSQL* sql_l;
+extern zlog_category_t *ser;
+extern MYSQL *sql_l;
 #else
 #include PROJECT_CLIENTHEAD
-extern zlog_category_t* cli;
+extern zlog_category_t *cli;
 extern int userid;
 #endif
 
-char* id_to_name(int id, char* name)
+char *id_to_name(int id, char *name)
 {
-    if (name == NULL) return NULL;
+    if (name == NULL)
+        return NULL;
 #ifdef PROJECT_SERVER
     char p[BUFLEN] = {0};
     sprintf(p, "select user_name from user where user_id =\'%d\';", id);
     mysql_query(sql_l, p);
-    MYSQL_RES* result = mysql_store_result(sql_l);
+    MYSQL_RES *result = mysql_store_result(sql_l);
     int returnnumber = mysql_num_rows(result);
     if (1 == returnnumber)
     {
@@ -33,7 +34,7 @@ char* id_to_name(int id, char* name)
 
 #else
 
-    info* ms = NULL;
+    info *ms = NULL;
     char p[BUFLEN] = {0};
     sprintf(p, "select user_name from user where user_id=\'%d\';", id);
     ms = cli_creatinfo(userid, 0, sql, WHAT_FIRST_VALUE, p);
@@ -43,20 +44,22 @@ char* id_to_name(int id, char* name)
         return NULL;
     }
     strcpy(name, ms->value);
-    if (ms) free(ms);
+    if (ms)
+        free(ms);
 #endif
     return name;
 }
 
-int name_to_id(char* name)
+int name_to_id(char *name)
 {
     int a = -1;
-    if (name == NULL) return a;
+    if (name == NULL)
+        return a;
 #ifdef PROJECT_SERVER
     char p[BUFLEN] = {0};
     sprintf(p, "select user_id from user where user_name =\'%s\';", name);
     mysql_query(sql_l, p);
-    MYSQL_RES* result = mysql_store_result(sql_l);
+    MYSQL_RES *result = mysql_store_result(sql_l);
     int returnnumber = mysql_num_rows(result);
     if (1 == returnnumber)
     {
@@ -73,7 +76,7 @@ int name_to_id(char* name)
 
 #else
 
-    info* ms = NULL;
+    info *ms = NULL;
     char p[BUFLEN] = {0};
     sprintf(p, "select user_id from user where user_name=\'%s\';", name);
     ms = cli_creatinfo(userid, 0, sql, WHAT_FIRST_VALUE, p);
@@ -83,13 +86,14 @@ int name_to_id(char* name)
         return -1;
     }
     a = atoi(ms->value);
-    if (ms) free(ms);
+    if (ms)
+        free(ms);
 
 #endif
     return a;
 }
 
-char* itoa(int num, char* str, int radix)
+char *itoa(int num, char *str, int radix)
 { /*索引表*/
     char index[] = "0123456789ABCDEF";
     unsigned unum; /*中间变量*/

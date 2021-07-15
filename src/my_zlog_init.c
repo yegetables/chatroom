@@ -5,7 +5,7 @@
 #include PROJECT_CLIENTHEAD
 #endif
 
-zlog_category_t* my_zlog_init(char* category)
+zlog_category_t *my_zlog_init(char *category)
 {
     if (zlog_init(PROJECT_LOGCONFIG))
     {
@@ -13,7 +13,7 @@ zlog_category_t* my_zlog_init(char* category)
         exit(-1);
     }
 
-    zlog_category_t* ser = zlog_get_category(category);
+    zlog_category_t *ser = zlog_get_category(category);
     if (!ser)
     {
         zlog_fini();
