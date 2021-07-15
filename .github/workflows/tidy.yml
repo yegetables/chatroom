@@ -7,6 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: c-linter
-        uses: ArtificialAmateur/cpp-linter-action@master
+        uses: ajian2002/cpp-linter-action@master
     env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
