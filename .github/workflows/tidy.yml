@@ -17,9 +17,6 @@ jobs:
       - name: c-linter
         run: ./.github/c-linter.sh
         shell: bash
-      
-      - name: format
-        run: ./.github/format.sh
   format-fix:
     runs-on: ubuntu-latest
     env:
