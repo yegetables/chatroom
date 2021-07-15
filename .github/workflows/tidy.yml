@@ -8,6 +8,8 @@ jobs:
     env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: build chatroom
+        uses: actions/checkout@master
       - name: c-linter
         uses: ajian2002/cpp-linter-action@master
       - name: Clang Code Formatter
