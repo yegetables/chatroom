@@ -37,34 +37,35 @@
 #define move_down(nums) printf("\r\033[%dB", nums);
 #define move_left(nums) printf("\033[%dC", nums);
 #define move_right(nums) printf("\033[%dD", nums);
-#define move_save printf("\033[s");  // 保存光标位置
-#define move_reset printf("\033[u"); //恢复光标位置
-#define move_cll printf("\r\033[K"); //清行
-#define move_cls printf("\033[2J");  //清屏
+#define move_save printf("\033[s");   // 保存光标位置
+#define move_reset printf("\033[u");  //恢复光标位置
+#define move_cll printf("\r\033[K");  //清行
+#define move_cls printf("\033[2J");   //清屏
 
-#define DEBUGPRINT(FORMAT, ...)                                                                                        \
-    {                                                                                                                  \
-        char *t = strrchr(__FILE__, '/');                                                                              \
-        printf("[%s]", t);                                                                                             \
-        printf("[%s][%d]" YELLOW FORMAT NONECOLOR "\n", __FUNCTION__, __LINE__, ##__VA_ARGS__);                        \
+#define DEBUGPRINT(FORMAT, ...)                                                                 \
+    {                                                                                           \
+        char *t = strrchr(__FILE__, '/');                                                       \
+        printf("[%s]", t);                                                                      \
+        printf("[%s][%d]" YELLOW FORMAT NONECOLOR "\n", __FUNCTION__, __LINE__, ##__VA_ARGS__); \
     }
 
-#define PRINTEXIT(FORMAT, ...)                                                                                         \
-    {                                                                                                                  \
-        char *t = strrchr(__FILE__, '/');                                                                              \
-        fprintf(stderr, "[%s]", t);                                                                                    \
-        fprintf(stderr,                                                                                                \
-                "[%s][%d]" YELLOW FORMAT NONECOLOR ":%s"                                                               \
-                "\n",                                                                                                  \
-                __FUNCTION__, __LINE__, ##__VA_ARGS__, strerror(errno));                                               \
-        exit(-1);                                                                                                      \
+#define PRINTEXIT(FORMAT, ...)                                           \
+    {                                                                    \
+        char *t = strrchr(__FILE__, '/');                                \
+        fprintf(stderr, "[%s]", t);                                      \
+        fprintf(stderr,                                                  \
+                "[%s][%d]" YELLOW FORMAT NONECOLOR                       \
+                ":%s"                                                    \
+                "\n",                                                    \
+                __FUNCTION__, __LINE__, ##__VA_ARGS__, strerror(errno)); \
+        exit(-1);                                                        \
     }
 
-#define PAUSE                                                                                                          \
-    {                                                                                                                  \
-        printf("   任意键返回");                                                                                       \
-        fflush(stdout);                                                                                                \
-        getchar();                                                                                                     \
-        getchar();                                                                                                     \
-        show_line++;                                                                                                   \
+#define PAUSE                    \
+    {                            \
+        printf("   任意键返回"); \
+        fflush(stdout);          \
+        getchar();               \
+        getchar();               \
+        show_line++;             \
     }

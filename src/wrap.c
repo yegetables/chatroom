@@ -37,8 +37,7 @@ int Bind(int fd, const struct sockaddr *sa, socklen_t salen)
 {
     int n;
 
-    if ((n = bind(fd, sa, salen)) < 0)
-        perr_exit("bind error");
+    if ((n = bind(fd, sa, salen)) < 0) perr_exit("bind error");
 
     return n;
 }
@@ -47,8 +46,7 @@ int Connect(int fd, const struct sockaddr *sa, socklen_t salen)
 {
     int n;
 
-    if ((n = connect(fd, sa, salen)) < 0)
-        perr_exit("connect error");
+    if ((n = connect(fd, sa, salen)) < 0) perr_exit("connect error");
 
     return n;
 }
@@ -57,8 +55,7 @@ int Listen(int fd, int backlog)
 {
     int n;
 
-    if ((n = listen(fd, backlog)) < 0)
-        perr_exit("listen error");
+    if ((n = listen(fd, backlog)) < 0) perr_exit("listen error");
 
     return n;
 }
@@ -67,8 +64,7 @@ int Socket(int family, int type, int protocol)
 {
     int n;
 
-    if ((n = socket(family, type, protocol)) < 0)
-        perr_exit("socket error");
+    if ((n = socket(family, type, protocol)) < 0) perr_exit("socket error");
 
     return n;
 }
@@ -114,8 +110,7 @@ again:;
 int Close(int fd)
 {
     int n;
-    if ((n = close(fd)) == -1)
-        perr_exit("close error");
+    if ((n = close(fd)) == -1) perr_exit("close error");
 
     return n;
 }
@@ -123,8 +118,8 @@ int Close(int fd)
 /*参三: 应该读取的字节数*/
 ssize_t Readn(int fd, void *vptr, size_t n)
 {
-    size_t nleft;  // usigned int 剩余未读取的字节数
-    ssize_t nread; // int 实际读到的字节数
+    size_t nleft;   // usigned int 剩余未读取的字节数
+    ssize_t nread;  // int 实际读到的字节数
     char *ptr;
 
     ptr = vptr;
@@ -193,8 +188,7 @@ static ssize_t my_read(int fd, char *ptr)
     again:;
         if ((read_cnt = read(fd, read_buf, sizeof(read_buf))) < 0)
         {
-            if (errno == EINTR)
-                goto again;
+            if (errno == EINTR) goto again;
             return -1;
         }
         else if (read_cnt == 0)
@@ -220,8 +214,7 @@ ssize_t Readline(int fd, void *vptr, size_t maxlen)
         if ((rc = my_read(fd, &c)) == 1)
         {
             *ptr++ = c;
-            if (c == '\n')
-                break;
+            if (c == '\n') break;
         }
         else if (rc == 0)
         {

@@ -30,21 +30,20 @@ void cli_show_groups(void)
     sscanf(buf, "%d", &num);
     buf = strchr(buf, '\n');
 
-    for (int i = 0; i < num && ++buf != NULL; i++) //本次个数
+    for (int i = 0; i < num && ++buf != NULL; i++)  //本次个数
     {
-        memset(p, 0, BUFLEN); // name
+        memset(p, 0, BUFLEN);  // name
         int id;
         sscanf(buf, "%d %s", &id, p);
         number++;
         buf = strchr(buf, '\n');
         printf("%2d-->%15s (%d)\n", number, p, id);
     }
-    printf("sum:%d groups\n", number); //在线未屏蔽人数
+    printf("sum:%d groups\n", number);  //在线未屏蔽人数
     printf("------------------------\n");
     show_line += 2 + number;
     PAUSE;
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
     return;
 }
 
@@ -66,8 +65,7 @@ int cli_create_groups(int uid)
     printf("群组id为%d\n", groupid);
     show_line += 3;
     PAUSE;
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
     return groupid;
 }
 
@@ -98,8 +96,7 @@ bool cli_del_groups(int userid)
         printf("群组id为%d的群已解散\n", groupid);
     }
     show_line += 3;
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
     PAUSE;
     return true;
 }
@@ -131,8 +128,7 @@ void cli_show_groups_members(void)
     {
         printf("您没有权限");
         PAUSE;
-        if (ms)
-            free(ms);
+        if (ms) free(ms);
         return;
     }
 
@@ -158,8 +154,7 @@ void cli_show_groups_members(void)
     printf("------------------------\n");
     show_line += 2 + number;
     PAUSE;
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
     return;
 }
 
@@ -173,11 +168,11 @@ void cli_add_group(int toid, int Authority)
     sprintf(p, "%d %d", Authority, toid);
     info *ms;
     if (toid == userid)
-    { //申请加入n->p
+    {  //申请加入n->p
         ms = cli_creatinfo(userid, groupid, sql, ADD_GROUP_APPLY, p);
     }
     else
-    { //设置别人升权降权
+    {  //设置别人升权降权
         ms = cli_creatinfo(userid, groupid, sql, set_POWER_GROUP, p);
     }
     if (atoi(ms->value) != 1)
@@ -221,7 +216,7 @@ void cli_apply_application(int is, int groupid)
     memset(p, 0, BUFLEN);
     info *ms = NULL;
 
-    if (is == 1) //同意
+    if (is == 1)  //同意
     {
         sprintf(p, "%d %d", id, groupid);
         ms = cli_creatinfo(userid, 0, sql, ADD_GROUP, p);
@@ -230,8 +225,7 @@ void cli_apply_application(int is, int groupid)
             zlog_error(cli, "recv none");
             return;
         }
-        if (ms)
-            free(ms);
+        if (ms) free(ms);
     }
 
     memset(p, 0, BUFLEN);
@@ -260,8 +254,7 @@ void cli_apply_application(int is, int groupid)
     }
     show_line += 3;
     PAUSE;
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
     return;
 }
 
@@ -274,8 +267,7 @@ void cli_show_group_applications(int groupid)
             " and requests.how=%d and requests.from=user.user_id ;",
             groupid, ADD_GROUP_APPLY);
     info *ms = cli_creatinfo(userid, groupid, sql, SHOW_GROUP_APPLY, p);
-    if (ms == NULL)
-        return;
+    if (ms == NULL) return;
     char *buf = ms->value;
     int num = 0;
     sscanf(buf, "%d", &num);
@@ -283,12 +275,11 @@ void cli_show_group_applications(int groupid)
     if (num == -1)
     {
         printf("无权限\n");
-        if (ms)
-            free(ms);
+        if (ms) free(ms);
         return;
     }
-    buf = strchr(buf, '\n');                        // name
-    for (int i = 1; i <= num && ++buf != NULL; i++) //本次个数
+    buf = strchr(buf, '\n');                         // name
+    for (int i = 1; i <= num && ++buf != NULL; i++)  //本次个数
     {
         int id;
         sscanf(buf, "%d %s", &id, p);
@@ -297,7 +288,6 @@ void cli_show_group_applications(int groupid)
     }
     printf("----------sum:%d--------\n", num);
     show_line += num + 1;
-    if (ms)
-        free(ms);
+    if (ms) free(ms);
     return;
 }

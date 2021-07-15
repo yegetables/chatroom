@@ -17,10 +17,10 @@ void client_event(int cfd, int event, void *args)
     char *p = showevents(ev);
     zlog_debug(ser, "recv success:%s", p);
     free(p);
-    if (ev->js.from > 0 && fd_id[ev->fd] != ev->js.from) //添加进在线列表
+    if (ev->js.from > 0 && fd_id[ev->fd] != ev->js.from)  //添加进在线列表
     {
-        fd_id[ev->fd] = ev->js.from;              // fd->uid
-        id_to_name(ev->js.from, fd_name[ev->fd]); // fd->name
+        fd_id[ev->fd] = ev->js.from;               // fd->uid
+        id_to_name(ev->js.from, fd_name[ev->fd]);  // fd->name
         zlog_info(ser, "**online**   fd:%d id:%d name:%s", ev->fd, fd_id[ev->fd], fd_name[ev->fd]);
     }
 
