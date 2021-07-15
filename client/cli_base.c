@@ -23,7 +23,7 @@ info *cli_send_recv(info *ms, int how)
             free(ms);
             ms = NULL;
         }
-        return ms;  // no close
+        return ms; // no close
     }
 
     if (how != HUP_NO)
@@ -44,7 +44,7 @@ info *cli_send_recv(info *ms, int how)
                 free(ms);
                 ms = NULL;
             }
-            return ms;  // no close
+            return ms; // no close
         }
     }
     else
@@ -89,7 +89,7 @@ void update_notices(char *user_msg, char *user_files)
                     "requests.how=\'%d\' and requests.from=relationship.id_2 and "
                     "requests.to=relationship.id_1  and relationship.if_shield=0 "
                     "and requests.if_read=0 ;",
-                    userid, MESSAGES);  //未屏蔽的消息
+                    userid, MESSAGES); //未屏蔽的消息
             ms = cli_creatinfo(userid, 0, sql, GET_MESSAGE_FROM, p);
             if (ms == NULL)
             {
@@ -144,7 +144,7 @@ void update_notices(char *user_msg, char *user_files)
                 " and requests.from=relationship.id_2 and "
                 "requests.to=relationship.id_1  and relationship.if_shield=0 "
                 "and requests.if_read=0 ;",
-                userid, file);  //未屏蔽的文件
+                userid, file); //未屏蔽的文件
         ms = cli_creatinfo(userid, 0, sql, GET_MESSAGE_FROM, p);
         if (ms == NULL)
         {
