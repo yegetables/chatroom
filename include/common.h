@@ -1,9 +1,10 @@
-#include <sys/sendfile.h>
 #include <cjson/cJSON.h>
 #include <mysql/mysql.h>
+#include <sys/sendfile.h>
+#include <zlog.h>
+
 #include "sdebug.info.h"
 #include "wrap.h"
-#include <zlog.h>
 
 #define BUFLEN 4096
 #define MAXCLIENT 5000
@@ -91,20 +92,22 @@
 //不屏蔽
 #define NO_SHIELD 0
 
-typedef enum {
-	msg = 1, // msg 文本消息(包括数值)
-	file, // file 文件传输
-	sql, // sql 数据库语句
-	request // 发送请求
+typedef enum
+{
+    msg = 1,  // msg 文本消息(包括数值)
+    file,     // file 文件传输
+    sql,      // sql 数据库语句
+    request   // 发送请求
 } value_type; // 枚举消息类型
 
-typedef struct {
-	char value[BUFLEN]; // value 缓冲区
-	value_type type; // type 枚举type(msg/file/sql)
-	int from; // from 客户端用户uid(-1->未登录用户)
-	int to; // to 接收者uid(0->服务器)
-	int how; // 宏-请求
-} info; // 定义info信息,用于网络传输的基本结构
+typedef struct
+{
+    char value[BUFLEN]; // value 缓冲区
+    value_type type;    // type 枚举type(msg/file/sql)
+    int from;           // from 客户端用户uid(-1->未登录用户)
+    int to;             // to 接收者uid(0->服务器)
+    int how;            // 宏-请求
+} info;                 // 定义info信息,用于网络传输的基本结构
 
 /**
  * @brief 帮助手册

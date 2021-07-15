@@ -165,7 +165,6 @@ bool IsValidEmail(char *s);
 void show_secret_chat_menu(void);
 void show_public_chat_menu(void);
 
-
 /**
  * @brief 向toid发一条私聊信息
  * 数据库加一条 MESSAGES
