@@ -33,7 +33,7 @@ info *cli_send_recv(info *ms, int how)
         {
             char *tt = NULL;
             tt = showinfo(ms);
-            zlog_debug(cli, tt);
+            zlog_debug(cli, "%s", tt);
             free(tt);
             return ms;
         }
