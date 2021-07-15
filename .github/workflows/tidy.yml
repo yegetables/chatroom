@@ -1,13 +1,12 @@
-name: tidy
+name: c-linter
 
-on:
-  pull_request:
-    branches: [ chatroom , dev]
-    
+on: [pull_request]
 jobs:
-  build_make:
+  c-linter:
+    name: c-linter
     runs-on: ubuntu-latest
     steps:
-
-      - name: clang-tidy check
-        uses: muxee/clang-tidy-action@0.0.1-rc1
+      - name: c-linter
+        uses: ArtificialAmateur/clang-tidy-action@master
+    env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
