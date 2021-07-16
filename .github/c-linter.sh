@@ -9,7 +9,7 @@ clang-tidy --version
 
 SRC=$(git ls-tree --full-tree -r HEAD | grep -e "\.\(c\|h\|hpp\|cpp\)\$" | cut -f 2)
 echo $SRC >list_reporters
-# cp ./build/compile_commands.json ./compile_commands.json
+cp build/compile_commands.json compile_commands.json
 
 while read line; do
     clang-tidy $SRC >>clang-tidy-report.txt
