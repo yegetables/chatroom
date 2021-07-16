@@ -1,9 +1,7 @@
 name:  format
-
 on: [push]
 jobs:
-  c-linter:
-    name: c-linter
+  format:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

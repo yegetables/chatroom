@@ -2,17 +2,35 @@ name: tidy
 
 on: [pull_request]
 jobs:
-  c-linter:
-    name: c-linter
+  build_make:
     runs-on: ubuntu-latest
     env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: build 
+        uses: actions/checkout@master
+        with:
+          repository: 'DaveGamble/cJSON'  
+      - run:  mkdir build && cd build && cmake .. -DENABLE_CJSON_UTILS=On -DENABLE_CJSON_TEST=Off -DCMAKE_INSTALL_PREFIX=/usr && make && sudo make DESTDIR=$pkgdir install 
+        shell: bash   
+      
+      - uses: actions/checkout@master
+        with:
+          repository: 'HardySimpson/zlog'      
+      - run:  make && sudo make install  && sudo bash -c "echo '/usr/local/lib'>>/etc/ld.so.conf" && sudo ldconfig
+        shell: bash
+
+      - uses: actions/checkout@master
+      
+      - name: make chatroom
+        run:  cmake -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE  -B$GITHUB_WORKSPACE/build -G "Unix Makefiles" && cmake --build $GITHUB_WORKSPACE/build  --config Debug --target all -j 10 --
+        shell: bash
+
       - name: build chatroom
         uses: actions/checkout@master
       - name: clangd init  
         run: sudo apt-get update >/dev/null && sudo apt-get -qq -y install curl clang-tidy cmake jq clang cppcheck clang-format >/dev/null && sudo chmod +x ./.github/*.sh 
         shell: bash
-      - name: c-linter
+      - name: tidy
         run: ./.github/c-linter.sh
         shell: bash

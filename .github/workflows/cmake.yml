@@ -1,7 +1,5 @@
 name: CMake
-
 on:  [push]
-    
 jobs:
   build_make:
     runs-on: ubuntu-latest
@@ -25,5 +23,6 @@ jobs:
       - name: build chatroom
         uses: actions/checkout@master
       - name: make chatroom
-        run:  cmake  --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -B$GITHUB_WORKSPACE/build -G "Unix Makefiles" && cmake --build $GITHUB_WORKSPACE/build --config Debug --target all -j 10 --
+        run:  cmake -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE  -B$GITHUB_WORKSPACE/build -G "Unix Makefiles" && cmake --build $GITHUB_WORKSPACE/build  --config Debug --target all -j 10 --
+        # cmake  --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -B$GITHUB_WORKSPACE/build -G "Unix Makefiles" && cmake --build $GITHUB_WORKSPACE/build --config Debug --target all -j 10 --
         shell: bash
