@@ -11,13 +11,11 @@ SRC=$(git ls-tree --full-tree -r HEAD | grep -e "\.\(c\|h\|hpp\|cpp\)\$" | cut -
 echo $SRC >list_reporters
 cp build/compile_commands.json compile_commands.json
 clang-tidy $SRC >clang-tidy-report.txt
-    # echo $line
+# echo $line
 
-
-    # clang-tidy $SRC >clang-tidy-report.txt
-    # echo $line
+# clang-tidy $SRC >clang-tidy-report.txt
+# echo $line
 clang-format $SRC >clang-format-report.txt
-
 
 # cppcheck --enable=all --std=c++11 --language=c++ --output-file=cppcheck-report.txt *
 
@@ -33,26 +31,27 @@ echo "Clang-format errors:"
 echo $PAYLOAD_FORMAT
 # echo "Cppcheck errors:"
 # echo $PAYLOAD_CPPCHECK
-
-# if [ ${#PAYLOAD_TIDY} -ne 0]; then
-    OUTPUT=$'**CLANG-TIDY WARNINGS**:\n'
+OUTPUT=""
+if [ ${#PAYLOAD_TIDY} -ne 0]; then
+    OUTPUT+=$'**CLANG-TIDY WARNINGS**:\n'
     OUTPUT+=$'\n```\n'
     OUTPUT+="$PAYLOAD_TIDY"
     OUTPUT+=$'\n```\n'
-# fi
-
-# if [ ${#PAYLOAD_FORMAT} -ne 0]; then
-    OUTPUT=$'**CLANG-FORMAT WARNINGS**:\n'
+fi
+if [ ${#PAYLOAD_FORMAT} -ne 0]; then
+    OUTPUT+=$'**CLANG-FORMAT WARNINGS**:\n'
     OUTPUT+=$'\n```\n'
     OUTPUT+="$PAYLOAD_FORMAT"eCTF20/mb/drm_audio_fw/src on
     OUTPUT+=$'\n```\n'
-# fi
+fi
 # if [ ${#PAYLOAD_CPPCHECK} -ne 0]; then
-    # OUTPUT=$'\n**CPPCHECK WARNINGS**:\n'
-    # OUTPUT+=$'\n```\n'
-    # OUTPUT+="$PAYLOAD_CPPCHECK"
-    # OUTPUT+=$'\n```\n'
+# OUTPUT=$'\n**CPPCHECK WARNINGS**:\n'
+# OUTPUT+=$'\n```\n'
+# OUTPUT+="$PAYLOAD_CPPCHECK"
+# OUTPUT+=$'\n```\n'
 # fi
-PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
 
-curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL"
+if [ ${#OUTPUT} -ne 0]; then
+    PAYLOAD=$(echo '{}' | jq --arg body "$OUTPUT" '.body = $body')
+    curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/vnd.github.VERSION.text+json" --data "$PAYLOAD" "$COMMENTS_URL"
+fi
