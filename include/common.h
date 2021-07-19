@@ -1,6 +1,7 @@
 #include <cjson/cJSON.h>
 #include <mysql/mysql.h>
 #include <sys/sendfile.h>
+#include <termio.h>
 #include <zlog.h>
 
 #include "sdebug.info.h"
@@ -202,3 +203,5 @@ bool send_file(int cfd, char *pathname, long int f_size);
  * @return true false
  */
 bool recv_file(int cfd, char *pathname, long int f_size);
+
+int getch(void);

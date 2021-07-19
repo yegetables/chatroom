@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -5,7 +6,6 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-
 // #include "../include/sdebug.info.h"
 
 void perr_exit(const char *s)

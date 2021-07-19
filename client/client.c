@@ -99,13 +99,13 @@ int main(int argc, char **argv)
         printf("登录请输入你的用户名\n");
         printf("注册请输入你想要的用户名\n");
         printf("(不超过15个字符)\n");
-
         char passwd[30];
         char email[50];
         memset(username, 0, sizeof(username));
         memset(passwd, 0, sizeof(passwd));
         memset(email, 0, sizeof(email));
         fgets(username, 25, stdin);
+        show_line += 4;
         {
             if (username[strlen(username) - 2] == '\r' && username[strlen(username) - 1] == '\n')
             {
@@ -113,7 +113,6 @@ int main(int argc, char **argv)
             }
             if (username[strlen(username) - 1] == '\n') username[strlen(username) - 1] = '\0';
         }
-        show_line += 4;
         /// login
         if (cli_accessusername(username))
         {
@@ -123,8 +122,29 @@ int main(int argc, char **argv)
 
             printf("请输入密码:\n");
             printf("忘记密码请输入#forget#username#email\n");
-            fgets(passwd, 25, stdin);
-            show_line += 3;
+            show_line += 2;
+            // fgets(passwd, 25, stdin);
+
+            {
+                int jj = 0;
+                char c;
+                while (1)
+                {
+                    c = getch();
+                    // printf("%d--", (int)c);
+                    if (c == '\r' || c == '\n')  //当读到回车符时输入结束
+                    {
+                        break;
+                    }
+                    passwd[jj++] = c;
+                    // printf("*");
+                }
+                printf("\b \n");
+                passwd[jj] = '\0';  //需要在字符的末尾补加字符串结束标志，才可以以字符串形式输出
+                show_line++;
+                // printf("beg:%s:end\n", passwd);
+            }
+
             {
                 if (passwd[strlen(passwd) - 2] == '\r' && passwd[strlen(passwd) - 1] == '\n')
                 {
@@ -140,7 +160,7 @@ int main(int argc, char **argv)
                 // scanf 验证码
                 // 重置 密码
                 printf("您的用户名\n%s\n您的密码\n%s\n请妥善保管\n", username, passwd);
-                show_line++;
+                show_line += 5;
                 zlog_info(cli, "重置密码成功:用户名:%s 密码:%s", username, passwd);
             }
 
@@ -182,12 +202,32 @@ int main(int argc, char **argv)
         {
             zlog_info(cli, "register user: %s", username);
         reinput:;
-            show_line += 5;
+            show_line += 3;
             printf("-----------------注册:\n");
             printf("用户名:%s\n", username);
             printf("密码开头不能是#,不超过24位\n");
             printf("密码:");
-            fgets(passwd, 25, stdin);
+            // fgets(passwd, 25, stdin);
+
+            {
+                int jj = 0;
+                char c;
+                while (1)
+                {
+                    c = getch();
+                    // printf("%d--", (int)c);
+                    if (c == '\r' || c == '\n')  //当读到回车符时输入结束
+                    {
+                        break;
+                    }
+                    passwd[jj++] = c;
+                    // printf("*");
+                }
+                printf("\b \n");
+                passwd[jj] = '\0';  //需要在字符的末尾补加字符串结束标志，才可以以字符串形式输出
+                show_line += 2;
+                // printf("beg:%s:end\n", passwd);
+            }
             {
                 if (passwd[strlen(passwd) - 2] == '\r' && passwd[strlen(passwd) - 1] == '\n')
                 {
@@ -199,6 +239,7 @@ int main(int argc, char **argv)
             {
                 printf("重新输入密码\n");
                 show_line++;
+                // break;
                 goto reinput;
             }
 
@@ -228,8 +269,10 @@ int main(int argc, char **argv)
             printf("-----------------注册成功\n");
             printf("您的用户名:%s\n您的密码:%s\n您的邮箱:%s\n请妥善保管\n", username, passwd,
                    email);
+            printf("输入任意键登录");
+            getchar();
             zlog_info(cli, "注册成功:用户名:%s 密码:%s 邮箱:%s", username, passwd, email);
-            show_line += 2;
+            show_line += 5;
         }
     }
 
