@@ -8,7 +8,6 @@ node_modules
 .cache
 .vscode
 checks.json
-# *.sh
 *.sql
 package.json
 .cz-config.js
@@ -18,3 +17,6 @@ husky.config.js
 yarn.lock
 yarn-error.log
 .husky
+compile_commands.json
+clang-format-report.*
+clang-tidy-report.*

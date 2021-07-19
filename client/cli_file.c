@@ -13,7 +13,7 @@ void cli_recv_file(int toid, int is)
     char relname[BUFLEN / 2];  //服务器真实文件名
     char *b;
 resdd:;
-    memset(fname, 0, PATH_MAX);
+    memset(fname, 0, sizeof(fname));
     printf("输入文件名\n");
     scanf("%s", fname);
 

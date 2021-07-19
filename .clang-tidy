@@ -1,2 +1,2 @@
-Checks:          '-*,google-*'
+Checks:          'google-*, -google-readability-braces-around-statements,clang-analyzer-*,-concurrency-*,-clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling,-clang-analyzer-security.insecureAPI.strcpy,-clang-analyzer-deadcode.DeadStores'
 FormatStyle:     Google

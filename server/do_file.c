@@ -139,11 +139,13 @@ bool event_AGREE_RECV_FILE(info *ms)
         ms->how = MANY_RESULT;
         ms->to = ms->from;
         ms->from = 0;
+        return false;
     }
     else  //唯一
     {
         ms->to = ms->from;
         ms->from = 0;
         //改为准备文件发送状态
+        return true;
     }
 }
