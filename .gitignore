@@ -20,3 +20,5 @@ yarn-error.log
 compile_commands.json
 clang-format-report.*
 clang-tidy-report.*
+.idea
+cmake-build-debug
