@@ -1,0 +1,79 @@
+{
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog",
+      "maxHeaderWidth": 100,
+      "maxLineWidth": 100,
+      "defaultType": "",
+      "defaultScope": "",
+      "defaultSubject": "",
+      "defaultBody": "",
+      "defaultIssues": "",
+      "types": {
+        "chore": {
+          "description": "构建过程或辅助工具更改和库的更改,不影响源文件、测试用例的其他操作",
+          "emoji": "🤖",
+          "value": "chore"
+        },
+        "ci": {
+          "description": "CI 相关变化,修改了 CI 配置、脚本",
+          "emoji": "🎡",
+          "value": "ci"
+        },
+        "docs": {
+          "description": "文档的变更",
+          "emoji": "✏️",
+          "value": "docs"
+        },
+        "feat": {
+          "description": "新增产品功能",
+          "emoji": "🎸",
+          "value": "feat"
+        },
+        "build": {
+          "description": "构建流程、外部依赖变更，比如升级 npm 包、修改 webpack 配置",
+          "emoji": "🏗️",
+          "value": "build"
+        },
+        "revent": {
+          "description": "回滚 commit",
+          "emoji": "🔙",
+          "value": "revent"
+        },
+        "fix": {
+          "description": "修复 bug",
+          "emoji": "🐛",
+          "value": "fix"
+        },
+        "perf": {
+          "description": "提高性能的代码更改",
+          "emoji": "⚡️",
+          "value": "perf"
+        },
+        "refactor": {
+          "description": "重构代码。不包括 bug 修复、功能新增",
+          "emoji": "💡",
+          "value": "refactor"
+        },
+        "release": {
+          "description": "创建发布提交",
+          "emoji": "🏹",
+          "value": "release"
+        },
+        "style": {
+          "description": "不改变代码功能的变动(如删除空格、格式化、去掉末尾分号等)",
+          "emoji": "💄",
+          "value": "style"
+        },
+        "test": {
+          "description": " 添加、修改测试用例",
+          "emoji": "💍",
+          "value": "test"
+        }
+      }
+    }
+  }
+}

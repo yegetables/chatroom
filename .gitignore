@@ -4,12 +4,12 @@ a.out
 Doxyfile.bak
 doxygen-qmi-style
 **/html/**
-node_modules
+/**/node_modules
 .cache
 .vscode
 checks.json
 *.sql
-package.json
+# package.json
 .cz-config.js
 package-lock.json
 commitlint.config.js
