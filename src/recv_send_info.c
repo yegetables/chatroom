@@ -24,6 +24,11 @@ bool recv_info(int cfd, info *ms)
     int ret = 0;
 rerecv:;
     ret = recv(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
+#ifdef PROJECT_CLIENT
+    zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
+#else
+    zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
+#endif
     if (ret > 0) returnnumber += ret;
     if (ret == 0) return false;
     if (returnnumber != sizeof(info))
@@ -37,17 +42,19 @@ rerecv:;
             goto rerecv;
 #endif
         }
-        zlog_warn(tmp, "recv failed %s", show_errno());
+
+        zlog_warn(tmp, "server now :::recv failed %s  has recv %d", show_errno(), returnnumber);
         errornumber++;
         if (errornumber > 30)
         {
-            zlog_warn(tmp, "can't recv info over 3");
+            zlog_warn(tmp, "ser::can't recv info over 30");
             goto over;
         }
         goto rerecv;
 
     over:;
-        zlog_error(tmp, "recv info failed %s:%s over", show_errno(), strerror(errno));
+        zlog_error(tmp, "ser::recv info failed %s:%s over   has recv %d", show_errno(),
+                   strerror(errno), returnnumber);
         return false;
     }
     return true;
@@ -68,11 +75,15 @@ bool send_info(int cfd, info *ms)
     int ret = 0;
 resend:;
     ret = send(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
+#ifdef PROJECT_CLIENT
+    zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
+#else
+    zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
+#endif
     if (ret > 0) returnnumber += ret;
     if (ret == 0) return false;
     if (sizeof(info) != returnnumber)
     {
-        zlog_warn(tmp, "send failed %s", show_errno());
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
 #ifdef PROJECT_CLIENT
@@ -80,16 +91,18 @@ resend:;
             goto resend;
 #endif
         }
+        zlog_warn(tmp, "ser::::send failed %s   has send %d", show_errno(), returnnumber);
         errornumber++;
         if (errornumber > 30)
         {
-            zlog_warn(tmp, "can't send info over 3");
+            zlog_warn(tmp, "ser::can't send info over 30,has send %d", errornumber);
             goto over;
         }
         goto resend;
 
     over:;
-        zlog_error(tmp, "send info failed %s:%s over", show_errno(), strerror(errno));
+        zlog_error(tmp, "ser::send info failed %s:%s over   has send %d", show_errno(),
+                   strerror(errno), returnnumber);
         return false;
     }
     return true;
