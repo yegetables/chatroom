@@ -24,12 +24,13 @@ bool recv_info(int cfd, info *ms)
     int ret = 0;
 rerecv:;
     ret = recv(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
+
+    if (ret > 0) returnnumber += ret;
 #ifdef PROJECT_CLIENT
     zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
 #else
     zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
 #endif
-    if (ret > 0) returnnumber += ret;
     if (ret == 0) return false;
     if (returnnumber != sizeof(info))
     {
@@ -75,12 +76,12 @@ bool send_info(int cfd, info *ms)
     int ret = 0;
 resend:;
     ret = send(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
+    if (ret > 0) returnnumber += ret;
 #ifdef PROJECT_CLIENT
     zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
 #else
     zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
 #endif
-    if (ret > 0) returnnumber += ret;
     if (ret == 0) return false;
     if (sizeof(info) != returnnumber)
     {
