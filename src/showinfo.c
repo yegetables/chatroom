@@ -9,7 +9,8 @@ char *showinfo(info *ms)
 {
     static char *how[50];
     {
-        how[0] = "[HUP_NO]";
+        how[30] = "[HUP_NO]";
+        how[0] = "[NULL]";
         how[1] = "[IF_HAS]";
         how[2] = "[IF_DONE]";
         how[3] = "[MANY_RESULT]";
@@ -38,6 +39,7 @@ char *showinfo(info *ms)
         how[26] = "[SHOW_GROUP_MESSAGES]";
         how[27] = "[REGISTER]";
         how[28] = "[28]";
+        how[29] = "[29]";
 
         // strcpy(how[0], "[IF_HAS]");
         // strcpy(how[1], "[IF_DONE]");
@@ -66,7 +68,7 @@ char *showinfo(info *ms)
             ms->from, ms->to);
 
     sprintf(&logbuf[strlen(logbuf)], "%s", type[ms->type]);
-    if (ms->how > 28) how[ms->how] = ">28";
+    if (ms->how > 30) how[ms->how] = ">30";
     sprintf(&logbuf[strlen(logbuf)], "%s", how[ms->how]);
     sprintf(&logbuf[strlen(logbuf)], "\n%s\n}", ms->value);
     return logbuf;

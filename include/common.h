@@ -16,7 +16,7 @@
 #define CLREAR "clear"
 #endif
 */
-#define HUP_NO 0
+#define HUP_NO 30
 // 是否存在
 #define IF_HAS 1
 // 是否执行成功
