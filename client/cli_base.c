@@ -111,7 +111,7 @@ void update_notices(char *user_msg, char *user_files)
         for (int i = 0; i < messages && b != NULL; i++, b++)
         {
             int id;
-            sscanf(b, "%d", &id);
+            sscanf(b, "%9d", &id);
             if (id > maxid)
             {
                 maxid = id;
@@ -167,7 +167,7 @@ void update_notices(char *user_msg, char *user_files)
         for (int i = 0; i < files && b != NULL; i++, b++)
         {
             int id;
-            sscanf(b, "%d", &id);
+            sscanf(b, "%9d", &id);
 
             if (id > maxid)
             {

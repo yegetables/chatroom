@@ -74,7 +74,7 @@ bool cli_del_groups(int userid)
     // char groupname[20] = { 0 };
     int groupid = -1;
     printf("输入群聊id\n");
-    scanf("%d", &groupid);
+    scanf("%9d", &groupid);
     char p[BUFLEN] = {0};
 
     sprintf(p,
@@ -105,7 +105,7 @@ void cli_show_groups_members(void)
 {
     int groupid = -1;
     printf("输入已加入的群组id查看群成员\n");
-    scanf("%d", &groupid);
+    scanf("%9d", &groupid);
     show_line += 2;
 
     char p[BUFLEN] = {0};

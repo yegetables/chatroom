@@ -22,3 +22,6 @@ clang-format-report.*
 clang-tidy-report.*
 .idea
 cmake-build-debug
+a
+.gitignore
+a.c

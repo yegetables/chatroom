@@ -118,7 +118,7 @@ void cli_del_friend(void)
 {
     int toid;
     printf("输入对方id\n");
-    scanf("%d", &toid);
+    scanf("%9d", &toid);
     char p[BUFLEN] = {0};
     info *ms = NULL;
     sprintf(p,
@@ -147,7 +147,7 @@ void cli_shield_friend(int is)
 {
     int toid;
     printf("输入对方id\n");
-    scanf("%d", &toid);
+    scanf("%9d", &toid);
     char p[BUFLEN] = {0};
     info *ms = NULL;
     sprintf(p,
@@ -164,7 +164,7 @@ void cli_shield_friend(int is)
     {
         zlog_debug(cli, "%d sheild %d success", userid, toid);
     }
-    printf("屏蔽%d成功\n", toid);
+    printf("屏蔽状态更改%d成功\n", toid);
     // getchar();
     PAUSE;
     show_line += 3;
@@ -177,7 +177,7 @@ void cli_search_user(void)
 reshow:;
     printf("1.输入id    2.输入namen 3.返回上一层\n");
     int t = 1;
-    scanf("%d", &t);
+    scanf("%1d", &t);
     char p[BUFLEN] = {0};
     memset(p, 0, BUFLEN);
     int iid = 10000;
@@ -211,7 +211,7 @@ void cli_add_friend(void)
 {
     int toid;
     printf("输入对方id\n");
-    scanf("%d", &toid);
+    scanf("%9d", &toid);
     info *ms = NULL;
     char p[BUFLEN] = {0};
     char pp[BUFLEN / 2] = {0};
@@ -272,7 +272,7 @@ void cli_agree_friend(int is)
 {
     int id = 0;
     printf("输入对方id\n");
-    scanf("%d", &id);
+    scanf("%9d", &id);
     char p[BUFLEN] = {0};
     memset(p, 0, BUFLEN);
     info *ms = NULL;

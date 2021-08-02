@@ -38,6 +38,6 @@ int getch()
     //------  restore old settings ---------
     res = tcsetattr(STDIN_FILENO, TCSANOW, &org_opts);
     assert(res == 0);
-    printf("*");
+    // printf("*");
     return c;
 }
