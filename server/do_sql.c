@@ -28,6 +28,52 @@ bool do_sql(events *ev)
             ms->from = 0;
             break;
         }
+        case REGISTER:
+        {
+            char name[50] = {0};
+            char email[50] = {0};
+            char passwd[50] = {0};
+            char newpasswd[50] = {0};
+            // sscanf(ms->value,
+            //        "INSERT INTO user (user_name,user_passwd, user_email,user_status) "
+            //        "VALUES ( "
+            //        "\'%s\',\'%s\',\'%s\',0);",
+            //        name, passwd, email);
+            char *be = strchr(ms->value, '\'');
+            be++;
+            char *en = strchr(be, '\'');
+            strncpy(name, be, (int)(en - be));
+            // zlog_error(ser, "now the new :%s:%d:  be=%s:en=%s", name, (int)(en - be), be, en);
+            en += 2;
+            be = strchr(en, '\'');
+            be++;
+            en = strchr(be, '\'');
+            strncpy(passwd, be, (int)(en - be));
+            en += 2;
+            be = strchr(en, '\'');
+            be++;
+            en = strchr(be, '\'');
+            strncpy(email, be, (int)(en - be));
+            en++;
+            for (int i = 0; i < strlen(passwd); i++)
+            {
+                newpasswd[i] = passwd[i] + 6;
+            }
+            zlog_debug(ser, "[get name]%s\n[passwd]%s\n[new passwd]%s\n[email]%s", name, passwd,
+                       newpasswd, email);
+            // strcpy(newpasswd, passwd);
+            memset(ms->value, 0, sizeof(ms->value));
+            sprintf(ms->value,
+                    "INSERT INTO user (user_name,user_passwd, user_email,user_status) "
+                    "VALUES ( "
+                    "\'%s\',\'%s\',\'%s\',0);",
+                    name, newpasswd, email);
+            if (!base_sql_query(ms)) return false;
+            ms->to = ms->from;
+            ms->from = 0;
+            sprintf(ms->value, "1");
+            break;
+        }
         case SHOW_GROUP_MESSAGES:
         {
             aasd = 3;

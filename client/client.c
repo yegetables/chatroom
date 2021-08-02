@@ -282,7 +282,7 @@ int main(int argc, char **argv)
     {
         // system("clear");
         update_notices(who_send_msg, who_send_file);
-        alarm(10);
+        // alarm(10);
         show_main_menu();
     }
     else
@@ -306,8 +306,8 @@ void signalcatch(int signal)
             close(cfd);
             exit(1);
         case SIGALRM:
-            update_notices(who_send_msg, who_send_file);
-            alarm(10);
+            // update_notices(who_send_msg, who_send_file);
+            // alarm(10);
             return;
             // 异常退出
     }

@@ -21,6 +21,8 @@
 #define IF_HAS 1
 // 是否执行成功
 #define IF_DONE 2
+//注册
+#define REGISTER 27
 // 查到多少行
 #define MANY_RESULT 3
 // 第一行第一列值是多少

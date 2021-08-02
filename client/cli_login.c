@@ -13,7 +13,7 @@ bool cli_register(char *name, char *passwd, char *email)  // IF_DONE
             "\'%s\',\'%s\',\'%s\',0);",
             name, passwd, email);
     info *ms = NULL;
-    ms = cli_creatinfo(userid, 0, sql, IF_DONE, p);
+    ms = cli_creatinfo(userid, 0, sql, REGISTER, p);
     if (ms == NULL) return false;
     int s = atoi(ms->value);
     if (ms) free(ms);
@@ -39,6 +39,10 @@ bool cli_accesspasswd(char *name, char *passwd)  // IF_HAS
     }
     else
     {
+        for (int i = 0; i < strlen(passwd); i++)
+        {
+            passwd[i] = passwd[i] + 6;
+        }
         sprintf(p,
                 "select * from user where user_name =\'%s\' and "
                 "user_passwd=\'%s\';",
