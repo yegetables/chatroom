@@ -211,15 +211,13 @@ bool do_sql(events *ev)
         {
             if (!base_sql_query(ms))
             {
-        
                 return false;
             }
             if (!case_IF_HAS(ms))
             {
-                
                 return false;
             }
-           
+
             ms->to = ms->from;
             ms->from = 0;
             break;
