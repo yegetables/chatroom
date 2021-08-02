@@ -75,20 +75,16 @@ int main(int argc, char **argv)
         {
             sleep(rand() % 3);
             zlog_debug(cli, "connect failed :%s,reconnecting~~~~", strerror(errno));
-            if (errornumber > 3)
-            {
-                sleep(rand() % 3);
-                errornumber = 0;
-                if (-1 == connect(cfd, (struct sockaddr *)&addr, addrlen))
-                {
-                    zlog_debug(cli, "connect error %s", strerror(errno));
-                    exit(-1);
-                }
-            }
-            else
-            {
-                errornumber++;
-                goto reconnect;
+            if (errornumber > 30) {
+              sleep(rand() % 3);
+              errornumber = 0;
+              if (-1 == connect(cfd, (struct sockaddr *)&addr, addrlen)) {
+                zlog_debug(cli, "connect error %s", strerror(errno));
+                exit(-1);
+              }
+            } else {
+              errornumber++;
+              goto reconnect;
             }
         }
         zlog_info(cli, "connect success");
@@ -179,22 +175,21 @@ int main(int argc, char **argv)
             else
             {
                 errornumber++;
-                if (errornumber == 3)
-                {
-                    printf(
-                        "密码错误次数太多，暂时锁定帐号%s,"
-                        "一分钟以后重新登陆\n",
-                        username);
-                    show_line++;
-                    zlog_warn(cli, "login %s passwd error passwd error 3 times ", username);
-                    exit(0);
-                }
-                else
-                {
-                    zlog_debug(cli, "login %s passwd error  %d times ", username, errornumber);
-                    printf("密码错误\n");
-                    show_line++;
-                    goto again;
+                if (errornumber == 30) {
+                  printf(
+                      "密码错误次数太多，暂时锁定帐号%s,"
+                      "一分钟以后重新登陆\n",
+                      username);
+                  show_line++;
+                  zlog_warn(cli, "login %s passwd error passwd error 3 times ",
+                            username);
+                  exit(0);
+                } else {
+                  zlog_debug(cli, "login %s passwd error  %d times ", username,
+                             errornumber);
+                  printf("密码错误\n");
+                  show_line++;
+                  goto again;
                 }
             }
         }
@@ -255,16 +250,15 @@ int main(int argc, char **argv)
                 if (email[strlen(email) - 1] == '\n') email[strlen(email) - 1] = '\0';
             }  /// mysql add register
             errornumber = 0;
-            while (false == cli_register(username, passwd, email) && errornumber++ < 3)
-            {
-                sleep(rand() % SLEEP_TIME);
+            while (false == cli_register(username, passwd, email) &&
+                   errornumber++ < 30) {
+              sleep(rand() % SLEEP_TIME);
             }
 
-            if (errornumber >= 3)
-            {
-                zlog_warn(cli, "register failed 用户名:%s 密码:%s 邮箱:%s", username, passwd,
-                          email);
-                exit(1);
+            if (errornumber >= 30) {
+              zlog_warn(cli, "register failed 用户名:%s 密码:%s 邮箱:%s",
+                        username, passwd, email);
+              exit(1);
             }
             printf("-----------------注册成功\n");
             printf("您的用户名:%s\n您的密码:%s\n您的邮箱:%s\n请妥善保管\n", username, passwd,

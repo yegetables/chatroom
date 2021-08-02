@@ -21,11 +21,13 @@ bool recv_info(int cfd, info *ms)
     int returnnumber = 0;
     // 记录错误次数
     int errornumber = 0;
+    int ret = 0;
 rerecv:;
-    if ((returnnumber = recv(cfd, ms, sizeof(info), 0)) != sizeof(info))
+    ret = recv(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
+    if (ret > 0) returnnumber += ret;
+    if (ret == 0) return false;
+    if (returnnumber != sizeof(info))
     {
-        if (returnnumber == 0) return false;
-
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
             // 服务端不能卡死,客户端close之后服务端收到EAGAIN,三次失败直接close
@@ -37,7 +39,7 @@ rerecv:;
         }
         zlog_warn(tmp, "recv failed %s", show_errno());
         errornumber++;
-        if (errornumber > 3)
+        if (errornumber > 30)
         {
             zlog_warn(tmp, "can't recv info over 3");
             goto over;
@@ -63,11 +65,13 @@ bool send_info(int cfd, info *ms)
     int returnnumber = 0;
     // 记录错误次数
     int errornumber = 0;
-
+    int ret = 0;
 resend:;
-    if (sizeof(info) != (returnnumber = send(cfd, ms, sizeof(info), 0)))
+    ret = send(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
+    if (ret > 0) returnnumber += ret;
+    if (ret == 0) return false;
+    if (sizeof(info) != returnnumber)
     {
-        if (returnnumber == 0) return false;
         zlog_warn(tmp, "send failed %s", show_errno());
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
@@ -77,7 +81,7 @@ resend:;
 #endif
         }
         errornumber++;
-        if (errornumber > 3)
+        if (errornumber > 30)
         {
             zlog_warn(tmp, "can't send info over 3");
             goto over;
@@ -150,7 +154,7 @@ resend:;
             }
 
             errornumber++;
-            if (errornumber > 3)
+            if (errornumber > 30)
             {
                 zlog_warn(tmp, "can't recv file over 3");
                 goto over;
@@ -227,7 +231,7 @@ resend:;
 #endif
             }
             errornumber++;
-            if (errornumber > 3)
+            if (errornumber > 30)
             {
                 zlog_warn(tmp, "can't send file over 3");
                 goto over;

@@ -29,14 +29,11 @@ reinit:;
                    "Failed to init mysql "
                    "Error %u: %s",
                    mysql_errno(conn), mysql_error(conn));
-        if (errornumber > 3)
-        {
-            return NULL;
-        }
-        else
-        {
-            sleep(rand() % 5);
-            goto reinit;
+        if (errornumber > 30) {
+          return NULL;
+        } else {
+          sleep(rand() % 5);
+          goto reinit;
         }
     }
     else
@@ -55,14 +52,11 @@ reconnect:
                    "Failed to connect "
                    "Error %u: %s",
                    mysql_errno(conn), mysql_error(conn));
-        if (errornumber > 3)
-        {
-            return NULL;
-        }
-        else
-        {
-            sleep(rand() % 5);
-            goto reconnect;
+        if (errornumber > 30) {
+          return NULL;
+        } else {
+          sleep(rand() % 5);
+          goto reconnect;
         }
     }
     else
