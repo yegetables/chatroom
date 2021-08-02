@@ -209,8 +209,17 @@ bool do_sql(events *ev)
         }
         case IF_HAS:
         {
-            if (!base_sql_query(ms)) return false;
-            if (!case_IF_HAS(ms)) return false;
+            if (!base_sql_query(ms))
+            {
+        
+                return false;
+            }
+            if (!case_IF_HAS(ms))
+            {
+                
+                return false;
+            }
+           
             ms->to = ms->from;
             ms->from = 0;
             break;

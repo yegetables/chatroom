@@ -7,7 +7,7 @@
 
 char *showinfo(info *ms)
 {
-    static char *how[20];
+    static char *how[50];
     {
         how[0] = "[HUP_NO]";
         how[1] = "[IF_HAS]";
@@ -26,9 +26,18 @@ char *showinfo(info *ms)
         how[14] = "[GET_MESSAGE_FROM]";
         how[15] = "[SEND_FILE_REDY]";
         how[16] = "[SEND_FILE]";
-        how[17] = "[17]";
-        how[18] = "[???]";
-        how[19] = "[???]";
+        how[17] = "[AGREE_RECV_FILE]";
+        how[18] = "[CREATE_GROUP]";
+        how[19] = "[DEL_GROUP]";
+        how[20] = "[GR_LIST]";
+        how[21] = "[ADD_GROUP_APPLY]";
+        how[22] = "[EXIT_GROUP]";
+        how[23] = "[set_POWER_GROUP]";
+        how[24] = "[ADD_GROUP]";
+        how[25] = "[SHOW_GROUP_APPLY]";
+        how[26] = "[SHOW_GROUP_MESSAGES]";
+        how[27] = "[REGISTER]";
+        how[28] = "[28]";
 
         // strcpy(how[0], "[IF_HAS]");
         // strcpy(how[1], "[IF_DONE]");
@@ -57,6 +66,7 @@ char *showinfo(info *ms)
             ms->from, ms->to);
 
     sprintf(&logbuf[strlen(logbuf)], "%s", type[ms->type]);
+    if (ms->how > 28) how[ms->how] = ">28";
     sprintf(&logbuf[strlen(logbuf)], "%s", how[ms->how]);
     sprintf(&logbuf[strlen(logbuf)], "\n%s\n}", ms->value);
     return logbuf;
