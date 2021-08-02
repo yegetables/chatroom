@@ -3,13 +3,11 @@ log/*.log
 a.out
 Doxyfile.bak
 doxygen-qmi-style
-**/html/**
 /**/node_modules
 .cache
 .vscode
 checks.json
 *.sql
-# package.json
 .cz-config.js
 package-lock.json
 commitlint.config.js
@@ -23,5 +21,7 @@ clang-tidy-report.*
 .idea
 cmake-build-debug
 a
-.gitignore
 a.c
+/**/config.h
+/**/s.log.conf
+
