@@ -61,12 +61,12 @@ void epoll_del(events *ev)
 
 int epoll_init_lfd(void)
 {
-    int lfd = socket(AF_INET, SOCK_STREAM, 0);
+    int lfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     // lfd非阻塞
     //[为什么TCP服务器的监听套接字要设置为非阻塞](https://blog.csdn.net/zhwenx3/article/details/88107428)
     //如果监听套接字为非阻塞的，accept()不会阻塞住，立即返回-1，同时errno =
     // EWOULDBLOCK
-    fcntl(lfd, F_SETFL, fcntl(lfd, F_GETFL, 0) | O_NONBLOCK);
+    // fcntl(lfd, F_SETFL, fcntl(lfd, F_GETFL, 0) | O_NONBLOCK);
 
     struct sockaddr_in serveraddr;
     serveraddr.sin_family = AF_INET;

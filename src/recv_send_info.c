@@ -22,18 +22,19 @@ bool recv_info(int cfd, info *ms)
     // 记录错误次数
     int errornumber = 0;
     int ret = 0;
+    long lll = 0;
+    ret = recv(cfd, &lll, sizeof(long), 0);
 rerecv:;
-    ret = recv(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
-
+    ret = recv(cfd, ms + returnnumber, lll - returnnumber, 0);
     if (ret == 0) return false;
     if (ret > 0) returnnumber += ret;
     if (returnnumber != sizeof(info))
     {
-#ifdef PROJECT_CLIENT
-        zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
-#else
-        zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
-#endif
+        // #ifdef PROJECT_CLIENT
+        //         zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
+        // #else
+        //         zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
+        // #endif
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
             // 服务端不能卡死,客户端close之后服务端收到EAGAIN,三次失败直接close
@@ -44,18 +45,17 @@ rerecv:;
 #endif
         }
 
-        zlog_warn(tmp, "server now :::recv failed %s  has recv %d", show_errno(), returnnumber);
+        zlog_warn(tmp, "recv failed %s", show_errno());
         errornumber++;
         if (errornumber > 30)
         {
-            zlog_warn(tmp, "ser::can't recv info over 30");
+            zlog_warn(tmp, "can't recv info over 30");
             goto over;
         }
         goto rerecv;
 
     over:;
-        zlog_error(tmp, "ser::recv info failed %s:%s over   has recv %d", show_errno(),
-                   strerror(errno), returnnumber);
+        zlog_error(tmp, "recv info failed %s:%s over   ", show_errno(), strerror(errno));
         return false;
     }
     return true;
@@ -74,17 +74,19 @@ bool send_info(int cfd, info *ms)
     // 记录错误次数
     int errornumber = 0;
     int ret = 0;
+    long lll = sizeof(*ms);
+
 resend:;
-    ret = send(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
+    ret = send(cfd, ms + returnnumber, lll - returnnumber, 0);
     if (ret > 0) returnnumber += ret;
     if (ret == 0) return false;
     if (sizeof(info) != returnnumber)
     {
-#ifdef PROJECT_CLIENT
-        zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
-#else
-        zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
-#endif
+        // #ifdef PROJECT_CLIENT
+        //         zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
+        // #else
+        //         zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
+        // #endif
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
 #ifdef PROJECT_CLIENT
@@ -92,18 +94,17 @@ resend:;
             goto resend;
 #endif
         }
-        zlog_warn(tmp, "ser::::send failed %s   has send %d", show_errno(), returnnumber);
+        zlog_warn(tmp, "send failed %s   ", show_errno());
         errornumber++;
         if (errornumber > 30)
         {
-            zlog_warn(tmp, "ser::can't send info over 30,has send %d", errornumber);
+            zlog_warn(tmp, "can't send info over 30");
             goto over;
         }
         goto resend;
 
     over:;
-        zlog_error(tmp, "ser::send info failed %s:%s over   has send %d", show_errno(),
-                   strerror(errno), returnnumber);
+        zlog_error(tmp, "send info failed %s:%s over ", show_errno(), strerror(errno));
         return false;
     }
     return true;

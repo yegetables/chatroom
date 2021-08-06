@@ -13,7 +13,7 @@ bool cli_register(char *name, char *passwd, char *email)  // IF_DONE
             "\'%s\',\'%s\',\'%s\',0);",
             name, passwd, email);
     info *ms = NULL;
-    ms = cli_creatinfo(userid, 0, sql, REGISTER, p);
+    ms = cli_creatinfo(-1, 0, sql, REGISTER, p);
     if (ms == NULL) return false;
     int s = atoi(ms->value);
     if (ms) free(ms);
@@ -48,7 +48,7 @@ bool cli_accesspasswd(char *name, char *passwd)  // IF_HAS
                 "user_passwd=\'%s\';",
                 name, passwd);
     }
-    info *ms = cli_creatinfo(userid, 0, sql, IF_HAS, p);
+    info *ms = cli_creatinfo(-1, 0, sql, IF_HAS, p);
     if (ms == NULL) return false;
     int s = atoi(ms->value);
     if (ms) free(ms);
@@ -69,7 +69,7 @@ bool cli_accessonline(char *name)  // WHAT_FIRST_VALUE
     char p[BUFLEN] = {0};
 
     sprintf(p, "SELECT user_status  FROM user where user_name =\'%s\';", name);
-    info *ms = cli_creatinfo(userid, 0, sql, WHAT_FIRST_VALUE, p);
+    info *ms = cli_creatinfo(-1, 0, sql, WHAT_FIRST_VALUE, p);
     if (ms == NULL) return false;
     int s = atoi(ms->value);
     if (ms) free(ms);
@@ -88,7 +88,7 @@ int cli_setonline(char *name)  // SET_ONLINE
     if (name == NULL) return -1;
     char p[BUFLEN] = {0};
     sprintf(p, "update user set  user_status= \'1\'  where user_name= \'%s\' ;", name);
-    info *ms = cli_creatinfo(userid, 0, sql, SET_ONLINE, p);
+    info *ms = cli_creatinfo(-1, 0, sql, SET_ONLINE, p);
     if (ms == NULL) return -1;
     int s = atoi(ms->value);
     if (ms) free(ms);

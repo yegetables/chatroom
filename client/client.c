@@ -63,7 +63,9 @@ int main(int argc, char **argv)
 
     /// 连接服务器
     {
-        cfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+        // cfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+        cfd = socket(AF_INET, SOCK_STREAM, 0);
+
         struct sockaddr_in addr;
         addr.sin_family = AF_INET;
         // addr.sin_addr.s_addr = htonl(INADDR_ANY);

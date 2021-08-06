@@ -22,12 +22,17 @@ info *cli_send_recv(info *ms, int how)
     while (1)
     {
         int thisnum = epoll_wait(epfd, outevents, 1024, 0);
-        if (thisnum != 1) continue;
+        if (thisnum < 1) continue;
         if (outevents[0].events & EPOLLIN)
         {
             epoll_ctl(epfd, EPOLL_CTL_DEL, cfd, NULL);
             // 接受并展示info
-            if (recv_info(cfd, ms))
+
+            long s = sizeof(ms);
+            // sprintf("%d", );
+            int ret = send(cfd, &s, sizeof(long), 0);
+            ret = send(cfd, ms, s, 0);
+            if (ret == sizeof(info))
             {
                 char *tt = NULL;
                 tt = showinfo(ms);
@@ -44,12 +49,34 @@ info *cli_send_recv(info *ms, int how)
                 }
                 return ms;  // no close
             }
+            // if (recv_info(cfd, ms))
+            // {
+            //     char *tt = NULL;
+            //     tt = showinfo(ms);
+            //     zlog_debug(cli, "%s", tt);
+            //     free(tt);
+            //     return ms;
+            // }
+            // else
+            // {
+            //     if (ms)
+            //     {
+            //         free(ms);
+            //         ms = NULL;
+            //     }
+            //     return ms;  // no close
+            // }
         }
         if (outevents[0].events & EPOLLOUT)
         {
             epoll_ctl(epfd, EPOLL_CTL_DEL, cfd, NULL);
             // 发送查询sql
-            if (!send_info(cfd, ms))
+            char ss[20] = {0};
+            long s = sizeof(ms);
+            // sprintf("%d", );
+            int ret = send(cfd, &s, sizeof(long), 0);
+            ret = send(cfd, ms, s, 0);
+            if (ret != sizeof(info))
             {
                 if (ms)
                 {
@@ -58,6 +85,22 @@ info *cli_send_recv(info *ms, int how)
                 }
                 return ms;  // no close
             }
+            else
+            {
+                char *tt = NULL;
+                tt = showinfo(ms);
+                zlog_debug(cli, "%s", tt);
+                free(tt);
+            }
+            // if (!send_info(cfd, ms))
+            // {
+            //     if (ms)
+            //     {
+            //         free(ms);
+            //         ms = NULL;
+            //     }
+            //     return ms;  // no close
+            // }
             if (how == HUP_NO)
             {
                 return ms;
