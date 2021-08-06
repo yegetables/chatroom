@@ -22,43 +22,50 @@ bool recv_info(int cfd, info *ms)
     // 记录错误次数
     int errornumber = 0;
     int ret = 0;
-    long lll = 0;
-    ret = recv(cfd, &lll, sizeof(long), 0);
+    size_t lll = sizeof(info);
+    // ret = recv(cfd, &lll, sizeof(long), 0);
 rerecv:;
-    ret = recv(cfd, ms + returnnumber, lll - returnnumber, 0);
-    if (ret == 0) return false;
-    if (ret > 0) returnnumber += ret;
-    if (returnnumber != sizeof(info))
+    (ret = recv(cfd, ms, lll, 0));
+    if (ret == lll)
     {
-        // #ifdef PROJECT_CLIENT
-        //         zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
-        // #else
-        //         zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
-        // #endif
-        if (errno == EWOULDBLOCK || errno == EAGAIN)
-        {
-            // 服务端不能卡死,客户端close之后服务端收到EAGAIN,三次失败直接close
-            // 客户端适时等待能提高准确率,永远重试
-#ifdef PROJECT_CLIENT
-            sleep(1);  // magic number
-            goto rerecv;
-#endif
-        }
-
-        zlog_warn(tmp, "recv failed %s", show_errno());
-        errornumber++;
-        if (errornumber > 30)
-        {
-            zlog_warn(tmp, "can't recv info over 30");
-            goto over;
-        }
-        goto rerecv;
-
-    over:;
-        zlog_error(tmp, "recv info failed %s:%s over   ", show_errno(), strerror(errno));
-        return false;
+        zlog_error(tmp, "recv %ld return yes", ret);
+        return true;
     }
-    return true;
+    zlog_error(tmp, "recv %ld return no", ret);
+    //     if (ret == 0) return false;
+    //     if (ret > 0) returnnumber += ret;
+    //     if (returnnumber != lll)
+    //     {
+    //         // #ifdef PROJECT_CLIENT
+    //         //         zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
+    //         // #else
+    //         //         zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
+    //         // #endif
+    //         if (errno == EWOULDBLOCK || errno == EAGAIN)
+    //         {
+    //             // 服务端不能卡死,客户端close之后服务端收到EAGAIN,三次失败直接close
+    //             // 客户端适时等待能提高准确率,永远重试
+    // #ifdef PROJECT_CLIENT
+    //             sleep(1);  // magic number
+    //             goto rerecv;
+    // #endif
+    //         }
+
+    //         zlog_warn(tmp, "recv failed %s  should recv:%ld really recv:%d", show_errno(), lll,
+    //                   returnnumber);
+    //         errornumber++;
+    //         if (errornumber > 30)
+    //         {
+    //             zlog_warn(tmp, "can't recv info over 30");
+    //             goto over;
+    //         }
+    //         goto rerecv;
+
+    //     over:;
+    //         zlog_error(tmp, "recv info failed %s:%s over   ", show_errno(), strerror(errno));
+    //         return false;
+    //     }
+    return false;
 }
 
 bool send_info(int cfd, info *ms)
@@ -74,40 +81,47 @@ bool send_info(int cfd, info *ms)
     // 记录错误次数
     int errornumber = 0;
     int ret = 0;
-    long lll = sizeof(*ms);
-
-resend:;
-    ret = send(cfd, ms + returnnumber, lll - returnnumber, 0);
-    if (ret > 0) returnnumber += ret;
-    if (ret == 0) return false;
-    if (sizeof(info) != returnnumber)
+    size_t lll = sizeof(info);
+    // ret = send(cfd, &lll, sizeof(size_t), 0);
+    (ret = send(cfd, ms, lll, 0));
+    if (ret == lll)
     {
-        // #ifdef PROJECT_CLIENT
-        //         zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
-        // #else
-        //         zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
-        // #endif
-        if (errno == EWOULDBLOCK || errno == EAGAIN)
-        {
-#ifdef PROJECT_CLIENT
-            sleep(1);  // magic number
-            goto resend;
-#endif
-        }
-        zlog_warn(tmp, "send failed %s   ", show_errno());
-        errornumber++;
-        if (errornumber > 30)
-        {
-            zlog_warn(tmp, "can't send info over 30");
-            goto over;
-        }
-        goto resend;
-
-    over:;
-        zlog_error(tmp, "send info failed %s:%s over ", show_errno(), strerror(errno));
-        return false;
+        zlog_error(tmp, "send %ld return yes", ret);
+        return true;
     }
-    return true;
+    zlog_error(tmp, "send %ld return no", ret);
+    // resend:;
+    //     ret = send(cfd, ms + returnnumber, lll - returnnumber, 0);
+    //     if (ret > 0) returnnumber += ret;
+    //     if (ret == 0) return false;
+    //     if (lll != returnnumber)
+    //     {
+    //         // #ifdef PROJECT_CLIENT
+    //         //         zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
+    //         // #else
+    //         //         zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
+    //         // #endif
+    //         if (errno == EWOULDBLOCK || errno == EAGAIN)
+    //         {
+    // #ifdef PROJECT_CLIENT
+    //             sleep(1);  // magic number
+    //             goto resend;
+    // #endif
+    //         }
+    //         zlog_warn(tmp, "send failed %s   ", show_errno());
+    //         errornumber++;
+    //         if (errornumber > 30)
+    //         {
+    //             zlog_warn(tmp, "can't send info over 30");
+    //             goto over;
+    //         }
+    //         goto resend;
+
+    //     over:;
+    //         zlog_error(tmp, "send info failed %s:%s over ", show_errno(), strerror(errno));
+    //         return false;
+    //     }
+    return false;
 }
 
 bool recv_file(int cfd, char *path, long int f_size)

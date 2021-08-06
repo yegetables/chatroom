@@ -11,6 +11,7 @@ void client_event(int cfd, int event, void *args)
     epoll_del(ev);
     if (false == recv_info(ev->fd, &ev->js))
     {
+        zlog_debug(ser, "recv_info error,rdhup");
         epoll_add(EPOLLRDHUP, ev);
         return;
     }

@@ -28,11 +28,13 @@ info *cli_send_recv(info *ms, int how)
             epoll_ctl(epfd, EPOLL_CTL_DEL, cfd, NULL);
             // 接受并展示info
 
-            long s = sizeof(ms);
+            size_t s = sizeof(info);
             // sprintf("%d", );
-            int ret = send(cfd, &s, sizeof(long), 0);
-            ret = send(cfd, ms, s, 0);
-            if (ret == sizeof(info))
+            int ret = 0;
+            // recv(cfd, &s, sizeof(s), 0);
+            ret = recv(cfd, ms, s, 0);
+            zlog_debug(cli, "should recv %ld,really recv  %d", s, ret);
+            if (ret == s)
             {
                 char *tt = NULL;
                 tt = showinfo(ms);
@@ -49,6 +51,7 @@ info *cli_send_recv(info *ms, int how)
                 }
                 return ms;  // no close
             }
+            continue;
             // if (recv_info(cfd, ms))
             // {
             //     char *tt = NULL;
@@ -72,11 +75,12 @@ info *cli_send_recv(info *ms, int how)
             epoll_ctl(epfd, EPOLL_CTL_DEL, cfd, NULL);
             // 发送查询sql
             char ss[20] = {0};
-            long s = sizeof(ms);
+            size_t s = sizeof(info);
             // sprintf("%d", );
-            int ret = send(cfd, &s, sizeof(long), 0);
+            int ret = 0;  // send(cfd, &s, sizeof(s), 0);
             ret = send(cfd, ms, s, 0);
-            if (ret != sizeof(info))
+            zlog_debug(cli, "should send %ld,really send %d", s, ret);
+            if (ret != s)
             {
                 if (ms)
                 {
@@ -107,6 +111,7 @@ info *cli_send_recv(info *ms, int how)
             }
             tempevents.events = EPOLLIN;
             epoll_ctl(epfd, EPOLL_CTL_ADD, cfd, &tempevents);
+            continue;
         }
     }
 
