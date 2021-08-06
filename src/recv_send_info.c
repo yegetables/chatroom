@@ -25,7 +25,7 @@ bool recv_info(int cfd, info *ms)
     size_t lll = sizeof(info);
     // ret = recv(cfd, &lll, sizeof(long), 0);
 rerecv:;
-    (ret = recv(cfd, ms, lll, 0));
+    (ret = recv(cfd, ms, lll, MSG_WAITALL));
     if (ret == lll)
     {
         zlog_error(tmp, "recv %ld return yes", ret);
