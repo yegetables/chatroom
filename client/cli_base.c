@@ -2,6 +2,8 @@
 #include PROJECT_CLIENTHEAD
 extern zlog_category_t *cli;
 extern int cfd;
+extern int epfd;
+extern struct epoll_event tempevents;
 extern int userid;
 extern int applications;
 extern int messages;
@@ -12,45 +14,84 @@ info *cli_send_recv(info *ms, int how)
     {
         return NULL;
     }
-
     ms->how = how;
 
-    // 发送查询sql
-    if (!send_info(cfd, ms))
+    tempevents.events = EPOLLOUT;
+    epoll_ctl(epfd, EPOLL_CTL_ADD, cfd, &tempevents);
+    struct epoll_event outevents[1024];
+    while (1)
     {
-        if (ms)
+        int thisnum = epoll_wait(epfd, outevents, 1024, 0);
+        if (thisnum != 1) continue;
+        if (outevents[0].events & EPOLLIN)
         {
-            free(ms);
-            ms = NULL;
+            epoll_ctl(epfd, EPOLL_CTL_DEL, cfd, NULL);
+            // 接受并展示info
+            if (recv_info(cfd, ms))
+            {
+                char *tt = NULL;
+                tt = showinfo(ms);
+                zlog_debug(cli, "%s", tt);
+                free(tt);
+                return ms;
+            }
+            else
+            {
+                if (ms)
+                {
+                    free(ms);
+                    ms = NULL;
+                }
+                return ms;  // no close
+            }
         }
-        return ms;  // no close
+        if (outevents[0].events & EPOLLOUT)
+        {
+            epoll_ctl(epfd, EPOLL_CTL_DEL, cfd, NULL);
+            // 发送查询sql
+            if (!send_info(cfd, ms))
+            {
+                if (ms)
+                {
+                    free(ms);
+                    ms = NULL;
+                }
+                return ms;  // no close
+            }
+            if (how == HUP_NO)
+            {
+                return ms;
+            }
+            tempevents.events = EPOLLIN;
+            epoll_ctl(epfd, EPOLL_CTL_ADD, cfd, &tempevents);
+        }
     }
 
-    if (how != HUP_NO)
-    {
-        // 接受并展示info
-        if (recv_info(cfd, ms))
-        {
-            char *tt = NULL;
-            tt = showinfo(ms);
-            zlog_debug(cli, "%s", tt);
-            free(tt);
-            return ms;
-        }
-        else
-        {
-            if (ms)
-            {
-                free(ms);
-                ms = NULL;
-            }
-            return ms;  // no close
-        }
-    }
-    else
-    {
-        return ms;
-    }
+    // if (how != HUP_NO)
+    // {
+    //     // 接受并展示info
+    //     if (recv_info(cfd, ms))
+    //     {
+    //         char *tt = NULL;
+    //         tt = showinfo(ms);
+    //         zlog_debug(cli, "%s", tt);
+    //         free(tt);
+    //         return ms;
+    //     }
+    //     else
+    //     {
+    //         if (ms)
+    //         {
+    //             free(ms);
+    //             ms = NULL;
+    //         }
+    //         return ms;  // no close
+    //     }
+    // }
+    // else
+    // {
+    //     return ms;
+    // }
 }
 
 void update_notices(char *user_msg, char *user_files)

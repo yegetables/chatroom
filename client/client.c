@@ -8,6 +8,8 @@ int cfd;
 int show_line = 0;
 char who_send_msg[BUFLEN];
 char who_send_file[BUFLEN];
+int epfd;
+struct epoll_event tempevents;
 int main(int argc, char **argv)
 {
     srand((unsigned)time(NULL));
@@ -93,6 +95,9 @@ int main(int argc, char **argv)
         }
         zlog_info(cli, "connect success");
     }
+    //增加epoll 句柄
+    epfd = epoll_create(10);
+    tempevents.data.fd = cfd;
 
     /// 登录或者注册
     {

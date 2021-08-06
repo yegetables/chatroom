@@ -25,15 +25,15 @@ bool recv_info(int cfd, info *ms)
 rerecv:;
     ret = recv(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
 
-    if (ret > 0) returnnumber += ret;
-#ifdef PROJECT_CLIENT
-    zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
-#else
-    zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
-#endif
     if (ret == 0) return false;
+    if (ret > 0) returnnumber += ret;
     if (returnnumber != sizeof(info))
     {
+#ifdef PROJECT_CLIENT
+        zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
+#else
+        zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
+#endif
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
             // 服务端不能卡死,客户端close之后服务端收到EAGAIN,三次失败直接close
@@ -77,14 +77,14 @@ bool send_info(int cfd, info *ms)
 resend:;
     ret = send(cfd, ms + returnnumber, sizeof(info) - returnnumber, 0);
     if (ret > 0) returnnumber += ret;
-#ifdef PROJECT_CLIENT
-    zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
-#else
-    zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
-#endif
     if (ret == 0) return false;
     if (sizeof(info) != returnnumber)
     {
+#ifdef PROJECT_CLIENT
+        zlog_warn(tmp, "cli:::this recv %d, all recv %d", ret, returnnumber);
+#else
+        zlog_warn(tmp, "ser:::this recv %d, all recv %d", ret, returnnumber);
+#endif
         if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
 #ifdef PROJECT_CLIENT
