@@ -16,8 +16,9 @@ void information_bar(void)
     pthread_mutex_lock(&update_mutex);
     // update_notices(who_send_msg, who_send_file);
     //准备消息来源名单
-    printf("----------%d:applications--------\n", applications);
-    printf("------------%d:messages from (%s)----------\n", messages, who_send_msg);
+    printf("你的id:%d-------%d:applications--------\n", userid, applications);
+    printf("你的昵称:%s--------%d:messages from (%s)----------\n", username, messages,
+           who_send_msg);
     printf("-----------%d:files from (%s)--------------\n", files, who_send_file);
     pthread_mutex_unlock(&update_mutex);
 }
