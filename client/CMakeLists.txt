@@ -22,4 +22,4 @@ add_compile_options(-g -Wall  -std=c17 )
 
 
 
-target_link_libraries(client.out cjson pthread zlog  )
+target_link_libraries(client.out cjson pthread zlog readline )

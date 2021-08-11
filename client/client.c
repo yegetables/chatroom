@@ -12,6 +12,8 @@ int epfd;
 struct epoll_event tempevents;
 int main(int argc, char **argv)
 {
+    char *readusername = NULL;
+
     srand((unsigned)time(NULL));
     userid = -1;
     // 记录错误次数
@@ -111,7 +113,11 @@ int main(int argc, char **argv)
         memset(username, 0, sizeof(username));
         memset(passwd, 0, sizeof(passwd));
         memset(email, 0, sizeof(email));
-        fgets(username, 25, stdin);
+        // fgets(username, 25, stdin);
+
+        readusername = readline("");
+        strcpy(username, readusername);
+        free(readusername);
         show_line += 4;
         {
             if (username[strlen(username) - 2] == '\r' && username[strlen(username) - 1] == '\n')
