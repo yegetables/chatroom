@@ -303,7 +303,10 @@ bool case_WHAT_FIRST_VALUE(info *ms)
     }
     memset(buf, 0, BUFLEN);
     rowline = mysql_fetch_row(result);  //第一行
-    strcpy(buf, rowline[0]);            //第一列
+    if (rowline == NULL || rowline[0] == NULL)
+        strcpy(buf, "-1");
+    else
+        strcpy(buf, rowline[0]);  //第一列
     mysql_free_result(result);
     return true;
 }
@@ -320,6 +323,7 @@ bool case_MANY_RESULT(info *ms)
         return false;
     }
     memset(buf, 0, BUFLEN);
+    // zlog_error(ser, "find result %s", mysql_num_rows(result));
     itoa(mysql_num_rows(result), buf, 10);
     mysql_free_result(result);
     return true;

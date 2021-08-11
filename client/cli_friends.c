@@ -180,20 +180,43 @@ reshow:;
     scanf("%1d", &t);
     char p[BUFLEN] = {0};
     memset(p, 0, BUFLEN);
-    int iid = 10000;
+    int iid = -1;
     char na[30] = {0};
     if (t == 1)
     {
-        scanf("%d", &iid);
+        while (1)
+        {
+            scanf("%10s", na);
+            iid = atoi(na);
+            strcpy(na, "");
+            if (iid < 0 || iid > INT32_MAX)
+            {
+                printf("请输入正确id\n");
+                show_line += 1;
+                iid = -1;
+            }
+            else
+                break;
+        }
+
         id_to_name(iid, p);
-        printf("id:%d----name:%s\n", iid, p);
+        if (strcmp(p, "-1") == 0)
+        {
+            printf("not found\n");
+        }
+        else
+            printf("id:%d----name:%s\n", iid, p);
         PAUSE;
         show_line += 4;
     }
     else if (t == 2)
     {
         scanf("%s", na);
-        printf("id:%d----name:%s\n", name_to_id(na), na);
+        iid = name_to_id(na);
+        if (iid == -1)
+            printf("not found\n");
+        else
+            printf("id:%d----name:%s\n", iid, na);
         PAUSE;
         show_line += 4;
     }

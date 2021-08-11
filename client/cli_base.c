@@ -33,13 +33,13 @@ info *cli_send_recv(info *ms, int how)
             int ret = 0;
             // recv(cfd, &s, sizeof(s), 0);
             ret = recv(cfd, ms, s, MSG_WAITALL);
-            zlog_debug(cli, "should recv %ld,really recv  %d", s, ret);
+            // zlog_debug(cli, "should recv %ld,really recv  %d", s, ret);
             if (ret == s)
             {
-                char *tt = NULL;
-                tt = showinfo(ms);
-                zlog_debug(cli, "%s", tt);
-                free(tt);
+                // char *tt = NULL;
+                // tt = showinfo(ms);
+                // zlog_debug(cli, "%s", tt);
+                // free(tt);
                 return ms;
             }
             else
@@ -79,7 +79,7 @@ info *cli_send_recv(info *ms, int how)
             // sprintf("%d", );
             int ret = 0;  // send(cfd, &s, sizeof(s), 0);
             ret = send(cfd, ms, s, 0);
-            zlog_debug(cli, "should send %ld,really send %d", s, ret);
+            // zlog_debug(cli, "should send %ld,really send %d", s, ret);
             if (ret != s)
             {
                 if (ms)
@@ -91,10 +91,10 @@ info *cli_send_recv(info *ms, int how)
             }
             else
             {
-                char *tt = NULL;
-                tt = showinfo(ms);
-                zlog_debug(cli, "%s", tt);
-                free(tt);
+                // char *tt = NULL;
+                // tt = showinfo(ms);
+                // zlog_debug(cli, "%s", tt);
+                // free(tt);
             }
             // if (!send_info(cfd, ms))
             // {
