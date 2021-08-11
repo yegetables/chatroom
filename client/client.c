@@ -10,6 +10,8 @@ char who_send_msg[BUFLEN];
 char who_send_file[BUFLEN];
 int epfd;
 struct epoll_event tempevents;
+pthread_mutex_t update_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t update_cond = PTHREAD_COND_INITIALIZER;
 int main(int argc, char **argv)
 {
     char *readusername = NULL;
@@ -310,7 +312,11 @@ int main(int argc, char **argv)
     if (userid > 0)
     {
         // system("clear");
-        update_notices(who_send_msg, who_send_file);
+        pthread_t update_thread;
+        pthread_attr_t detach_attr;
+        pthread_attr_init(&detach_attr);
+        pthread_attr_setdetachstate(&detach_attr, PTHREAD_CREATE_DETACHED);
+        pthread_create(&update_thread, &detach_attr, timed_update_notices, NULL);
         // alarm(10);
         show_main_menu();
     }
@@ -339,5 +345,16 @@ void signalcatch(int signal)
             // alarm(10);
             return;
             // 异常退出
+    }
+}
+
+void *timed_update_notices(void *argv)
+{
+    while (1)
+    {
+        pthread_mutex_lock(&update_mutex);
+        update_notices(who_send_msg, who_send_file);
+        pthread_mutex_unlock(&update_mutex);
+        sleep(SLEEP_TIME);
     }
 }

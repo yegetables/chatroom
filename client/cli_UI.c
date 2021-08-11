@@ -10,13 +10,16 @@ int files;
 extern int show_line;
 extern char who_send_msg[BUFLEN];
 extern char who_send_file[BUFLEN];
+extern pthread_mutex_t update_mutex;
 void information_bar(void)
 {
-    update_notices(who_send_msg, who_send_file);
+    pthread_mutex_lock(&update_mutex);
+    // update_notices(who_send_msg, who_send_file);
     //准备消息来源名单
     printf("----------%d:applications--------\n", applications);
     printf("------------%d:messages from (%s)----------\n", messages, who_send_msg);
     printf("-----------%d:files from (%s)--------------\n", files, who_send_file);
+    pthread_mutex_unlock(&update_mutex);
 }
 
 void show_main_menu(void)

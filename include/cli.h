@@ -106,6 +106,14 @@ void update_notices(char *user_msg, char *user_files);
 void cli_search_user(void);
 
 /**
+ * @brief 另一线程定时更新消息
+ * 
+ * @param argv 
+ * @return void* 
+ */
+void* timed_update_notices(void*argv);
+
+/**
  * @brief 进入好友申请管理
  */
 void show_applicationss_menu(void);
