@@ -144,10 +144,16 @@ int main(int argc, char **argv)
                 while (1)
                 {
                     c = getch();
-                    // printf("%d--", (int)c);
+                    // printf("%d", c);
                     if (c == '\r' || c == '\n')  //当读到回车符时输入结束
                     {
                         break;
+                    }
+                    if (c == '\b' || c == 127)  //当读到退格符时删除一个字符)
+                    {
+                        if (jj > 0) jj--;
+                        passwd[jj] = '\0';
+                        continue;
                     }
                     passwd[jj++] = c;
                     // printf("*");
@@ -233,6 +239,12 @@ int main(int argc, char **argv)
                     {
                         break;
                     }
+                    if (c == '\b' || c == 127)  //当读到退格符时删除一个字符)
+                    {
+                        if (jj > 0) jj--;
+                        passwd[jj] = '\0';
+                        continue;
+                    }
                     passwd[jj++] = c;
                     // printf("*");
                 }
@@ -259,7 +271,11 @@ int main(int argc, char **argv)
             printf("输入验证邮箱:\n");
             printf("邮箱不超过48位\n");
             show_line += 3;
-            fgets(email, 50, stdin);
+            // fgets(email, 50, stdin);
+            readusername = readline("");
+            strcpy(email, readusername);
+            free(readusername);
+
             {
                 if (email[strlen(email) - 2] == '\r' && email[strlen(email) - 1] == '\n')
                 {

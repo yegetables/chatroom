@@ -1,11 +1,11 @@
 #include <cjson/cJSON.h>
 #include <mysql/mysql.h>
-#include <readline/readline.h>
 #include <sys/sendfile.h>
 #include <termio.h>
 #include <zlog.h>
 
 #include "sdebug.info.h"
+#include <readline/readline.h>
 #include "wrap.h"
 
 #define BUFLEN 4096

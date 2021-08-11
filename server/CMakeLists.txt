@@ -26,4 +26,4 @@ add_compile_options(-g -Wall  -std=c17 )
 
 
 
-target_link_libraries(server.out cjson pthread zlog  mysqlclient)
+target_link_libraries(server.out cjson pthread zlog  mysqlclient readline )
