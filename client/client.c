@@ -11,7 +11,10 @@ char who_send_file[BUFLEN];
 int epfd;
 struct epoll_event tempevents;
 pthread_mutex_t update_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t update_cond = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t rs_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_attr_t detach_attr;
+
+// pthread_cond_t update_cond = PTHREAD_COND_INITIALIZER;
 int main(int argc, char **argv)
 {
     char *readusername = NULL;
@@ -313,7 +316,6 @@ int main(int argc, char **argv)
     {
         // system("clear");
         pthread_t update_thread;
-        pthread_attr_t detach_attr;
         pthread_attr_init(&detach_attr);
         pthread_attr_setdetachstate(&detach_attr, PTHREAD_CREATE_DETACHED);
         pthread_create(&update_thread, &detach_attr, timed_update_notices, NULL);

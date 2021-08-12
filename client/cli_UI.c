@@ -39,7 +39,10 @@ void show_main_menu(void)
         // printf("8.找回密码\n");//登陆界面
         printf("8.好友设置\n");
         printf("0.退出登录\n");
-        scanf("%2d", &c);
+        char *mm = readline("");
+        // scanf("%2d", &c);
+        c = atoi(mm);
+        free(mm);
         show_line += 10;
         switch (c)
         {
@@ -85,7 +88,10 @@ void show_management_friends_menu(void)
         printf("5.查看好友申请\n");
         printf("6.搜索用户\n");
         printf("0.返回上一层\n");
-        scanf("%2d", &c);
+        char *mm = readline("");
+        // scanf("%2d", &c);
+        c = atoi(mm);
+        free(mm);
         show_line += 9;
         switch (c)
         {
@@ -134,7 +140,10 @@ void show_management_groups_menu(void)
         printf("9.设置群管理\n");
         printf("10.踢人\n");
         printf("0.返回上一层\n");
-        scanf("%2d", &c);
+        char *mm = readline("");
+        // scanf("%2d", &c);
+        c = atoi(mm);
+        free(mm);
         show_line += 11;
         switch (c)
         {
@@ -192,7 +201,10 @@ void show_applicationss_menu(void)
     printf("1.同意申请\n");
     printf("2.拒绝申请\n");
     printf("0.返回上一层\n");
-    scanf("%2d", &c);
+    char *mm = readline("");
+    // scanf("%2d", &c);
+    c = atoi(mm);
+    free(mm);
     show_line += 5;
     switch (c)
     {
@@ -219,7 +231,10 @@ void show_file_menu(int toid)
     printf("1.接受文件\n");
     printf("2.拒绝文件\n");
     printf("0.返回上一层\n");
-    scanf("%2d", &c);
+    char *mm = readline("");
+    // scanf("%2d", &c);
+    c = atoi(mm);
+    free(mm);
     show_line += 5;
     switch (c)
     {
@@ -243,7 +258,10 @@ void show_secret_chat_menu(void)
     {
         printf("输入对方id\n");
         printf("0.返回上一层\n");
-        scanf("%9d", &toid);
+        char *mm = readline("");
+        // scanf("%2d", &c);
+        toid = atoi(mm);
+        free(mm);
         show_line += 3;
         if (toid == 0) return;
     }  //开始进入私聊界面
@@ -265,7 +283,10 @@ void show_secret_chat_menu(void)
         printf("3.查看消息记录\n");  //消息记录 (近一天?近10条?)
         printf("4.接收文件\n");
         printf("0.返回上一层\n");
-        scanf("%2d", &c);
+        char *mm = readline("");
+        // scanf("%2d", &c);
+        c = atoi(mm);
+        free(mm);
         show_line += 7;
         switch (c)
         {
@@ -295,7 +316,10 @@ void show_public_chat_menu(void)
 
     printf("输入群组id\n");
     printf("0.返回上一层\n");
-    scanf("%9d", &toid);
+    char *mm = readline("");
+    // scanf("%2d", &c);
+    toid = atoi(mm);
+    free(mm);
     show_line += 3;
     if (toid == 0) return;
     int c;
@@ -306,7 +330,10 @@ void show_public_chat_menu(void)
         printf("1.发送消息\n");
         printf("2.查看消息记录\n");
         printf("0.返回上一层\n");
-        scanf("%2d", &c);
+        char *mm = readline("");
+        // scanf("%2d", &c);
+        c = atoi(mm);
+        free(mm);
         show_line += 5;
         switch (c)
         {
@@ -328,7 +355,10 @@ void show_group_applicationss_menu(void)
     int c;
     int groupid;
     printf("输入群组id\n");
-    scanf("%9d", &groupid);
+    char *mm = readline("");
+    // scanf("%2d", &c);
+    groupid = atoi(mm);
+    free(mm);
     show_line += 2;
     while (1)
     {
@@ -339,7 +369,10 @@ void show_group_applicationss_menu(void)
         printf("1.同意申请\n");
         printf("2.拒绝申请\n");
         printf("0.返回上一层\n");
-        scanf("%2d", &c);
+        char *mm = readline("");
+        // scanf("%2d", &c);
+        c = atoi(mm);
+        free(mm);
         show_line += 5;
         switch (c)
         {

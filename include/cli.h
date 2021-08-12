@@ -186,7 +186,7 @@ int send_secret_message(int toid);
  * @brief 接收toid私聊消息(所有未读)
  * @param toid 对方id
  */
-void recv_secret_message(int toid);
+void *recv_secret_message(void *toid);
 void recv_public_message(int toid);
 
 /**

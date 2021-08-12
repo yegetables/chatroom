@@ -8,6 +8,8 @@ extern int userid;
 extern int applications;
 extern int messages;
 extern int files;
+extern pthread_mutex_t update_mutex;
+extern pthread_mutex_t rs_mutex;
 info *cli_send_recv(info *ms, int how)
 {
     if (ms == NULL)
@@ -319,6 +321,8 @@ info *cli_creatinfo(int from, int to, value_type type, int how, char *value)
     ms->type = type;
     ms->from = from;
     ms->to = to;
+    pthread_mutex_lock(&rs_mutex);
     ms = cli_send_recv(ms, how);
+    pthread_mutex_unlock(&rs_mutex);
     return ms;
 }
