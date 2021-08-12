@@ -4,10 +4,13 @@ jobs:
   build_make:
     runs-on: ubuntu-latest
     steps:
+      - name: build readline
+        run:  sudo apt-get install libreadline6-dev 
+        shell: bash   
       - name: build cjson
         uses: actions/checkout@master
         with:
-          repository: 'DaveGamble/cJSON'  
+           repository: 'DaveGamble/cJSON'  
       - name: make cjson
         run:  mkdir build && cd build && cmake .. -DENABLE_CJSON_UTILS=On -DENABLE_CJSON_TEST=Off -DCMAKE_INSTALL_PREFIX=/usr && make && sudo make DESTDIR=$pkgdir install 
         shell: bash   

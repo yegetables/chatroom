@@ -28,7 +28,7 @@ rerecv:;
     (ret = recv(cfd, ms, lll, MSG_WAITALL));
     if (ret == lll)
     {
-        zlog_error(tmp, "recv %ld return yes", ret);
+        // zlog_error(tmp, "recv %ld return yes", ret);
         return true;
     }
     zlog_error(tmp, "recv %ld return no", ret);
@@ -86,7 +86,7 @@ bool send_info(int cfd, info *ms)
     (ret = send(cfd, ms, lll, 0));
     if (ret == lll)
     {
-        zlog_error(tmp, "send %ld return yes", ret);
+        // zlog_error(tmp, "send %ld return yes", ret);
         return true;
     }
     zlog_error(tmp, "send %ld return no", ret);
@@ -154,8 +154,11 @@ bool recv_file(int cfd, char *path, long int f_size)
     // zlog_error(tmp, "dir path is ::::::%s", dir);
     if (-1 == mkdir(dir, 0777))
     {
-        zlog_error(tmp, "creat %s error:%s ", dir, show_errno());
-        return false;
+        if (errno != EEXIST)
+        {
+            zlog_error(tmp, "creat %s error:%s ", dir, show_errno());
+            return false;
+        }
     }
     // path:/home/ajian/3dd6dd93-8490-427d-bc44-63b668568981/Makefile
     int fd = open(path, O_RDWR | O_APPEND | O_CREAT, 0777);
