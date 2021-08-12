@@ -292,17 +292,26 @@ long int get_file_size(char *path)
     zlog_category_t *tmp = NULL;
 
     tmp = cli;
-    if (access(path, F_OK) || access(path, R_OK))
+    // if (!(access(path, F_OK) && access(path, R_OK)))
+    // {
+    //     zlog_error(tmp, "path:%s can't read %s", path, show_errno());
+    //     printf("error path\n");
+    //     show_line++;
+    //     PAUSE;
+    //     return -1;
+    // }
+    while (path[strlen(path) - 1] == '\n' || path[strlen(path) - 1] == '\r' ||
+           path[strlen(path) - 1] == ' ')
     {
-        zlog_error(tmp, "path:%s can't read ", path);
-        printf("error path\n");
-        show_line++;
-        return -1;
+        path[strlen(path) - 1] = '\0';
     }
     int fd = open(path, O_RDONLY);
     if (fd < 0)
     {
         zlog_error(tmp, "open %s error", path);
+        printf("error open\n");
+        show_line++;
+        PAUSE;
         return -1;
     }
     struct stat statbuf;
@@ -310,6 +319,9 @@ long int get_file_size(char *path)
     if (fstat(fd, &statbuf))
     {
         zlog_error(tmp, "fstat error %s", strerror(errno));
+        printf("error get file size \n");
+        show_line++;
+        PAUSE;
         return -1;
     }
     return statbuf.st_size;

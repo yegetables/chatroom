@@ -137,8 +137,8 @@ bool recv_file(int cfd, char *path, long int f_size)
     // 记录错误次数
     int errornumber = 0;
     // char cmd[100]   = {0};
-    // char dir[100]   = {0};
-    // strcpy(dir, path);
+    char dir[PATH_MAX] = {0};
+    strcpy(dir, path);
     // sprintf(cmd, "mkdir -p %s", dirname(dir));
     // signal(SIGCHLD, SIG_DFL);
     // if (system(cmd) && errno != EISDIR)  //避免多次系统调用开销大
@@ -148,7 +148,16 @@ bool recv_file(int cfd, char *path, long int f_size)
     //     return false;
     // }
     // signal(SIGCHLD, SIG_IGN);
-
+    // char dir[100] = {0};
+    // strcpy(dir, path);
+    dirname(dir);
+    // zlog_error(tmp, "dir path is ::::::%s", dir);
+    if (-1 == mkdir(dir, 0777))
+    {
+        zlog_error(tmp, "creat %s error:%s ", dir, show_errno());
+        return false;
+    }
+    // path:/home/ajian/3dd6dd93-8490-427d-bc44-63b668568981/Makefile
     int fd = open(path, O_RDWR | O_APPEND | O_CREAT, 0777);
     if (fd < 0)
     {
@@ -278,7 +287,7 @@ resend:;
             goto resend;
         }
     }
-
+    zlog_info(tmp, " send file ok");
     // zlog_info(tmp, "offset=%ld", offset);
     return true;
 }

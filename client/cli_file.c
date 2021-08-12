@@ -166,16 +166,23 @@ void send_file_menu(int toid)
     char *path = NULL;
     path = readline("输入文件路径:");
     show_line++;
-    //检测文件名长度
-    if (strlen(path) > 50)
-    {
-        printf("file name too long \n");
-        show_line++;
-        free(path);
-        zlog_error(cli, "file name too long ");
-        return;
-    }
+    // //检测文件名长度
+    // if (strlen(path) > )
+    // {
+    //     printf("file name too long \n");
+    //     show_line++;
+    //     free(path);
+    //     zlog_error(cli, "file name too long ");
+    //     return;
+    // }
 
+    // while (path[strlen(path) - 1] == '\n' || path[strlen(path) - 1] == '\r' ||
+    //        path[strlen(path) - 1] == ' ')
+    // {
+    //     path[strlen(path) - 1] = '\0';
+    // }
+    // path[strlen(path) - 1] = '\n';
+    zlog_error(cli, "now get path [%s]", path);
     // 内部检测权限
     long int f_size = get_file_size(path);
     if (f_size < 0)
@@ -194,8 +201,8 @@ void send_file_menu(int toid)
     char p[BUFLEN] = {0};
     sprintf(p, "%s %ld %d", filename, f_size, toid);
     //发送文件通知
+    zlog_debug(cli, "this is file ready :%s", p);
     ms = cli_creatinfo(userid, 0, sql, SEND_FILE_REDY, p);
-    zlog_debug(cli, "sendfile ready value: %s", ms->value);
 
     if (ms == NULL || atoi(ms->value) == 0)
     {
@@ -206,6 +213,7 @@ void send_file_menu(int toid)
         free(path);
         return;
     }
+    zlog_debug(cli, "sendfile ready value: %s", ms->value);
 
     //真正发送文件
     if (!send_file(cfd, path, f_size))
