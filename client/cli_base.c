@@ -10,6 +10,7 @@ extern int messages;
 extern int files;
 extern pthread_mutex_t update_mutex;
 extern pthread_mutex_t rs_mutex;
+extern int show_line;
 info *cli_send_recv(info *ms, int how)
 {
     if (ms == NULL)
@@ -295,6 +296,7 @@ long int get_file_size(char *path)
     {
         zlog_error(tmp, "path:%s can't read ", path);
         printf("error path\n");
+        show_line++;
         return -1;
     }
     int fd = open(path, O_RDONLY);

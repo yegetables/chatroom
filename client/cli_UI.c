@@ -144,7 +144,7 @@ void show_management_groups_menu(void)
         // scanf("%2d", &c);
         c = atoi(mm);
         free(mm);
-        show_line += 11;
+        show_line += 13;
         switch (c)
         {
             case 0:  //返回上一层
@@ -174,14 +174,20 @@ void show_management_groups_menu(void)
                 break;
             case 9:
 
-                printf("输入成员id\n");
-                scanf("%9d", &toid);
+                // printf("输入成员id\n");
+                mm = readline("输入成员id\n");
+                toid = atoi(mm);
+                free(mm);
+                // scanf("%9d", &toid);
                 show_line += 2;
                 cli_add_group(toid, MANER);
                 break;
             case 10:
-                printf("输入对方id\n");
-                scanf("%9d", &toid);
+                // printf("输入对方id\n");
+                // scanf("%9d", &toid);
+                mm = readline("输入对方id\n");
+                toid = atoi(mm);
+                free(mm);
                 show_line += 2;
                 cli_exit_group(toid);
                 break;

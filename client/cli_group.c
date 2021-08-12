@@ -49,12 +49,17 @@ void cli_show_groups(void)
 
 int cli_create_groups(int uid)
 {
-    char groupname[20] = {0};
+    // char groupname[20] = {0};
+    char *groupname = NULL;
     int groupid = -1;
-    printf("输入群聊名称\n");
-    scanf("%s", groupname);
+    // printf("输入群聊名称\n");
+    // scanf("%s", groupname);
+    groupname = readline("输入群组名称\n");
+    // groupid = atoi(mm);
+    // free(mm);
     char p[BUFLEN] = {0};
     sprintf(p, "insert into groups (group_name,master_id)values(\'%s\',%d);", groupname, userid);
+    free(groupname);
     info *ms = cli_creatinfo(userid, 0, sql, CREATE_GROUP, p);
     if (ms == NULL)
     {
@@ -73,8 +78,11 @@ bool cli_del_groups(int userid)
 {
     // char groupname[20] = { 0 };
     int groupid = -1;
-    printf("输入群聊id\n");
-    scanf("%9d", &groupid);
+    // printf("输入群聊id\n");
+    // scanf("%9d", &groupid);
+    char *mm = readline("输入群组id\n");
+    groupid = atoi(mm);
+    free(mm);
     char p[BUFLEN] = {0};
 
     sprintf(p,
@@ -104,8 +112,11 @@ bool cli_del_groups(int userid)
 void cli_show_groups_members(void)
 {
     int groupid = -1;
-    printf("输入已加入的群组id查看群成员\n");
-    scanf("%9d", &groupid);
+    // printf("输入已加入的群组id查看群成员\n");
+    // scanf("%9d", &groupid);
+    char *mm = readline("输入已加入的群组id查看群成员\n");
+    groupid = atoi(mm);
+    free(mm);
     show_line += 2;
 
     char p[BUFLEN] = {0};
@@ -126,7 +137,7 @@ void cli_show_groups_members(void)
     }
     if (atoi(ms->value) == -1)
     {
-        printf("您没有权限");
+        printf("您没有权限    ");
         PAUSE;
         if (ms) free(ms);
         return;
@@ -161,8 +172,11 @@ void cli_show_groups_members(void)
 void cli_add_group(int toid, int Authority)
 {
     int groupid;
-    printf("输入群组id\n");
-    scanf("%d", &groupid);
+    // printf("输入群组id\n");
+    // scanf("%d", &groupid);
+    char *mm = readline("输入群组id\n");
+    groupid = atoi(mm);
+    free(mm);
     show_line += 2;
     char p[BUFLEN] = {0};
     sprintf(p, "%d %d", Authority, toid);
@@ -181,15 +195,19 @@ void cli_add_group(int toid, int Authority)
     }
     else
     {
-        printf("请求已发送");
+        printf("请求已发送   ");
     }
     PAUSE;
 }
 void cli_exit_group(int toid)
 {
     int groupid;
-    printf("输入群组id\n");
-    scanf("%d", &groupid);
+    // printf("输入群组id\n");
+    // scanf("%d", &groupid);
+    char *mm = readline("输入群组id\n");
+    groupid = atoi(mm);
+    free(mm);
+
     show_line += 2;
     char p[BUFLEN] = {0};
     sprintf(p, "%d", toid);
@@ -210,8 +228,12 @@ void cli_exit_group(int toid)
 void cli_apply_application(int is, int groupid)
 {
     int id = 0;
-    printf("输入对方id\n");
-    scanf("%d", &id);
+    // printf("输入对方id\n");
+    // scanf("%d", &id);
+    char *mm = readline("输入对方id\n");
+    id = atoi(mm);
+    free(mm);
+
     char p[BUFLEN] = {0};
     memset(p, 0, BUFLEN);
     info *ms = NULL;
@@ -252,6 +274,7 @@ void cli_apply_application(int is, int groupid)
         zlog_debug(cli, " del from %d to %d ", id, userid);
         printf("已拒绝%d的申请\n", id);
     }
+    // show_line++;
     show_line += 3;
     PAUSE;
     if (ms) free(ms);

@@ -1,7 +1,7 @@
 #ifndef MYINCLUDE
 #define MYINCLUDE
 #endif
-
+// #define _GNU_SOURCE
 #include <arpa/inet.h>
 #include <assert.h>
 #include <bits/sockaddr.h>
@@ -61,11 +61,11 @@
         exit(-1);                                                        \
     }
 
-#define PAUSE                    \
-    {                            \
-        printf("   任意键返回"); \
-        fflush(stdout);          \
-        getchar();               \
-        getchar();               \
-        show_line++;             \
+#define PAUSE                                 \
+    {                                         \
+        fflush(stdout);                       \
+        char *mm = readline("   任意键返回"); \
+        fflush(stdout);                       \
+        free(mm);                             \
+        show_line++;                          \
     }

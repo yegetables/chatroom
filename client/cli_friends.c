@@ -117,8 +117,12 @@ void cli_show_friends(void)  // TODO(ajian): ready to perf
 void cli_del_friend(void)
 {
     int toid;
-    printf("输入对方id\n");
-    scanf("%9d", &toid);
+    // printf("输入对方id\n");
+    // scanf("%9d", &toid);
+    char *mm = readline("输入对方id\n");
+    toid = atoi(mm);
+    free(mm);
+
     char p[BUFLEN] = {0};
     info *ms = NULL;
     sprintf(p,
@@ -146,8 +150,13 @@ void cli_del_friend(void)
 void cli_shield_friend(int is)
 {
     int toid;
-    printf("输入对方id\n");
-    scanf("%9d", &toid);
+    // printf("输入对方id\n");
+    // scanf("%9d", &toid);
+
+    char *mm = readline("输入对方id\n");
+    toid = atoi(mm);
+    free(mm);
+
     char p[BUFLEN] = {0};
     info *ms = NULL;
     sprintf(p,
@@ -175,29 +184,39 @@ void cli_shield_friend(int is)
 void cli_search_user(void)
 {
 reshow:;
-    printf("1.输入id    2.输入namen 3.返回上一层\n");
+    // printf("1.输入id    2.输入namen 3.返回上一层\n");
     int t = 1;
-    scanf("%1d", &t);
+    // scanf("%1d", &t);
+    char *mm = readline("1.输入id    2.输入namen 3.返回上一层\n");
+    t = atoi(mm);
+    free(mm);
+    show_line += 2;
+
     char p[BUFLEN] = {0};
     memset(p, 0, BUFLEN);
     int iid = -1;
-    char na[30] = {0};
+    // char na[30] = {0};
+    char *na = NULL;
     if (t == 1)
     {
         while (1)
         {
-            scanf("%10s", na);
+            // scanf("%10s", na);
+            na = readline("");
             iid = atoi(na);
-            strcpy(na, "");
+            show_line++;
+            // strcpy(na, "");
             if (iid < 0 || iid > INT32_MAX)
             {
                 printf("请输入正确id\n");
-                show_line += 1;
+                show_line++;
                 iid = -1;
+                free(na);
             }
             else
                 break;
         }
+        free(na);
 
         id_to_name(iid, p);
         if (strcmp(p, "-1") == 0)
@@ -206,19 +225,22 @@ reshow:;
         }
         else
             printf("id:%d----name:%s\n", iid, p);
+        show_line++;
         PAUSE;
-        show_line += 4;
+        // show_line += 4;
     }
     else if (t == 2)
     {
-        scanf("%s", na);
+        // scanf("%s", na);
+        na = readline("");
         iid = name_to_id(na);
         if (iid == -1)
             printf("not found\n");
         else
             printf("id:%d----name:%s\n", iid, na);
+        free(na);
         PAUSE;
-        show_line += 4;
+        show_line += 2;
     }
     else if (t == 3)
     {
@@ -233,8 +255,14 @@ reshow:;
 void cli_add_friend(void)
 {
     int toid;
-    printf("输入对方id\n");
-    scanf("%9d", &toid);
+    // printf("输入对方id\n");
+    // scanf("%9d", &toid);
+
+    char *mm = readline("输入对方id\n");
+    show_line += 2;
+    toid = atoi(mm);
+    free(mm);
+
     info *ms = NULL;
     char p[BUFLEN] = {0};
     char pp[BUFLEN / 2] = {0};
@@ -255,7 +283,7 @@ void cli_add_friend(void)
     }
     printf("请求已发送,等待同意后在好友列表查看");
     PAUSE;
-    show_line += 2;
+    // show_line += 2;
     if (ms) free(ms);
 }
 
@@ -294,8 +322,13 @@ void show_apply_friends(void)
 void cli_agree_friend(int is)
 {
     int id = 0;
-    printf("输入对方id\n");
-    scanf("%9d", &id);
+    // printf("输入对方id\n");
+    // scanf("%9d", &id);
+    char *mm = readline("输入对方id\n");
+    id = atoi(mm);
+    show_line += 2;
+    free(mm);
+
     char p[BUFLEN] = {0};
     memset(p, 0, BUFLEN);
     info *ms = NULL;
@@ -340,7 +373,7 @@ void cli_agree_friend(int is)
         zlog_debug(cli, " del from %d to %d ", id, userid);
         printf("已拒绝%d的申请\n", id);
     }
-    show_line += 3;
+    show_line += 1;
     PAUSE;
     if (ms) free(ms);
     return;

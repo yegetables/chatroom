@@ -4,18 +4,23 @@ extern zlog_category_t *cli;
 extern int userid;
 extern char username[30];
 extern int cfd;
+extern int show_line;
 
 void cli_recv_file(int toid, int is)
 {
-    char fname[PATH_MAX / 2] = {0};  //文件模糊名
+    char *fname = NULL;  //文件模糊名
     info *ms = NULL;
-    char sname[BUFLEN];        //本地保存文件路径
+    char *sname = NULL;        //本地保存文件路径
     char relname[BUFLEN / 2];  //服务器真实文件名
     char *b;
 resdd:;
-    memset(fname, 0, sizeof(fname));
-    printf("输入文件名\n");
-    scanf("%s", fname);
+    // memset(fname, 0, sizeof(fname));
+    // printf("输入文件名\n");
+    // scanf("%s", fname);
+    // unsigned long long len = PATH_MAX;
+    // getline(fname, &len, stdin);
+    fname = readline("输入文件名:");
+    show_line++;
 
     // char realpath[PATH_MAX] = {0};
     // char p[BUFLEN] = {0};
@@ -31,13 +36,16 @@ resdd:;
     ms = cli_creatinfo(userid, 0, sql, AGREE_RECV_FILE, p);
     if (ms == NULL)
     {
+        if (fname) free(fname);
         zlog_error(cli, "recv none");
         return;
     }
     if (1 != atoi(ms->value))
     {
         if (ms) free(ms);
+        if (fname) free(fname);
         printf("结果太多或不存在,重新搜索\n");
+        show_line++;
         goto resdd;
     }
 
@@ -49,9 +57,11 @@ resdd:;
 
     if (is == 1)  //同意
     {
-        memset(sname, 0, PATH_MAX);
-        printf("输入保存到文件的绝对路径\n");
-        scanf("%s", sname);
+        // memset(sname, 0, PATH_MAX);
+        // printf("输入保存到文件的绝对路径\n");
+        // scanf("%s", sname);
+        sname = readline("输入保存到文件的绝对路径:");
+        show_line++;
         // char* f = dirname(fname);             //目录
         // sprintf(realpath, "%s/%s", f, name);  //拼接目录/文件
 
@@ -62,6 +72,8 @@ resdd:;
         {
             zlog_error(cli, "recv file error: %s", sname);
             if (ms) free(ms);
+            if (fname) free(fname);
+            if (sname) free(sname);
             return;
         }
     }
@@ -82,6 +94,9 @@ resdd:;
     if (ms == NULL)
     {
         zlog_error(cli, "recv none");
+        // if (ms) free(ms);
+        if (fname) free(fname);
+        if (sname) free(sname);
         return;
     }
     if (is == 1)
@@ -94,7 +109,10 @@ resdd:;
         zlog_debug(cli, " del file from %d to %d ", toid, userid);
         printf("已拒绝文件%s\n", fname);
     }
+    show_line++;
     if (ms) free(ms);
+    if (fname) free(fname);
+    if (sname) free(sname);
     return;
 }
 
@@ -142,13 +160,18 @@ void show_apply_files(int toid)
 void send_file_menu(int toid)
 {
     // cat /proc/sys/kernel/random/uuid 随机uuid
-    printf("输入文件路径\n");
-    char path[PATH_MAX] = {0};
-    scanf("%s", path);
+    // printf("输入文件路径\n");
+    // char path[PATH_MAX] = {0};
+    // scanf("%s", path);
+    char *path = NULL;
+    path = readline("输入文件路径:");
+    show_line++;
     //检测文件名长度
     if (strlen(path) > 50)
     {
         printf("file name too long \n");
+        show_line++;
+        free(path);
         zlog_error(cli, "file name too long ");
         return;
     }
@@ -158,11 +181,13 @@ void send_file_menu(int toid)
     if (f_size < 0)
     {
         zlog_error(cli, "get size error");
+        free(path);
         return;
     }
 
     char *filename = basename(path);
     printf("waiting transmission\n");
+    show_line++;
 
     //发送文件通知
     info *ms = NULL;
@@ -176,7 +201,9 @@ void send_file_menu(int toid)
     {
         zlog_error(cli, "path:%s can't ready file ", path);
         printf("服务器未准备好接收文件\n");
+        show_line++;
         if (ms) free(ms);
+        free(path);
         return;
     }
 
@@ -184,6 +211,7 @@ void send_file_menu(int toid)
     if (!send_file(cfd, path, f_size))
     {
         zlog_error(cli, "path:%s can't read ", path);
+        free(path);
         return;
     }
 
@@ -209,6 +237,7 @@ void send_file_menu(int toid)
         free(ms);
         ms = NULL;
     }
+    free(path);
     zlog_debug(cli, "recv errror");
     return;  // no close
 }
