@@ -191,7 +191,7 @@ int main(int argc, char **argv)
                 if (cli_accessonline(username))
                 {
                     show_line++;
-                    printf("您的账号已在别处下线\n");
+                    printf("您的账号已在别处下线,请重新登陆\n");
                 }
                 zlog_info(cli, "login success");
                 printf("登录成功\n");

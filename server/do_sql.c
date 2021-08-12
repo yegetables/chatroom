@@ -75,6 +75,7 @@ bool do_sql(events *ev)
             break;
         }
         case SHOW_GROUP_MESSAGES:
+        case SHOW_MESSAGES:
         {
             aasd = 3;
             if (!base_sql_query(ms)) return false;
@@ -85,7 +86,6 @@ bool do_sql(events *ev)
         }
         case SHOW_APPLY:
         case FR_LIST:
-        case SHOW_MESSAGES:
         case GET_MANY_VALUE:
         {
             aasd = 2;

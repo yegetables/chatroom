@@ -7,18 +7,26 @@ extern int show_line;
 int send_secret_message(int toid)
 {
     info *ms = NULL;
-    char p[BUFLEN / 2] = {0};
+    // char p[BUFLEN / 2] = {0};
     char pp[BUFLEN] = {0};
-    printf("\nto:%d:", toid);
-    scanf("%s", p);
-    show_line += 2;
-    if (strcmp(p, "#return#") == 0) return 0;  //返回上一层
+    // printf("\nto:%d:", toid);
+    // scanf("%s", p);
+    sprintf(pp, "            to:%d:", toid);
+    char *p = readline(pp);
+    show_line += 1;
+    if (strncmp(p, "#return#", 8) == 0)
+    {
+        free(p);
+        return 0;  //返回上一层
+    }
+    memset(pp, 0, BUFLEN);
     sprintf(pp,
             "INSERT  INTO requests "
             "(requests.from,requests.to,requests.type,requests.how,requests."
             "value,requests.if_read)"
             "VALUES (%d,%d,%d,%d,\'%s\',%d);",
             userid, toid, msg, MESSAGES, p, 0);
+    free(p);
     ms = cli_creatinfo(userid, 0, sql, HUP_NO, pp);
     if (ms == NULL) return 0;
     if (ms) free(ms);
@@ -38,12 +46,13 @@ void recv_secret_message(int toid)
             userid, MESSAGES, toid);  //未屏蔽,未读的消息
     ms = cli_creatinfo(userid, 0, sql, SHOW_MESSAGES, p);
     if (ms == NULL) return;
-    if (atoi(ms->value) != 0)
+    int number = atoi(ms->value);
+    if (number != 0)
     {
         char *buf = strchr(ms->value, '\n');
         buf++;
-        printf("\nfrom %d :%s", toid, buf);
-        show_line++;
+        printf("from %d :%s", toid, buf);
+        show_line += number;
     }
     memset(p, 0, BUFLEN);
     sprintf(p,
@@ -63,11 +72,12 @@ void show_secret_message(int toid)
     info *ms = NULL;
     char p[BUFLEN] = {0};
     sprintf(p,
-            "select requests.add_time,requests.value from requests,relationship  "
-            "where requests.to= %d and requests.how=%d and requests.from=%d and "
+            "select requests.from,requests.add_time,requests.value from requests,relationship  "
+            "where (requests.to= %d and requests.from=%d)or(requests.to= %d and requests.from=%d) "
+            "and requests.how=%d  and "
             "requests.from=relationship.id_2 and "
             "requests.to=relationship.id_1  ;",
-            userid, MESSAGES, toid);  //未屏蔽,未读的消息
+            userid, toid, toid, userid, MESSAGES);  //未屏蔽,未读的消息
     ms = cli_creatinfo(userid, 0, sql, SHOW_MESSAGES, p);
     if (ms == NULL) return;
     int number = atoi(ms->value);
@@ -77,9 +87,22 @@ void show_secret_message(int toid)
     {
         char *buf = strchr(ms->value, '\n');
         buf++;
-        printf("\nfrom %d :%s", toid, buf);  // BUG:showline
-        show_line++;
+        char relbuf[BUFLEN] = {0};
+        char *q = NULL;
+        int newid;
+        for (int i = 0; i < number && buf != NULL; i++)
+        {
+            memset(relbuf, 0, BUFLEN);
+            q = strchr(buf, '\n');
+            strncpy(relbuf, buf, (int)(q - buf + 1));
+            sscanf(relbuf, "%d", &newid);
+            if (newid == userid) printf("          ");
+            printf("from %s", relbuf);
+            buf = strchr(buf, '\n');
+            buf++;
+        }
     }
+    show_line += number;
     PAUSE;
     if (ms) free(ms);
 }
@@ -111,12 +134,13 @@ void recv_public_message(int toid)
 
     ms = cli_creatinfo(userid, 0, sql, SHOW_GROUP_MESSAGES, p);
     if (ms == NULL) return;
-    if (atoi(ms->value) != 0)
+    int number = atoi(ms->value);
+    if (number != 0)
     {
         char *buf = strchr(ms->value, '\n');
         buf++;
-        printf("\nto %d:%s", toid, buf);  // BUG:showline
-        show_line++;
+        printf("to %d:%s", toid, buf);  // BUG:showline
+        show_line += number;
     }
     // TODO(ajian): 群聊消息设置已读
     // memset(p, 0, BUFLEN);
@@ -154,9 +178,8 @@ void show_public_message(int toid)
     {
         char *buf = strchr(ms->value, '\n');
         buf++;
-
-        printf("\nto %d:%s", toid, buf);  // BUG:showline
-        show_line++;
+        printf("to %d:%s", toid, buf);  // BUG:showline
+        show_line += number;
     }
     PAUSE;
     if (ms) free(ms);
