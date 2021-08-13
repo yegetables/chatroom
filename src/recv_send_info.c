@@ -31,7 +31,7 @@ rerecv:;
         // zlog_error(tmp, "recv %ld return yes", ret);
         return true;
     }
-    zlog_error(tmp, "recv %ld return no", ret);
+    zlog_error(tmp, "recv %d return no", ret);
     //     if (ret == 0) return false;
     //     if (ret > 0) returnnumber += ret;
     //     if (returnnumber != lll)
@@ -89,7 +89,7 @@ bool send_info(int cfd, info *ms)
         // zlog_error(tmp, "send %ld return yes", ret);
         return true;
     }
-    zlog_error(tmp, "send %ld return no", ret);
+    zlog_error(tmp, "send %d return no", ret);
     // resend:;
     //     ret = send(cfd, ms + returnnumber, lll - returnnumber, 0);
     //     if (ret > 0) returnnumber += ret;

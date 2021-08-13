@@ -245,7 +245,8 @@ void send_file_menu(int toid)
         }
         else
         {
-            printf("发送成功"); zlog_info(cli, " recv file message success");
+            printf("发送成功");
+            zlog_info(cli, " recv file message success");
         }
     }
     else
