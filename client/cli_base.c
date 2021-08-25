@@ -39,10 +39,10 @@ info *cli_send_recv(info *ms, int how)
             // zlog_debug(cli, "should recv %ld,really recv  %d", s, ret);
             if (ret == s)
             {
-                // char *tt = NULL;
-                // tt = showinfo(ms);
-                // zlog_debug(cli, "%s", tt);
-                // free(tt);
+                char *tt = NULL;
+                tt = showinfo(ms);
+                zlog_debug(cli, "%s", tt);
+                free(tt);
                 return ms;
             }
             else
@@ -94,10 +94,14 @@ info *cli_send_recv(info *ms, int how)
             }
             else
             {
-                // char *tt = NULL;
-                // tt = showinfo(ms);
-                // zlog_debug(cli, "%s", tt);
-                // free(tt);
+                char *tt = NULL;
+                tt = showinfo(ms);
+                zlog_debug(cli, "%s", tt);
+                free(tt);
+                zlog_debug(cli, "========VVV=========");
+                zlog_debug(cli, "========VVV=========");
+                zlog_debug(cli, "========VVV=========");
+                zlog_debug(cli, "========VVV=========");
             }
             // if (!send_info(cfd, ms))
             // {
@@ -170,6 +174,7 @@ void update_notices(char *user_msg, char *user_files)
     }
 
     applications = atoi(ms->value);
+    free(ms);
     {
         {
             memset(p, 0, sizeof(p));
@@ -224,7 +229,7 @@ void update_notices(char *user_msg, char *user_files)
             }
         }
     }
-
+    free(ms);
     {
         memset(p, 0, sizeof(p));
         sprintf(p,
@@ -337,6 +342,9 @@ info *cli_creatinfo(int from, int to, value_type type, int how, char *value)
     ms->to = to;
     pthread_mutex_lock(&rs_mutex);
     ms = cli_send_recv(ms, how);
-    pthread_mutex_unlock(&rs_mutex);
+    if (ms->how == SEND_FILE_REDY || ms->how == AGREE_RECV_FILE)
+        ;
+    else
+        pthread_mutex_unlock(&rs_mutex);
     return ms;
 }

@@ -2,7 +2,7 @@
 #include PROJECT_CLIENTHEAD
 char username[30];
 int userid;
-#define SLEEP_TIME 3
+#define SLEEP_TIME 5
 zlog_category_t *cli = NULL;
 int cfd;
 int show_line = 0;

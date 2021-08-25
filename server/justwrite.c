@@ -30,7 +30,7 @@ void justwrite(int cfd, int event, void *args)
     }
 
     //回调,事件,返回
-    if (ms->how == SEND_FILE_REDY)
+    if (ms->how == SEND_FILE_REDY && atoi(ms->value) == 1)  // c -> s file
     {
         ev->call_back = IN_recvfile;
         epoll_add(EPOLLIN, ev);

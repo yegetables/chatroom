@@ -11,17 +11,19 @@ long int event_recv_file_ready(events *ev)
 {
     info *ms = &ev->js;
     long int f_size = 0;
-    int ufd = open("/proc/sys/kernel/random/uuid", O_RDONLY);
-    if (ufd < 0)
-    {
-        zlog_error(ser, "/proc/sys/kernel/random/uuid can't open");
-        return -1;
-    }
     char uid[40] = {0};  //获取uuid
-    read(ufd, uid, 39);
-    if (uid[strlen(uid) - 1] == '\n' || uid[strlen(uid) - 1] == ' ') uid[strlen(uid) - 1] = 0;
-    if (strlen(uid) < 30) return -2;
-    // zlog_info(ser, "uid:%s", uid);
+    {
+        int ufd;
+        ufd = open("/proc/sys/kernel/random/uuid", O_RDONLY);
+        if (ufd < 0)
+        {
+            zlog_error(ser, "/proc/sys/kernel/random/uuid can't open");
+            return -1;
+        }
+        read(ufd, uid, 39);
+        if (uid[strlen(uid) - 1] == '\n' || uid[strlen(uid) - 1] == ' ') uid[strlen(uid) - 1] = 0;
+        if (strlen(uid) < 30) return -2;
+    }  // zlog_info(ser, "uid:%s", uid);
     char filename[100] = {0};
     int toid;
     sscanf(ms->value, "%s %ld %d", filename, &f_size, &toid);
@@ -80,25 +82,35 @@ void IN_recvfile(int cfd, int event, void *args)
             return;
         }
     }
-
+    // zlog_info(ser, "找到 struct 信息");
     //打开文件准备存储
     if (!recv_file(ev->fd, f_r[i].path, f_r[i].f_size))
     {
-        zlog_error(ser, "send file error: %s", f_r[i].path);
+        zlog_error(ser, "ser recv file error: %s", f_r[i].path);
         sprintf(ev->js.value, "%d %s[%ld] error save", 0, f_r[i].path, f_r[i].f_size);
     }
     else
     {
+        // zlog_info(ser, "ser recv file success: %s", f_r[i].path);
         sprintf(ev->js.value, "%d %s[%ld] success save", 1, f_r[i].path, f_r[i].f_size);
     }
 
-    {  //设置回复消息
+    {
+        f_r[i].from_id = 0;
+        //设置回复消息
         ev->js.from = 0;
         ev->js.to = fd_id[ev->fd];
         ev->js.how = IF_DONE;
         ev->js.type = msg;
         ev->call_back = justwrite;
     }
+
+    // 展示发送内容
+    char *p;
+    p = showevents(ev);
+    zlog_debug(ser, "recv file success ;told to:%s", p);
+    free(p);
+
     epoll_add(EPOLLOUT, ev);
     return;
 }
@@ -113,17 +125,23 @@ void OUT_sendfile(int cfd, int event, void *args)
     char *b = strchr(ms->value, '\n');
     if (b == NULL)
     {
-        zlog_error(ser, "value:%s", ms->value);
-        exit(-1);
+        zlog_error(ser, "value:%s error", ms->value);
+        // ev->call_back = client_event;
+        epoll_add(EPOLLRDHUP, ev);
+        return;
     }
+
     long f_size;
     char path[PATH_MAX] = {0};
-    sscanf(b, "%ld %s", &f_size, path);
+    sscanf(++b, "%ld %s", &f_size, path);
     zlog_debug(ser, "ready send %ld:%s", f_size, path);
 
     if (!send_file(ev->fd, path, f_size))
     {
         zlog_error(ser, "path:%s can't read ", path);
+        // ev->call_back = client_event;
+        epoll_add(EPOLLRDHUP, ev);
+        return;
     }
     ev->call_back = client_event;
     epoll_add(EPOLLIN, ev);
@@ -134,18 +152,11 @@ bool event_AGREE_RECV_FILE(info *ms)
     //没找到要接收的文件,或者找到文件太多
     if (atoi(ms->value) != 1)
     {
-        strcpy(ms->value, "0");
+        // strcpy(ms->value, "0");
         //使用justwrite-cli_event普通传输
         ms->how = MANY_RESULT;
-        ms->to = ms->from;
-        ms->from = 0;
-        return false;
     }
-    else  //唯一
-    {
-        ms->to = ms->from;
-        ms->from = 0;
-        //改为准备文件发送状态
-        return true;
-    }
+    ms->to = ms->from;
+    ms->from = 0;
+    return true;
 }

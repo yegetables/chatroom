@@ -28,45 +28,44 @@ resdd:;
     // memset(p, 0, BUFLEN);
     sprintf(p,
             "select requests.how,requests.value  from requests  where "
-            "requests.to= %d and requests.from=%d and requests.type=%d"
-            " and requests.value like \'%%%s\'",
+            "requests.to= %d and requests.from=%d and requests.if_read=0 and requests.type=%d"
+            " and requests.value like \'%%%s\' ",
             userid, toid, file, fname);  //模糊搜索
     // base_GET_MANY_VALUE(ms, 2)
-
-    ms = cli_creatinfo(userid, 0, sql, AGREE_RECV_FILE, p);
-    pthread_mutex_lock(&rs_mutex);
+    ms = cli_creatinfo(userid, 0, sql, GET_MANY_VALUE, p);  //得到大小,确认数量
     if (ms == NULL)
     {
         if (fname) free(fname);
         zlog_error(cli, "recv none");
-        pthread_mutex_unlock(&rs_mutex);
-
         return;
     }
+
     if (1 != atoi(ms->value))
     {
         if (ms) free(ms);
         if (fname) free(fname);
         printf("结果太多或不存在,重新搜索\n");
         show_line++;
-        pthread_mutex_unlock(&rs_mutex);
-
         goto resdd;
     }
 
-    //唯一结果
-    long f_size;
-    b = strchr(ms->value, '\n');
-    b++;
-    sscanf(b, "%ld %s", &f_size, relname);
-
     if (is == 1)  //同意
     {
+        long f_size;
+        ms->value[0] = ' ';
+        ms->value[1] = ' ';
+        sscanf(ms->value, "%ld %s", &f_size, relname);  //得到大小,确认数量
+        free(ms);
+        sname = readline("输入保存到文件的绝对路径:");
+        show_line++;
+        //通知服务器 s->c send file
+
+        // b = strchr(ms->value, '\n');
+        // b++;
         // memset(sname, 0, PATH_MAX);
         // printf("输入保存到文件的绝对路径\n");
         // scanf("%s", sname);
-        sname = readline("输入保存到文件的绝对路径:");
-        show_line++;
+
         // char* f = dirname(fname);             //目录
         // sprintf(realpath, "%s/%s", f, name);  //拼接目录/文件
 
@@ -75,34 +74,38 @@ resdd:;
         //打开文件准备存储
         // pthread_mutex_lock(&rs_mutex);
         // ms = cli_send_recv(ms, how);
+
+        //不接受回复和不解锁
+        ms = cli_creatinfo(userid, 0, sql, AGREE_RECV_FILE, p);
         if (!recv_file(cfd, sname, f_size))
         {
+            pthread_mutex_unlock(&rs_mutex);
             zlog_error(cli, "recv file error: %s", sname);
             if (ms) free(ms);
             if (fname) free(fname);
             if (sname) free(sname);
-            pthread_mutex_unlock(&rs_mutex);
             return;
         }
+        pthread_mutex_unlock(&rs_mutex);
+        zlog_info(cli, "recv file success: %s", sname);
     }
     // fname 客户接受路径
-    pthread_mutex_unlock(&rs_mutex);
 
     //设置已读
     memset(p, 0, sizeof(p));
     sprintf(p,
             "update requests,relationship set requests.if_read=1 "
             "where "
-            "requests.to= %d   and requests.value =\'%s\' and  "
+            "requests.to= %d   and  requests.value like \'%%%s\' and  "
             "requests.type=%d and "
             "requests.from= %d",
-            userid, relname, file, toid);  //设为已读
+            userid, fname, file, toid);  //设为已读
     // base_GET_MANY_VALUE(ms, 2)
-    ms = cli_creatinfo(userid, 0, sql, HUP_NO, p);
+    ms = cli_creatinfo(userid, 0, sql, IF_DONE, p);
 
     if (ms == NULL)
     {
-        zlog_error(cli, "recv none");
+        zlog_error(cli, "set file had read error");
         // if (ms) free(ms);
         if (fname) free(fname);
         if (sname) free(sname);
@@ -110,15 +113,16 @@ resdd:;
     }
     if (is == 1)
     {
-        zlog_debug(cli, "recv file %s to %s del from %d to %d ", relname, sname, toid, userid);
-        printf("已接受文件%s to %s\n", relname, sname);
+        zlog_info(cli, "recv file %s to %s del from %d to %d ", relname, sname, toid, userid);
+        printf("已接受文件%s to %s", relname, sname);
     }
     else
     {
-        zlog_debug(cli, " del file from %d to %d ", toid, userid);
-        printf("已拒绝文件%s\n", fname);
+        zlog_info(cli, " del file from %d to %d ", toid, userid);
+        printf("已拒绝文件%s", fname);
     }
-    show_line++;
+    PAUSE;
+    // show_line++;
     if (ms) free(ms);
     if (fname) free(fname);
     if (sname) free(sname);
@@ -192,13 +196,19 @@ void send_file_menu(int toid)
     //     path[strlen(path) - 1] = '\0';
     // }
     // path[strlen(path) - 1] = '\n';
-    zlog_error(cli, "now get path [%s]", path);
+
     // 内部检测权限
     long int f_size = get_file_size(path);
     if (f_size < 0)
     {
         zlog_error(cli, "get size error");
-        free(path);
+        if (path)
+        {
+            free(path);
+            path = NULL;
+        }
+        printf("发送失败");
+        PAUSE;
         return;
     }
 
@@ -210,40 +220,59 @@ void send_file_menu(int toid)
     info *ms = NULL;
     char p[BUFLEN] = {0};
     sprintf(p, "%s %ld %d", filename, f_size, toid);
-    //发送文件通知
-    zlog_debug(cli, "this is file ready :%s", p);
-    ms = cli_creatinfo(userid, 0, sql, SEND_FILE_REDY, p);
-    pthread_mutex_lock(&rs_mutex);
 
-    if (ms == NULL || atoi(ms->value) == 0)
+    zlog_info(cli, "told ser ready send file[SEND_FILE_REDY] :%s", p);
+    ms = cli_creatinfo(userid, 0, sql, SEND_FILE_REDY, p);  //锁上
+    if (ms == NULL || atoi(ms->value) != 1)
     {
-        zlog_error(cli, "path:%s can't ready file ", path);
         pthread_mutex_unlock(&rs_mutex);
+        zlog_info(cli, "ser refused recv file %s  ", path);
         printf("服务器未准备好接收文件\n");
         show_line++;
-        if (ms) free(ms);
-        free(path);
+        if (ms)
+        {
+            free(ms);
+            ms = NULL;
+        }
+        if (path)
+        {
+            free(path);
+            path = NULL;
+        }
+        PAUSE;
         return;
     }
-    zlog_debug(cli, "sendfile ready value: %s", ms->value);
+    zlog_debug(cli, "ser recv file agree;;cli real sendfile : %s", path);
 
     //真正发送文件
     if (!send_file(cfd, path, f_size))
     {
-        zlog_error(cli, "path:%s can't read ", path);
-        free(path);
+        zlog_error(cli, "real cli sendfile ser error:path:%s  ", path);
         pthread_mutex_unlock(&rs_mutex);
+        if (ms)
+        {
+            free(ms);
+            ms = NULL;
+        }
+        if (path)
+        {
+            free(path);
+            path = NULL;
+        }
+        printf("发送失败");
+        PAUSE;
         return;
     }
+
+    zlog_info(cli, "real send to ser success ");
+
+    // pthread_mutex_unlock(&rs_mutex);
 
     // 接受并展示info
     if (recv_info(cfd, ms))
     {
-        if (!atoi(ms->value))
-        {
-            zlog_info(cli, "server can't  recv all");
-        }
-        else
+        zlog_info(cli, "recv file info");
+        if (atoi(ms->value))
         {
             printf("发送成功");
             zlog_info(cli, " recv file message success");
@@ -251,8 +280,10 @@ void send_file_menu(int toid)
     }
     else
     {
-        zlog_info(cli, "can;t recv file message");
+        zlog_info(cli, "can;t recv file info");
+        printf("发送失败");
     }
+
     pthread_mutex_unlock(&rs_mutex);
 
     if (ms)
@@ -260,7 +291,12 @@ void send_file_menu(int toid)
         free(ms);
         ms = NULL;
     }
-    free(path);
+    if (path)
+    {
+        free(path);
+        path = NULL;
+    }
+    PAUSE;
     // zlog_debug(cli, "recv errror");
     return;  // no close
 }

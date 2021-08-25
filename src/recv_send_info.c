@@ -138,6 +138,7 @@ bool recv_file(int cfd, char *path, long int f_size)
     int errornumber = 0;
     // char cmd[100]   = {0};
     char dir[PATH_MAX] = {0};
+    int ret = 0;
     strcpy(dir, path);
     // sprintf(cmd, "mkdir -p %s", dirname(dir));
     // signal(SIGCHLD, SIG_DFL);
@@ -173,40 +174,52 @@ bool recv_file(int cfd, char *path, long int f_size)
     if (buf == NULL)
     {
         zlog_error(tmp, "mmap error %s", show_errno());
+        close(fd);
         return false;
     }
     // off_t offset = 0;
 resend:;
     // if (f_size != offset + (returnnumber = recv(cfd, buf, f_size -
     // offset, 0)))
-    if (f_size != (returnnumber = recv(cfd, buf, f_size, 0)))
+    returnnumber = recv(cfd, buf, f_size, 0);
+    if (returnnumber == 0)
     {
-        if (returnnumber == 0) return false;
-        if (returnnumber < 0)
+        close(fd);
+        msync(buf, f_size, MS_ASYNC);
+        munmap(buf, f_size);
+        return false;
+    }
+    if (returnnumber < 0)
+    {
+        zlog_warn(tmp, "recv file failed %s", show_errno());
+
+        if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
-            zlog_warn(tmp, "recv file failed %s", show_errno());
-
-            if (errno == EWOULDBLOCK || errno == EAGAIN)
-            {
 #ifdef PROJECT_CLIENT
-                sleep(1);  // magic number
-                goto resend;
-#endif
-            }
-
-            errornumber++;
-            if (errornumber > 30)
-            {
-                zlog_warn(tmp, "can't recv file over 3");
-                goto over;
-            }
+            sleep(1);  // magic number
             goto resend;
-
-        over:;
-            zlog_error(tmp, "recv file failed %s:%s over", show_errno(), strerror(errno));
-            return false;
+#endif
         }
-        else
+
+        errornumber++;
+        if (errornumber > 30)
+        {
+            zlog_warn(tmp, "can't recv file over 3");
+            goto over;
+        }
+        goto resend;
+
+    over:;
+        zlog_error(tmp, "recv file failed %s:%s over", show_errno(), strerror(errno));
+        close(fd);
+        msync(buf, f_size, MS_ASYNC);
+        munmap(buf, f_size);
+        return false;
+    }
+    if (returnnumber > 0)
+    {
+        ret += returnnumber;
+        if (f_size != ret)
         {
             // offset += returnnumber;
             // zlog_info(tmp, "已接收%lf", offset * 1.0 / f_size);
@@ -215,8 +228,8 @@ resend:;
     }
 
     close(fd);
-    munmap(buf, f_size);
     msync(buf, f_size, MS_ASYNC);
+    munmap(buf, f_size);
     return true;
 }
 
@@ -232,7 +245,7 @@ bool send_file(int cfd, char *path, long int f_size)
     int returnnumber = 0;
     // 记录错误次数
     int errornumber = 0;
-
+    int ret = 0;
     int fd = open(path, O_RDONLY);
     if (fd < 0)
     {
@@ -252,44 +265,51 @@ resend:;
     // fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) &~ O_NONBLOCK);
     // if (offset + (returnnumber = sendfile(cfd, fd, &offset, f_size) !=
     // f_size))
-    if ((returnnumber = sendfile(cfd, fd, NULL, f_size)) != f_size)
-    {
-        // zlog_error(tmp, "returnnumber %d offset %ld", returnnumber,
-        // offset);
-        if (returnnumber == 0)
-        {
-            zlog_error(tmp, "return 0");
-            return false;
-        }
-        if (returnnumber < 0)
-        {
-            zlog_warn(tmp, "send file failed %s", show_errno());
-            if (errno == EWOULDBLOCK || errno == EAGAIN)
-            {
-#ifdef PROJECT_CLIENT
-                sleep(1);  // magic number
-                goto resend;
-#endif
-            }
-            errornumber++;
-            if (errornumber > 30)
-            {
-                zlog_warn(tmp, "can't send file over 3");
-                goto over;
-            }
-            goto resend;
 
-        over:;
-            zlog_error(tmp, "send file failed %s:%s over", show_errno(), strerror(errno));
-            return false;
-        }
-        else if (returnnumber > 0)
+    returnnumber = sendfile(cfd, fd, NULL, f_size);
+    if (returnnumber == 0)
+    {
+        zlog_error(tmp, "return 0");
+        close(fd);
+        return false;
+    }
+    if (returnnumber < 0)
+    {
+        zlog_warn(tmp, "send file failed %s", show_errno());
+        if (errno == EWOULDBLOCK || errno == EAGAIN)
         {
-            // offset += returnnumber;
-            // zlog_info(tmp, "已发送%lf", offset * 1.0 / f_size);
+#ifdef PROJECT_CLIENT
+            sleep(1);  // magic number
+            goto resend;
+#endif
+        }
+        errornumber++;
+        if (errornumber > 30)
+        {
+            zlog_warn(tmp, "can't send file over 3");
+            goto over;
+        }
+        goto resend;
+
+    over:;
+        close(fd);
+        zlog_error(tmp, "send file failed %s:%s over", show_errno(), strerror(errno));
+        return false;
+    }
+    if (returnnumber > 0)
+    {
+        // offset += returnnumber;
+        // zlog_info(tmp, "已发送%lf", offset * 1.0 / f_size);
+        ret += returnnumber;
+        if (ret != f_size)
+        {
+            // zlog_error(tmp, "returnnumber %d offset %ld", returnnumber,
+            // offset);
             goto resend;
         }
     }
+
+    close(fd);
     zlog_info(tmp, " send file ok");
     // zlog_info(tmp, "offset=%ld", offset);
     return true;
