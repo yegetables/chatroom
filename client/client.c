@@ -72,14 +72,12 @@ int main(int argc, char **argv)
     {
         // cfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
         cfd = socket(AF_INET, SOCK_STREAM, 0);
-
         struct sockaddr_in addr;
         addr.sin_family = AF_INET;
         // addr.sin_addr.s_addr = htonl(INADDR_ANY);
         inet_aton(argv[1], &addr.sin_addr);
         addr.sin_port = htons(atoi(argv[2]));
         socklen_t addrlen = sizeof(addr);
-
         errornumber = 0;
     reconnect:;
         if (-1 == (returnnumber = connect(cfd, (struct sockaddr *)&addr, addrlen)))

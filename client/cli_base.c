@@ -35,7 +35,7 @@ info *cli_send_recv(info *ms, int how)
             // sprintf("%d", );
             int ret = 0;
             // recv(cfd, &s, sizeof(s), 0);
-            ret = recv(cfd, ms, s, MSG_WAITALL);
+            ret = recv(cfd, ms, sizeof(info), MSG_WAITALL);
             // zlog_debug(cli, "should recv %ld,really recv  %d", s, ret);
             if (ret == s)
             {
