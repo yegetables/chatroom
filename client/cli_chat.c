@@ -142,7 +142,7 @@ void secret_message_menu(int toid)
     while (returnnumber)
     {
         // recv_secret_message(toid);
-        returnnumber = send_secret_message(toid);
+        returnnumber = send_secret_message(toid);  //手动结束输入时退出循环
     }
     pthread_cancel(recv_thread);
     usleep(1);
