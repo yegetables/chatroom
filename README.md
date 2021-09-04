@@ -51,10 +51,8 @@
         int how;             // 宏-请求
     } info;                  // 定义info信息,用于网络传输的基本结构
     
-    
-    
     ```
-
+    
     
 
 7. 主程序 epoll wait  处理 rdhup和 call_back
@@ -136,7 +134,7 @@
 
 12.  file部分则 为       
 
-     ​     或者 
+     ​    
 
      ```c
         //回调,事件,返回
@@ -217,15 +215,17 @@
    info *cli_send_recv(info *ms, int how){
     tempevents.events = EPOLLOUT;
     epoll_ctl(epfd, EPOLL_CTL_ADD, cfd, &tempevents);
+    	while(1){
+	    	int thisnum = epoll_wait(epfd, outevents, 1024, 0);
     
-    int thisnum = epoll_wait(epfd, outevents, 1024, 0);
-    if (outevents[0].events & EPOLLIN){
-         ret = recv(cfd, ms, sizeof(info), MSG_WAITALL);
-    }else if (outevents[0].events & EPOLLOUT){
-         ret = send(cfd, ms, sizeof(info), 0);
-          tempevents.events = EPOLLIN;
-            epoll_ctl(epfd, EPOLL_CTL_ADD, cfd, &tempevents);
-     }
+            if (outevents[0].events & EPOLLIN){
+        		  ret = recv(cfd, ms, sizeof(info), MSG_WAITALL);
+    		}else if (outevents[0].events & EPOLLOUT){
+         		  ret = send(cfd, ms, sizeof(info), 0);
+        		  tempevents.events = EPOLLIN;
+          		  epoll_ctl(epfd, EPOLL_CTL_ADD, cfd, &tempevents);
+     		}
+   		}
    }
 ```
 
